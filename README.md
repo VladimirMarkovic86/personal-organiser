@@ -6,5 +6,7 @@ PersonalOrganiser should be application for organising daily activities, from me
 Tutorials
 =========
 
-Tutorials from this address are followed. Except in 'tutorial-xx' instead of 'xx' type numbers from 01 to 16. Sixteen tutorials cover ClojureScript tehnology. In future there may be more.
+Tutorials from this address are followed.
 https://github.com/magomimmo/modern-cljs/blob/master/doc/tutorial-xx.md
+Except in 'tutorial-xx' instead of 'xx' type numbers from 01 to 16. Sixteen tutorials cover ClojureScript tehnology. In future there may be more.
+
