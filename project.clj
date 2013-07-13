@@ -5,10 +5,19 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   ;; CLJ source code path
   :source-paths ["src/clj"]
-  :dependencies [[org.clojure/clojure "1.5.1"]]
+
+  :dependencies [[org.clojure/clojure "1.5.1"]
+		 [compojure "1.1.5"]]
 
   ;; lein-cljsbuild plugin to build a CLJS project
-  :plugins [[lein-cljsbuild "0.3.2"]]
+  :plugins [;; cljsbuild plugin
+	    [lein-cljsbuild "0.3.2"]
+
+	    ;; ring plugin
+	    [lein-ring "0.8.5"]]
+
+  ;; ring task configuration
+  :ring {:handler personal-organiser.core/handler}
 
   ;; cljsbuild options configuration
   :cljsbuild {:builds
