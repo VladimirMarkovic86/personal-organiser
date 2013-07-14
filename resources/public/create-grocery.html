@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Create grocery</title>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <form action="/create-grocery" method="post" id="createGroceryForm">
+        <fieldset>
+            <legend>Create grocery</legend>
+
+            <div>
+              <label for="name">Name</label>
+              <input type="text" name="gname" id="name" required>
+            </div>
+
+            <div>
+              <label for="calories">Calories</label>
+              <input type="number" name="gcalories" id="calories" required>
+            </div>
+
+            <div>
+              <label for="fats">Fats</label>
+              <input type="number" name="gfats" id="fats" required>
+            </div>
+
+            <div>
+              <label for="proteins">Proteins</label>
+              <input type="number" name="gproteins" id="proteins" required>
+            </div>
+
+            <div>
+              <label for="carbohydrates">Carbohydrates</label>
+              <input type="number" name="gcarbohydrates" id="carbohydrates" required>
+            </div>
+
+            <div>
+              <label for="water">Water</label>
+              <input type="number" name="gwater" id="water" required>
+            </div>
+
+            <div>
+              <label for="description">Description</label>
+              <input type="text" name="gdesc" id="description" required>
+            </div>
+
+	    <div>
+		<p>Vitamins</p>
+	    </div>
+
+	    <div>
+		<p>Minerals</p>
+	    </div>
+
+            <div>
+              <label for="submit"></label>
+              <input type="submit" value="Create" id="submit">
+            </div>
+
+        </fieldset>
+    </form>
+
+    <script src="js/personal-organiser.js"></script>
+
+</body>
+</html>

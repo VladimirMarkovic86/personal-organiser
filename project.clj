@@ -7,7 +7,12 @@
   :source-paths ["src/clj"]
 
   :dependencies [[org.clojure/clojure "1.5.1"]
-		 [compojure "1.1.5"]]
+		 [compojure "1.1.5"]
+		 [com.cemerick/valip "0.3.2"]
+		 [clojurewerkz/neocons "1.1.0"]
+		 [ring/ring-jetty-adapter "1.1.0"]]
+
+  :main personal-organiser.core
 
   ;; lein-cljsbuild plugin to build a CLJS project
   :plugins [;; cljsbuild plugin
