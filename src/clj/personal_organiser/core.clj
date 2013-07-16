@@ -2,7 +2,7 @@
   (:use compojure.core)
   (:require [compojure.handler :as handler]
 	    [compojure.route :as route]
-	    [personal-organiser.grocery :refer [create-grocery]]
+	    [personal-organiser.grocery :refer [create-grocery read-all-grocery]]
 	    [personal-organiser.neo4j :as n4j]
 	    [ring.adapter.jetty :as jetty]))
 
@@ -11,7 +11,7 @@
 ;; turn, until a non-nil response is returned.
 (defroutes app-routes
   ; to serve document root address
-  (GET "/" [] (ring.util.response/redirect "http://localhost:5000/create-grocery.html"))
+  (GET "/" [] (read-all-grocery nil)) ;;(ring.util.response/redirect "http://localhost:5000/create-grocery.html"))
   (POST "/create-grocery" [gname gcalories gfats gproteins gcarbohydrates gwater gdesc] (create-grocery gname gcalories gfats gproteins gcarbohydrates gwater gdesc))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")

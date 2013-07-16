@@ -10,8 +10,10 @@
 		 [compojure "1.1.5"]
 		 [com.cemerick/valip "0.3.2"]
 		 [clojurewerkz/neocons "1.1.0"]
-		 [ring/ring-jetty-adapter "1.1.0"]]
+		 [ring/ring-jetty-adapter "1.1.0"]
+		 [enlive "1.0.0"]]
 
+  ;; run main from personal-organiser.core namespace
   :main personal-organiser.core
 
   ;; lein-cljsbuild plugin to build a CLJS project
