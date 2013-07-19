@@ -2,7 +2,7 @@
   (:use compojure.core)
   (:require [compojure.handler :as handler]
 	    [compojure.route :as route]
-	    [personal-organiser.grocery :refer [create-grocery read-all-grocery]]
+	    [personal-organiser.grocery :as gry]
 	    [personal-organiser.neo4j :as n4j]
 	    [ring.adapter.jetty :as jetty]))
 
@@ -11,8 +11,11 @@
 ;; turn, until a non-nil response is returned.
 (defroutes app-routes
   ; to serve document root address
-  (GET "/" [] (read-all-grocery nil)) ;;(ring.util.response/redirect "http://localhost:5000/create-grocery.html"))
-  (POST "/create-grocery" [gname gcalories gfats gproteins gcarbohydrates gwater gdesc] (create-grocery gname gcalories gfats gproteins gcarbohydrates gwater gdesc))
+  (GET "/" [] (gry/read-all-grocery nil)) ;;(ring.util.response/redirect "http://localhost:5000/create-grocery.html"))
+  (POST "/create-grocery" [gname gcalories gfats gproteins gcarbohydrates gwater gdesc] (gry/create-grocery gname gcalories gfats gproteins gcarbohydrates gwater gdesc))
+  (GET "/edit" [id] (gry/edit-grocery (n4j/read-node (read-string id))))
+  (POST "/update-grocery" [groceryid gname gcalories gfats gproteins gcarbohydrates gwater gdesc] (gry/update-grocery groceryid gname gcalories gfats gproteins gcarbohydrates gwater gdesc))
+  (GET "/delete" [id] (gry/delete-grocery (read-string id)))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found

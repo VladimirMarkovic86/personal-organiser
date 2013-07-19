@@ -11,7 +11,7 @@
 		 [com.cemerick/valip "0.3.2"]
 		 [clojurewerkz/neocons "1.1.0"]
 		 [ring/ring-jetty-adapter "1.1.0"]
-		 [enlive "1.0.0"]]
+		 [enlive "1.1.1"]]
 
   ;; run main from personal-organiser.core namespace
   :main personal-organiser.core
@@ -21,7 +21,10 @@
 	    [lein-cljsbuild "0.3.2"]
 
 	    ;; ring plugin
-	    [lein-ring "0.8.5"]]
+	    [lein-ring "0.8.5"]
+
+	    ;; codox plugin
+	    [codox "0.6.4"]]
 
   ;; ring task configuration
   :ring {:handler personal-organiser.core/handler}
