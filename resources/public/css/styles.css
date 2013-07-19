@@ -1,0 +1,86 @@
+body {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+  background-color: #5881d8;
+}
+
+div.topcontent {
+  width: 800px;
+  background-color: #fff;
+  padding: 5px;
+}
+div.navigation {
+  width: 800px;
+  background-color: #91dc47;
+  margin-bottom: 5px;
+}
+div.navigation a{
+  text-decoration: none;
+  color: #fff;
+}
+div.navigation a:hover{
+  text-decoration: none;
+  color: #63b132;
+}
+div.maincontent {
+  display: inline-block;
+  width: 800px;
+  background-color: #90b4fe;
+}
+div.food-nav a{
+  text-decoration: none;
+  color: #fff;
+}
+div.food-nav a:hover{
+  color: #91dc47;
+}
+td.gedit a{
+  color: #fff;
+  text-decoration: none;
+}
+td.gedit:hover {
+  background-color: #5881d8;
+  color: #fff;
+}
+td.gedit:hover a{
+  color: #90b4fe;
+}
+td.gedit:active {
+  background-color: #fff;
+  color: #fff;
+}
+td.gedit:active a{
+  color: #90b4fe;
+}
+div.left-column {
+  float: left;
+  margin: 5px;
+  margin-right: 10px;
+  border: solid 5px #fff;
+  padding: 5px;
+  background-color: #63b132;
+}
+div.middle-column {
+  float: left;
+  font-size: 14px;
+  color: #fff;
+}
+div.right-column {
+  float: left;
+}
+form#grocery-form tr td:first-child {
+  text-align:right;
+}
+form#grocery-form tr td:first-child + td input, form#grocery-form tr td:first-child + td textarea {
+  color: #fff;
+  background-color: #91dc47;
+  border: solid 1px #fff;
+  width: 150px;
+}
+input#submit {
+  width: auto !important;
+}
+input#submit:hover {
+  background-color: #63b132 !important;
+}
