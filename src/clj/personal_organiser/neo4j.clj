@@ -19,7 +19,6 @@
  [node]
 	(:idx (:data node)))
 
-
 (defn get-type-indexes
 "Returns indexes of particular type nodes"
  [index-type]
@@ -31,13 +30,19 @@
  [index-type]
 	(nn/get-many (get-type-indexes index-type)))
 
+(defn create-type-node [node-data]
+"Create type node that is indexed and contains indexes of all nodes of that type in :idx property"
+ (let [node (nn/create node-data)]
+  (nn/add-to-index node "indexesoftypes" "type" (:type node-data))))
+
 (defn add-node-key-to-indexes
 "Add new node index to node that contains indexes of nodes with same type"
  [index-type new-node-id]
-  (let [node-idx (get-indexes-node-type-of index-type)]
+  (if-let [node-idx (get-indexes-node-type-of index-type)]
     (if (contains? (into #{} (vector-of-indexes node-idx)) new-node-id)
       false
-      (nn/set-property node-idx :idx (conj (vector-of-indexes node-idx) new-node-id)))))
+      (nn/set-property node-idx :idx (conj (vector-of-indexes node-idx) new-node-id)))
+    (create-type-node {:idx [new-node-id] :type index-type})))
 
 (defn remove-node-key-from-indexes
 "Remove index of removed node from indexes type node"
@@ -51,7 +56,8 @@
 "Create node in neo4j db"
  [index-type node-data]
   (let [node (nn/create node-data)]
-	(add-node-key-to-indexes index-type (:id node))))
+	(add-node-key-to-indexes index-type (:id node))
+	(:id node)))
 
 (defn read-node
 "Read node by id from neo4j db"
@@ -66,5 +72,18 @@
 (defn delete-node
 "Delete node from neo4j db"
  [index-type id]
-	((remove-node-key-from-indexes index-type id)
-	(nn/delete id)))
+	(nrel/delete-many (nrel/all-ids-for (read-node id)))
+	 (nn/delete id)
+	 (remove-node-key-from-indexes index-type id))
+
+(defn create-relationship [from to rel-type data]
+"Create relationship between nodes"
+  (nrel/create from to rel-type data))
+
+(defn update-relationship [rel-id data]
+"Update relationship by id"
+  (nrel/update rel-id data))
+
+(defn cypher-query [query-statement]
+"Cypher query"
+  (cy/query query-statement))

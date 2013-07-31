@@ -3,21 +3,18 @@
 	    [personal-organiser.neo4j :as n4j]
 	    [net.cgrand.enlive-html :as en]))
 
-(def atom-data (atom {}))
-
-(defn add-data-to-atom
+(defn add-data-to-map
 "Add grocery data to atom of maps"
   [start-map node]
   (let [id (:id node)
 	data (:data node)]
-    (swap! atom-data assoc id data)))
+    (assoc start-map id data)))
 
-(defn nodes-data-to-atom
+(defn nodes-data-to-map
 "Format data from nodes to maps in atom"
- []
-	(let [nodes (n4j/read-all-nodes-type-of "grocery")]
-	  (reduce add-data-to-atom atom-data nodes))
-	@atom-data)
+ [index-type]
+	(let [nodes (n4j/read-all-nodes-type-of index-type)]
+	  (reduce add-data-to-map {} nodes)))
 
 (defn generate-html-resource [template template-selector component component-selector]
   (en/html-resource (en/transform (en/html-resource template) template-selector
@@ -29,6 +26,17 @@
   []
       [:title] (en/content "Create grocery")
       [:form#grocery-form] (en/set-attr :action "/save-grocery")
+      [:tr.vitamin] (en/clone-for [[id data] (nodes-data-to-map "vitamin")]
+		       [:td.vname] (en/content {:tag :label, :attrs {:for (str "vid"id)}, :content (:vname data)})
+		       [:td.vinput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "vid"id), :id (str "vid"id), :value id}, :content nil})
+		       [:td.vinput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "vvalue"id), :id (str "vvalue"id), :value "", :required "required"}, :content nil})
+);; vitamin clone-for
+      [:tr.mineral] (en/clone-for [[id data] (nodes-data-to-map "mineral")]
+		       [:td.mname] (en/content {:tag :label, :attrs {:for (str "mid"id)}, :content (:mname data)})
+		       [:td.minput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "mid"id), :id (str "mid"id), :value id}, :content nil})
+		       [:td.minput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "mvalue"id), :id (str "mvalue"id), :value "", :required "required"}, :content nil})
+);; mineral clone-for
+
 )
 
 (en/deftemplate edit-grocery
@@ -45,6 +53,16 @@
       [:input#carbohydrates] (en/set-attr :value (:gcarbohydrates (:data node)))
       [:input#water] (en/set-attr :value (:gwater (:data node)))
       [:textarea#description] (en/content (:gdesc (:data node)))
+      [:tr.vitamin] (en/clone-for [[vid rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`grocery-has-vitamin`]-(n2) return ID(n2),ID(r),r.mg,n2.vname order by ID(r)")))]
+		       [:td.vname] (en/content {:tag :label, :attrs {:for (str "vid"vid)}, :content vlabel})
+		       [:td.vinput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "vid"vid), :id (str "vid"vid), :value rid}, :content nil})
+		       [:td.vinput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "vvalue"vid), :id (str "vvalue"vid), :value vvalue, :required "required"}, :content nil})
+);; vitamin clone-for
+      [:tr.mineral] (en/clone-for [[mid rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`grocery-has-mineral`]-(n2) return ID(n2),ID(r),r.mg,n2.mname order by ID(r)")))]
+		       [:td.mname] (en/content {:tag :label, :attrs {:for (str "mid"mid)}, :content mlabel})
+		       [:td.minput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "mid"mid), :id (str "mid"mid), :value rid}, :content nil})
+		       [:td.minput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "mvalue"mid), :id (str "mvalue"mid), :value mvalue, :required "required"}, :content nil})
+);; mineral clone-for
       [:input#submit] (en/set-attr :value "Save changes")
 )
 
@@ -52,7 +70,7 @@
   (generate-html-resource (generate-html-resource "public/template.html" [:div.middle-column] "public/grocery-table.html" [:table.grocery-table]) [:div.left-column] "public/food-nav.html" [:div.food-nav])
   []
   [:title] (en/content "Grocery table")
-  [:tr.grocery-data] (en/clone-for [[id data] (nodes-data-to-atom)]
+  [:tr.grocery-data] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
 				[:td.gname] (en/content (format "%s" (:gname data)))
 				[:td.gcalories] (en/content (format "%s" (:gcalories data)))
 				[:td.gfats] (en/content (format "%s" (:gfats data)))
@@ -63,40 +81,56 @@
 				[:td.gedit] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/edit-grocery?id="id)}, :content "edit"})
 				[:td.gdelete] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/delete-grocery?id="id)}, :content "delete"})))
 
+(defn create-rel-for-node
+"Create relationship for node to another node"
+ [node-id data rel]
+  (doseq [[id value] data]
+    		(n4j/create-relationship node-id (read-string id) rel {:mg (read-string value)})))
+
+(defn update-rel-for-node
+"Update relationship by id"
+ [data]
+  (doseq [[id value] data]
+    		(n4j/update-relationship (read-string id) {:mg (read-string value)})))
+
 (defn save-grocery
 "Save grocery in neo4j database"
- [gname gcalories gfats gproteins gcarbohydrates gwater gdesc]
+ [gname gcalories gfats gproteins gcarbohydrates gwater gdesc vitamins minerals]
   (if-let [grocery-errors (create-grocery-errors gname gcalories gfats gproteins gcarbohydrates gwater gdesc)]
     (str "Grocery errors: " grocery-errors)
-    (n4j/create-node "grocery" {:gname gname
-			 :gcalories gcalories
-			 :gfats gfats
-			 :gproteins gproteins
-			 :gcarbohydrates gcarbohydrates
-			 :gwater gwater
-			 :gdesc gdesc}))
+    (let [node-id (n4j/create-node "grocery" {:gname gname
+			 :gcalories (read-string gcalories)
+			 :gfats (read-string gfats)
+			 :gproteins (read-string gproteins)
+			 :gcarbohydrates (read-string gcarbohydrates)
+			 :gwater (read-string gwater)
+			 :gdesc gdesc})]
+	(create-rel-for-node node-id vitamins :grocery-has-vitamin)
+	(create-rel-for-node node-id minerals :grocery-has-mineral)))
   (read-all-grocery))
 
 (defn update-grocery
 "Update grocery in neo4j database"
-[id gname gcalories gfats gproteins gcarbohydrates gwater gdesc]
+[id gname gcalories gfats gproteins gcarbohydrates gwater gdesc vitamins minerals]
   (if-let [grocery-errors (create-grocery-errors gname gcalories gfats gproteins gcarbohydrates gwater gdesc)]
     (str "Grocery errors: " grocery-errors)
-    (n4j/update-node (n4j/read-node (read-string id)) {:gname gname
+    ((n4j/update-node (n4j/read-node (read-string id)) {:gname gname
 			 :gcalories gcalories
 			 :gfats gfats
 			 :gproteins gproteins
 			 :gcarbohydrates gcarbohydrates
 			 :gwater gwater
-			 :gdesc gdesc}))
+			 :gdesc gdesc})
+     (update-rel-for-node vitamins)
+     (update-rel-for-node minerals)))
   (read-all-grocery))
 
 (defn delete-grocery
 "Delete grocery from neo4j database"
  [id]
   (n4j/delete-node "grocery" id)
-  (swap! atom-data dissoc id)
   (read-all-grocery))
 
-(defn food []
-    (generate-html-resource "public/template.html" [:div.left-column] "public/food-nav.html" [:div.food-nav]))
+(en/deftemplate food
+    (generate-html-resource "public/template.html" [:div.left-column] "public/food-nav.html" [:div.food-nav])
+[])

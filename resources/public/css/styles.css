@@ -35,22 +35,22 @@ div.food-nav a{
 div.food-nav a:hover{
   color: #91dc47;
 }
-td.gedit a{
-  color: #fff;
+td.gedit a, td.gdelete a{
+  color: #5881d8;
   text-decoration: none;
 }
-td.gedit:hover {
+td.gedit:hover, td.gdelete:hover {
   background-color: #5881d8;
   color: #fff;
 }
-td.gedit:hover a{
+td.gedit:hover a, td.gdelete:hover a{
   color: #90b4fe;
 }
-td.gedit:active {
+td.gedit:active, td.gdelete:active {
   background-color: #fff;
   color: #fff;
 }
-td.gedit:active a{
+td.gedit:active a, td.gdelete:active a{
   color: #90b4fe;
 }
 div.left-column {
@@ -75,7 +75,7 @@ form#grocery-form tr td:first-child {
 form#grocery-form tr td:first-child + td input, form#grocery-form tr td:first-child + td textarea {
   color: #fff;
   background-color: #91dc47;
-  border: solid 1px #fff;
+  border: solid 2px #fff;
   width: 150px;
 }
 input#submit {
@@ -84,3 +84,5 @@ input#submit {
 input#submit:hover {
   background-color: #63b132 !important;
 }
+/*tr.grocery-data (even) {background-color: #CCC;}
+tr.grocery-data (odd) {background-color: #FFF;}*/
