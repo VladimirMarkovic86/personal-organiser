@@ -25,16 +25,19 @@
   (generate-html-resource (generate-html-resource "public/template.html" [:div.middle-column] "public/grocery-form.html" [:form#grocery-form]) [:div.left-column] "public/food-nav.html" [:div.food-nav])
   []
       [:title] (en/content "Create grocery")
+      [:script#script] (en/after {:tag :script, :attrs nil, :content "personal_organiser.grocery.init();"})
       [:form#grocery-form] (en/set-attr :action "/save-grocery")
       [:tr.vitamin] (en/clone-for [[id data] (nodes-data-to-map "vitamin")]
-		       [:td.vname] (en/content {:tag :label, :attrs {:for (str "vid"id)}, :content (:vname data)})
+		       [:td.vname] (en/content {:tag :label, :attrs {:for (str "vvalue"id), :id (str "lvvalue"id)}, :content (:vname data)})
 		       [:td.vinput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "vid"id), :id (str "vid"id), :value id}, :content nil})
 		       [:td.vinput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "vvalue"id), :id (str "vvalue"id), :value "", :required "required"}, :content nil})
+		       [:td.vhelp] (en/set-attr :id (str "tdvvalue"id))
 );; vitamin clone-for
       [:tr.mineral] (en/clone-for [[id data] (nodes-data-to-map "mineral")]
-		       [:td.mname] (en/content {:tag :label, :attrs {:for (str "mid"id)}, :content (:mname data)})
+		       [:td.mname] (en/content {:tag :label, :attrs {:for (str "mvalue"id), :id (str "lmvalue"id)}, :content (:mname data)})
 		       [:td.minput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "mid"id), :id (str "mid"id), :value id}, :content nil})
 		       [:td.minput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "mvalue"id), :id (str "mvalue"id), :value "", :required "required"}, :content nil})
+		       [:td.mhelp] (en/set-attr :id (str "tdmvalue"id))
 );; mineral clone-for
 
 )
@@ -44,6 +47,7 @@
   [node]
       [:title] (en/content "Edit grocery")
       [:h3.form-title] (en/content "Edit grocery")
+      [:script#script] (en/after {:tag :script, :attrs nil, :content "personal_organiser.grocery.init();"})
       [:form#grocery-form] (en/set-attr :action "/update-grocery")
       [:input#name] (en/before {:tag :input, :attrs {:type "hidden", :name "groceryid", :id "groceryid", :value (:id node)}, :content nil})
       [:input#name] (en/set-attr :value (:gname (:data node)))
@@ -54,14 +58,16 @@
       [:input#water] (en/set-attr :value (:gwater (:data node)))
       [:textarea#description] (en/content (:gdesc (:data node)))
       [:tr.vitamin] (en/clone-for [[vid rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`grocery-has-vitamin`]-(n2) return ID(n2),ID(r),r.mg,n2.vname order by ID(r)")))]
-		       [:td.vname] (en/content {:tag :label, :attrs {:for (str "vid"vid)}, :content vlabel})
+		       [:td.vname] (en/content {:tag :label, :attrs {:for (str "vvalue"vid), :id (str "lvvalue"vid)}, :content vlabel})
 		       [:td.vinput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "vid"vid), :id (str "vid"vid), :value rid}, :content nil})
 		       [:td.vinput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "vvalue"vid), :id (str "vvalue"vid), :value vvalue, :required "required"}, :content nil})
+		       [:td.vhelp] (en/set-attr :id (str "tdvvalue"vid))
 );; vitamin clone-for
       [:tr.mineral] (en/clone-for [[mid rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`grocery-has-mineral`]-(n2) return ID(n2),ID(r),r.mg,n2.mname order by ID(r)")))]
-		       [:td.mname] (en/content {:tag :label, :attrs {:for (str "mid"mid)}, :content mlabel})
+		       [:td.mname] (en/content {:tag :label, :attrs {:for (str "mvalue"mid), :id (str "lmvalue"mid)}, :content mlabel})
 		       [:td.minput] (en/content {:tag :input, :attrs {:type "hidden", :name (str "mid"mid), :id (str "mid"mid), :value rid}, :content nil})
 		       [:td.minput :input] (en/after {:tag :input, :attrs {:type "number", :step "any", :name (str "mvalue"mid), :id (str "mvalue"mid), :value mvalue, :required "required"}, :content nil})
+		       [:td.mhelp] (en/set-attr :id (str "tdmvalue"mid))
 );; mineral clone-for
       [:input#submit] (en/set-attr :value "Save changes")
 )

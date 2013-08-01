@@ -1,54 +1,64 @@
-<form method="post" id="grocery-form">
+<form method="post" id="grocery-form" novalidate>
 <table>
 
     <tr>
       <td><h3 class="form-title">Create grocery</h3></td>
+      <td></td>
       <td></td>
     </tr>
 
     <tr>
       <td><label for="name">Name</label></td>
       <td><input type="text" name="gname" id="name" required></td>
+      <td></td>
     </tr>
 
     <tr>
       <td><label for="calories">Calories</label></td>
       <td><input type="number" step="any" name="gcalories" id="calories" required></td>
+      <td></td>
     </tr>
 
     <tr>
       <td><label for="fats">Fats</label></td>
       <td><input type="number" step="any" name="gfats" id="fats" required></td>
+      <td></td>
     </tr>
 
     <tr>
       <td><label for="proteins">Proteins</label></td>
       <td><input type="number" step="any" name="gproteins" id="proteins" required></td>
+      <td></td>
     </tr>
 
     <tr>
       <td><label for="carbohydrates">Carbohydrates</label></td>
       <td><input type="number" step="any" name="gcarbohydrates" id="carbohydrates" required></td>
+      <td></td>
     </tr>
 
     <tr>
       <td><label for="water">Water</label></td>
       <td><input type="number" step="any" name="gwater" id="water" required></td>
+      <td></td>
     </tr>
 
     <tr>
       <td><label for="description">Description</label></td>
       <td><textarea type="text" name="gdesc" id="description" required></textarea></td>
+      <td></td>
     </tr>
 
     <tr>
       <td><h4>Vitamins</h4></td>
+      <td></td>
       <td></td>
     </tr>
 
     <tr class="vitamin">
       <td class="vname"></td>
       <td class="vinput"></td>
+      <td class="vhelp"></td>
     </tr>
 
     <tr>
@@ -59,11 +69,13 @@
     <tr class="mineral">
       <td class="mname"></td>
       <td class="minput"></td>
+      <td class="mhelp"></td>
     </tr>
 
     <tr>
       <td><label for="submit"></label></td>
       <td><input type="submit" value="Create" id="submit"></td>
+      <td></td>
     </tr>
 </table>
 </form>

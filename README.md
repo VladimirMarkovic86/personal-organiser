@@ -6,6 +6,11 @@ PersonalOrganiser should be application for organising daily activities, from me
 ClojureScript
 =========
 
+Command to build js file:
+
+lein cljsbuild once dev -> generates js development file that connects to brepl (browser repl)
+lein cljsbuild once prod -> generates js production file
+
 Tutorials from this address are followed.
 https://github.com/magomimmo/modern-cljs/blob/master/doc/tutorial-xx.md
 Except in 'tutorial-xx' instead of 'xx' type numbers from 01 to 16. Sixteen tutorials cover ClojureScript and other tehnology. In future there may be more.
@@ -35,3 +40,10 @@ API Documentation
 A tool for generating API documentation from Clojure source code.
 
 Plugin => https://github.com/weavejester/codox
+
+Domina
+======
+
+Domina is a jQuery inspired DOM manipulation library for ClojureScript. It provides a functional, idiomatic Clojure interface to the DOM manipulation facilities provided by the Google Closure library.
+
+https://github.com/levand/domina

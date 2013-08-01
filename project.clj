@@ -11,7 +11,8 @@
 		 [com.cemerick/valip "0.3.2"]
 		 [clojurewerkz/neocons "1.1.0"]
 		 [ring/ring-jetty-adapter "1.1.0"]
-		 [enlive "1.1.1"]]
+		 [enlive "1.1.1"]
+		 [domina "1.0.2-SNAPSHOT"]]
 
   ;; run main from personal-organiser.core namespace
   :main personal-organiser.core
@@ -31,8 +32,9 @@
 
   ;; cljsbuild options configuration
   :cljsbuild {:builds
-		[{;; CLJS source code path
-		  :source-paths ["src/cljs"]
+		{:dev
+		 {;; CLJS source code path
+		  :source-paths ["src/brepl" "src/cljs"]
 
 		  ;; Google Closure (CLS) options configuration
 		  :compiler {;; CLS generated JS script filename
@@ -42,4 +44,17 @@
 			     :optimizations :whitespace
 
 			     ;; generated JS code prettyfication
-			     :pretty-print true}}]})
+			     :pretty-print true}}
+		 :prod
+		 {;; CLJS source code path
+		  :source-paths ["src/cljs"]
+
+		  ;; Google Closure (CLS) options configuration
+		  :compiler {;; CLS generated JS script filename
+			     :output-to "resources/public/js/personal-organiser.js"
+
+			     ;; minimal JS optimization directive
+			     :optimizations :advanced
+
+			     ;; generated JS code prettyfication
+			     :pretty-print true}}}})
