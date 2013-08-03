@@ -15,7 +15,10 @@
 		 [domina "1.0.2-SNAPSHOT"]]
 
   ;; run main from personal-organiser.core namespace
-  :main personal-organiser.core
+  :main personal-organiser.repl
+
+  ;; REPL default namespace
+  :repl-init personal-organiser.repl
 
   ;; lein-cljsbuild plugin to build a CLJS project
   :plugins [;; cljsbuild plugin
@@ -26,6 +29,8 @@
 
 	    ;; codox plugin
 	    [codox "0.6.4"]]
+
+  ;; :codox {:sources ["src/clj" "src/cljs"]}
 
   ;; ring task configuration
   :ring {:handler personal-organiser.core/handler}
