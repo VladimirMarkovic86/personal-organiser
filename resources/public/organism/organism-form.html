@@ -1,0 +1,115 @@
+<form method="post" id="organism-form" novalidate>
+<table class="organism-table">
+
+    <tr>
+      <td><h3 class="form-title">Create organism</h3></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td><label for="ofirst-name" id="lofirst-name">First name</label></td>
+      <td><input type="text" name="ofirst-name" id="ofirst-name" required></td>
+      <td id="tdofirst-name"></td>
+    </tr>
+
+    <tr>
+      <td><label for="olast-name" id="lolast-name">Last name</label></td>
+      <td><input type="text" name="olast-name" id="olast-name" required></td>
+      <td id="tdolast-name"></td>
+    </tr>
+
+    <tr>
+      <td><label for="oemail" id="loemail">Email</label></td>
+      <td><input type="email" name="oemail" id="oemail" required></td>
+      <td id="tdoemail"></td>
+    </tr>
+
+    <tr>
+      <td><label for="opassword" id="lopassword">Password</label></td>
+      <td><input type="password" name="opassword" id="opassword" required></td>
+      <td id="tdopassword"></td>
+    </tr>
+
+    <tr>
+      <td><label for="oconfirm-password" id="loconfirm-password">Confirm password</label></td>
+      <td><input type="password" name="oconfirm-password" id="oconfirm-password" required></td>
+      <td id="tdoconfirm-password"></td>
+    </tr>
+
+    <tr>
+      <td><label for="oheight" id="loheight">Height</label></td>
+      <td><input type="number" step="any" name="oheight" id="oheight" required></td>
+      <td id="tdoheight"></td>
+    </tr>
+
+    <tr>
+      <td><label for="oweight" id="loweight">Weight</label></td>
+      <td><input type="number" step="any" name="oweight" id="oweight" required></td>
+      <td id="tdoweight"></td>
+    </tr>
+
+    <tr>
+      <td><label for="obirthday" id="lobirthday">Birthday</label></td>
+      <td><input type="date" name="obirthday" id="obirthday" required></td>
+      <td id="tdobirthday"></td>
+    </tr>
+
+    <tr>
+      <td><label for="ogender" id="logender">Gender</label></td>
+      <td>
+	<div><input type="radio" name="ogender" id="ogender-male" value="Male" required><label for="ogender-male"><span></span>Male</label></div>
+	<div><input type="radio" name="ogender" id="ogender-female" value="Female" required><label for="ogender-female"><span></span>Female</label></div>
+      </td>
+      <td id="tdogender"></td>
+    </tr>
+
+    <tr>
+      <td><label for="odiet" id="lodiet">Diet</label></td>
+      <td>
+	<div><input type="radio" name="odiet" id="odiet-all" value="All" required><label for="odiet-all"><span></span>All</label></div>
+	<div><input type="radio" name="odiet" id="odiet-vegetarian" value="Vegetarian" required><label for="odiet-vegetarian"><span></span>Vegetarian</label></div>
+      </td>
+      <td id="tdodiet"></td>
+    </tr>
+
+    <tr>
+      <td><label for="oactivity" id="loactivity">Activity</label></td>
+      <td>
+	<div><input type="radio" name="oactivity" id="oactivity-easy" value="Easy" required><label for="oactivity-easy"><span></span>Easy</label></div>
+	<div><input type="radio" name="oactivity" id="oactivity-medium" value="Medium" required><label for="oactivity-medium"><span></span>Medium</label></div>
+	<div><input type="radio" name="oactivity" id="oactivity-hard" value="Hard" required><label for="oactivity-hard"><span></span>Hard</label></div>
+      </td>
+      <td id="tdoactivity"></td>
+    </tr>
+
+    <tr>
+      <td><h4>Vitamins</h4></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr class="vitamin">
+      <td class="vname"></td>
+      <td class="vinput"></td>
+      <td class="vhelp"></td>
+    </tr>
+
+    <tr>
+      <td><h4>Minerals</h4></td>
+      <td></td>
+    </tr>
+
+    <tr class="mineral">
+      <td class="mname"></td>
+      <td class="minput"></td>
+      <td class="mhelp"></td>
+    </tr>
+
+    <tr>
+      <td><label for="submit"></label></td>
+      <td><input type="submit" value="Create" id="submit"></td>
+      <td></td>
+    </tr>
+</table>
+</form>

@@ -28,11 +28,11 @@ div.maincontent {
   width: 800px;
   background-color: #90b4fe;
 }
-div.food-nav a{
+div.food-nav a, div.organism-nav a{
   text-decoration: none;
   color: #fff;
 }
-div.food-nav a:hover{
+div.food-nav a:hover, div.organism-nav a:hover{
   color: #91dc47;
 }
 td.gedit a, td.gdelete a{
@@ -69,20 +69,40 @@ div.middle-column {
 div.right-column {
   float: left;
 }
-form#grocery-form tr td:first-child {
+form#grocery-form tr td:first-child,
+form#organism-form tr td:first-child,
+table.organism-table tr td:first-child {
   text-align:right;
 }
-form#grocery-form tr td:first-child + td input, form#grocery-form tr td:first-child + td textarea {
+form#grocery-form tr td:first-child + td input,
+form#grocery-form tr td:first-child + td textarea,
+form#organism-form tr td:first-child + td input,
+table.organism-table tr td:first-child + td input{
   color: #fff;
   background-color: #91dc47;
   border: solid 2px #fff;
-  width: 150px;
+  width: 200px;
 }
 input#submit {
   width: auto !important;
 }
 input#submit:hover {
   background-color: #63b132 !important;
+}
+input[type="radio"] {
+  display:none;
+}
+input[type="radio"] + label span {
+    display:inline-block;
+    width:19px;
+    height:19px;
+    margin:-1px 4px 0 0;
+    vertical-align:middle;
+    background:url('../images/radio.png') left top no-repeat;
+    cursor:pointer;
+}
+input[type="radio"]:checked + label span {
+    background:url('../images/radio.png') -19px top no-repeat;
 }
 /*tr.grocery-data (even) {background-color: #CCC;}
 tr.grocery-data (odd) {background-color: #FFF;}*/

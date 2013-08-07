@@ -1,0 +1,719 @@
+package com.sample
+ 
+import model.Organizam;
+import enums.VrstaObroka;
+import java.util.ArrayList;
+import model.Obrok;
+
+global ArrayList<Obrok> breakfast;
+global ArrayList<Obrok> lunch;
+global ArrayList<Obrok> dinner;
+global ArrayList<Obrok> training;
+
+rule "Neuhranjenost"
+salience 4
+no-loop
+    when
+        o : Organizam( o.getRacunIndeksTelesneMase() < 18 )
+    then
+        o.setIndeksTelesneMase("Neuhranjenost");
+        System.out.println("Neuhranjenost");
+        update( o );
+end
+
+rule "Normalna tezina"
+salience 4
+no-loop
+    when
+        o : Organizam( (o.getRacunIndeksTelesneMase() >= 18) && (o.getRacunIndeksTelesneMase() <= 25))
+    then
+        o.setIndeksTelesneMase("Normalna tezina");
+        update( o );
+        System.out.println("Normalna tezina");
+        
+end
+
+rule "Preterana tezina"
+salience 4
+no-loop
+    when
+        o : Organizam( o.getRacunIndeksTelesneMase() > 25 )
+    then
+        o.setIndeksTelesneMase("Preterana tezina");
+        System.out.println("Preterana tezina");
+        update( o );
+end
+
+/* Dorucak */
+
+rule "Dorucak normalna tezina"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.DORUCAK) &&
+        				( indeksTelesneMase == "Normalna tezina" ) )
+        obrok : Obrok( (obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+        System.out.println("Dorucak, bez fizicke aktivnosti, normalno");
+        breakfast.add(obrok);
+end
+
+rule "Dorucak 1 normalna tezina, trening"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.DORUCAK ) &&
+        				(indeksTelesneMase == "Normalna tezina") )
+        obrok : Obrok( (obrok.getUgljeniHidrati() > 70) &&
+        				(obrok.getUgljeniHidrati() < 130) &&
+        				(obrok.getMasti() < 100) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+    	System.out.println("Dorucak 1 normalna tezina, trening " + obrok.getIme());
+    	breakfast.add(obrok);
+end
+
+rule "Dorucak 2 normalna tezina, trening"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.DORUCAK ) &&
+        				(indeksTelesneMase == "Normalna tezina") )
+        obrok : Obrok( (obrok.getProteini() > 30) &&
+        				(obrok.getMasti() < 100) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+    	System.out.println("Dorucak 2 normalna tezina, trening " + obrok.getIme());
+    	training.add(obrok);
+end
+
+rule "Dorucak preterana tezina"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.DORUCAK) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 50) &&
+        				(obrok.getMasti() < 100) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+        System.out.println("Dorucak preterana tezina");
+        breakfast.add(obrok);
+end
+
+rule "Dorucak 1 preterana tezina, trening"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.DORUCAK ) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 70) &&
+        				(obrok.getProteini() > 30) &&
+        				(obrok.getMasti() < 100) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+        System.out.println("Dorucak 1 preterana tezina, trening");
+        breakfast.add(obrok);
+end
+
+rule "Dorucak 2 preterana tezina, trening"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.DORUCAK ) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 50) &&
+        				(obrok.getProteini() > 30) &&
+        				(obrok.getMasti() < 100) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+        System.out.println("Dorucak 2 preterana tezina, trening");
+        training.add(obrok);
+end
+
+rule "Dorucak neuhranjenost"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.DORUCAK) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+		obrok : Obrok( (obrok.getProteini() > 20) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+        System.out.println("Dorucak neuhranjenost");
+        breakfast.add(obrok);
+end
+
+rule "Dorucak 1 neuhranjenost, trening"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.DORUCAK ) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+		obrok : Obrok( (obrok.getUgljeniHidrati() > 50) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+        System.out.println("Dorucak 1 neuhranjenost, trening");
+        breakfast.add(obrok);
+end
+
+rule "Dorucak 2 neuhranjenost, trening"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.DORUCAK ) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+		obrok : Obrok( (obrok.getProteini() > 30) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+        System.out.println("Dorucak 2 neuhranjenost, trening");
+        training.add(obrok);
+end
+
+/* Rucak */
+
+rule "Rucak normalna tezina"
+salience 3
+    when
+        o : Organizam(( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.RUCAK) &&
+        				( indeksTelesneMase == "Normalna tezina" ) )
+        obrok : Obrok( (obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak normalna tezina");
+        lunch.add(obrok);
+end
+
+rule "Rucak preterana tezina"
+salience 3
+    when
+        o : Organizam(( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.RUCAK) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 70) &&
+        				(obrok.getMasti() < 50) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak preterana tezina");
+        lunch.add(obrok);
+end
+
+rule "Rucak neuhranjenost"
+salience 3
+    when
+        o : Organizam(( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.RUCAK) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+        obrok : Obrok( (obrok.getProteini() > 30) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak neuhranjenost");
+        lunch.add(obrok);
+end
+
+rule "Rucak 1 normalna tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.RUCAK ) &&
+        				( indeksTelesneMase == "Normalna tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() > 100) &&
+        				(obrok.getMasti() < 70) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak 1 normalna tezina, trening");
+        lunch.add(obrok);
+end
+
+rule "Rucak 2 normalna tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.RUCAK ) &&
+        				( indeksTelesneMase == "Normalna tezina" ) )
+        obrok : Obrok( (obrok.getProteini() > 30) &&
+        				(obrok.getMasti() < 70) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak 2 normalna tezina, trening");
+        training.add(obrok);
+end
+
+rule "Rucak 1 preterana tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.RUCAK ) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 100) &&
+        				(obrok.getMasti() < 70) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak 1 preterana tezina, trening");
+        lunch.add(obrok);
+end
+
+rule "Rucak 2 preterana tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.RUCAK ) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 70) &&
+        				(obrok.getProteini() > 30) &&
+        				(obrok.getMasti() < 70) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak 2 preterana tezina, trening");
+        training.add(obrok);
+end
+
+rule "Rucak 1 neuhranjenost, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.RUCAK ) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() > 100) &&
+        				(obrok.getProteini() > 20) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak 1 neuhranjenost, trening");
+        lunch.add(obrok);
+end
+
+rule "Rucak 2 neuhranjenost, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.RUCAK ) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+        obrok : Obrok( (obrok.getProteini() > 30) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+        System.out.println("Rucak 2 neuhranjenost, trening");
+        training.add(obrok);
+end
+
+/* Vecera */
+
+rule "Vecera normalna tezina"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.VECERA) &&
+        				( indeksTelesneMase == "Normalna tezina" ) )
+        obrok : Obrok( (obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+		System.out.println("Vecera normalna tezina");
+		dinner.add(obrok);
+end
+
+rule "Vecera preterana tezina"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.VECERA) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 50) &&
+        				(obrok.getProteini() > 20) &&
+        				(obrok.getMasti() < 50) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+		System.out.println("Vecera preterana tezina");
+		dinner.add(obrok);
+end
+
+rule "Vecera neuhranjenost"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() !=  VrstaObroka.VECERA) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() > 20) &&
+        				(obrok.getProteini() > 20) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+		System.out.println("Vecera neuhranjenost");
+		dinner.add(obrok);
+end
+
+rule "Vecera 1 normalna tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.VECERA ) &&
+        				( indeksTelesneMase == "Normalna tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() > 50) &&
+        				(obrok.getMasti() < 50) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+        System.out.println("Vecera 1 normalna tezina, treninga");
+        dinner.add(obrok);
+end
+
+rule "Vecera 2 normalna tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.VECERA ) &&
+        				( indeksTelesneMase == "Normalna tezina" ) )
+        obrok : Obrok( (obrok.getProteini() > 30) &&
+        				(obrok.getMasti() < 70) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+        System.out.println("Vecera 2 normalna tezina, treninga");
+        training.add(obrok);
+end
+
+rule "Vecera 1 preterana tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.VECERA ) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 70) &&
+        				(obrok.getMasti() < 70) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+        System.out.println("Vecera 1 preterana tezina, treninga");
+        dinner.add(obrok);
+end
+
+rule "Vecera 2 preterana tezina, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.VECERA ) &&
+        				( indeksTelesneMase == "Preterana tezina" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() < 70) &&
+        				(obrok.getProteini() > 30) &&
+        				(obrok.getMasti() < 70) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+        System.out.println("Vecera 2 preterana tezina, treninga");
+        training.add(obrok);
+end
+
+rule "Vecera 1 neuhranjenost, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.VECERA ) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+        obrok : Obrok( (obrok.getUgljeniHidrati() > 70) &&
+        				(obrok.getProteini() > 20) &&
+        				(obrok.getMasti() < 100) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+        System.out.println("Vecera 1 neuhranjenost, treninga");
+        dinner.add(obrok);
+end
+
+rule "Vecera 2 neuhranjenost, treninga"
+salience 3
+    when
+        o : Organizam( ( o.getTrening() > 0 ) &&
+        				( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTrajanjeTreninga() > 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.VECERA ) &&
+        				( indeksTelesneMase == "Neuhranjenost" ) )
+        obrok : Obrok( (obrok.getProteini() > 30) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+        System.out.println("Vecera 2 neuhranjenost, treninga");
+        training.add(obrok);
+end
+
+rule "Dorucak opstipacija"
+salience 3
+    when
+        o : Organizam( ( opstipacija == 1 ) &&
+        				( dijareja == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getOpstipacija() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+		System.out.println("Dorucak opstipacija");
+		breakfast.add(obrok);
+end
+
+rule "Rucak opstipacija"
+salience 3
+    when
+        o : Organizam( ( opstipacija == 1 ) &&
+        				( dijareja == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getOpstipacija() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+		System.out.println("Rucak opstipacija");
+		lunch.add(obrok);
+end
+
+rule "Vecera opstipacija"
+salience 3
+    when
+        o : Organizam( ( opstipacija == 1 ) &&
+        				( dijareja == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getOpstipacija() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+		System.out.println("Vecera opstipacija");
+		dinner.add(obrok);
+end
+
+rule "Dorucak dijareja"
+salience 3
+    when
+        o : Organizam( ( opstipacija == 0 ) &&
+        				( dijareja == 1 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getDijareja() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+		System.out.println("Dorucak dijareja");
+		breakfast.add(obrok);
+end
+
+rule "Rucak dijareja"
+salience 3
+    when
+        o : Organizam( ( opstipacija == 0 ) &&
+        				( dijareja == 1 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA))
+        obrok : Obrok( (obrok.getDijareja() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+		System.out.println("Rucak dijareja");
+		lunch.add(obrok);
+end
+
+rule "Vecera dijareja"
+salience 3
+    when
+        o : Organizam( ( opstipacija == 0 ) &&
+        				( dijareja == 1 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA))
+        obrok : Obrok( (obrok.getDijareja() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+		System.out.println("Vecera dijareja");
+		dinner.add(obrok);
+end
+
+rule "Dorucak normalizovanjeKrvnogPritiska"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 1 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getNormalizovanjePritiska() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+		System.out.println("Dorucak normalizovanjeKrvnogPritiska");
+		breakfast.add(obrok);
+end
+
+rule "Rucak normalizovanjeKrvnogPritiska"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 1 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getNormalizovanjePritiska() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+		System.out.println("Rucak normalizovanjeKrvnogPritiska");
+		lunch.add(obrok);
+end
+
+rule "Vecera normalizovanjeKrvnogPritiska"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 0 ) &&
+        				( normalizovanjeKrvnogPritiska == 1 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getNormalizovanjePritiska() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+		System.out.println("Vecera normalizovanjeKrvnogPritiska");
+		dinner.add(obrok);
+end
+
+rule "Dorucak smanjenjeHolesterola"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 1 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA))
+        obrok : Obrok( (obrok.getSmanjenjeHolesterola() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.DORUCAK) )
+    then
+		System.out.println("Dorucak smanjenjeHolesterola");
+		breakfast.add(obrok);
+end
+
+rule "Rucak smanjenjeHolesterola"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 1 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getSmanjenjeHolesterola() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.RUCAK) )
+    then
+		System.out.println("Rucak smanjenjeHolesterola");
+		lunch.add(obrok);
+end
+
+rule "Vecera smanjenjeHolesterola"
+salience 3
+    when
+        o : Organizam( ( dijareja == 0 ) &&
+        				( opstipacija == 0 ) &&
+        				( smanjenjeHolesterola == 1 ) &&
+        				( normalizovanjeKrvnogPritiska == 0 ) &&
+        				( o.getTreningObrok() == VrstaObroka.BEZ_OBROKA) )
+        obrok : Obrok( (obrok.getSmanjenjeHolesterola() == 1) &&
+        				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
+    then
+		System.out.println("Vecera smanjenjeHolesterola");
+		dinner.add(obrok);
+end
