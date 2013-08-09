@@ -15,29 +15,9 @@
 		 [ring/ring-jetty-adapter "1.1.0"]
 		 [enlive "1.1.1"]
 		 [domina "1.0.2-SNAPSHOT"]
-		 [org.antlr/antlr-runtime "3.5"]
-		 [org.drools/drools-core "6.0.0.CR1"]
-		 [org.drools/drools-compiler "6.0.0.CR1"]
-		 [org.drools/drools-decisiontables "6.0.0.CR1"]
-		 [org.drools/droolsjbpm-ide-common "5.5.0.Final"]
-		 [org.drools/drools-jsr94 "6.0.0.CR1"]
-		 [org.drools/drools-templates "6.0.0.CR1"]
-		 [org.drools/guvnor-api "5.5.0.Final"]
-		 [org.jbpm/jbpm-bpmn2 "6.0.0.CR1"]
-		 [org.jbpm/jbpm-flow "6.0.0.CR1"]
-		 [org.jbpm/jbpm-flow-builder "6.0.0.CR1"]
-		 [drools/drools-jsr94 "20040726.195413"]
-		 [junit/junit "4.11"]
-		 [jexcelapi/jxl "2.6"]
-		 [org.drools/knowledge-api "6.0.0.CR1"]
-		 [org.drools/knowledge-internal-api "5.5.0.Final"]
-		 [org.mvel/mvel2 "2.1.6.Final"]
-		 [org.eclipse.jdt/core "3.3.0-v_771"]
-		 [org.slf4j/slf4j-api "1.7.5"]
-		 [xmlpull/xmlpull "1.1.3.4d_b4_min"]
-		 [xpp3/xpp3_min "1.1.4c"]
-		 [xstream/xstream "1.2.2"]
-		 [org.jvnet.jaxb2_commons/jaxb-xjc "2.1.10.1"]]
+;		 Drools runtime dependencies should bi commented when compiling clojurescript
+;		 [org.antlr/antlr-runtime "3.5"] [org.drools/drools-core "6.0.0.CR1"] [org.drools/drools-compiler "6.0.0.CR1"] [org.drools/drools-decisiontables "6.0.0.CR1"] [org.drools/droolsjbpm-ide-common "5.5.0.Final"] [org.drools/drools-jsr94 "6.0.0.CR1"] [org.drools/drools-templates "6.0.0.CR1"] [org.drools/guvnor-api "5.5.0.Final"] [org.jbpm/jbpm-bpmn2 "6.0.0.CR1"] [org.jbpm/jbpm-flow "6.0.0.CR1"] [org.jbpm/jbpm-flow-builder "6.0.0.CR1"] [drools/drools-jsr94 "20040726.195413"] [junit/junit "4.11"] [jexcelapi/jxl "2.6"] [org.drools/knowledge-api "6.0.0.CR1"] [org.drools/knowledge-internal-api "5.5.0.Final"] [org.mvel/mvel2 "2.1.6.Final"] [org.eclipse.jdt/core "3.3.0-v_771"] [org.slf4j/slf4j-api "1.7.5"] [xmlpull/xmlpull "1.1.3.4d_b4_min"] [xpp3/xpp3_min "1.1.4c"] [xstream/xstream "1.2.2"] [org.jvnet.jaxb2_commons/jaxb-xjc "2.1.10.1"]
+]
 
   ;; run main from personal-organiser.core namespace
   :main personal-organiser.repl
@@ -58,30 +38,82 @@
   ;; :codox {:sources ["src/clj" "src/cljs"]}
 
   ;; ring task configuration
-  :ring {:handler personal-organiser.core/handler}
+  :ring {:handler personal-organiser.server/handler}
 
   ;; cljsbuild options configuration
   :cljsbuild {:builds
-		{:dev
+		{:dev-grocery
 		 {;; CLJS source code path
-		  :source-paths ["src/brepl" "src/cljs"]
+		  :source-paths ["src/brepl" "src/cljs/personal_organiser/grocery"]
 
 		  ;; Google Closure (CLS) options configuration
 		  :compiler {;; CLS generated JS script filename
-			     :output-to "resources/public/js/personal-organiser.js"
+			     :output-to "resources/public/js/grocery.js"
 
 			     ;; minimal JS optimization directive
 			     :optimizations :whitespace
 
 			     ;; generated JS code prettyfication
 			     :pretty-print true}}
-		 :prod
+		 :dev-meal
 		 {;; CLJS source code path
-		  :source-paths ["src/cljs"]
+		  :source-paths ["src/brepl" "src/cljs/personal_organiser/meal"]
 
 		  ;; Google Closure (CLS) options configuration
 		  :compiler {;; CLS generated JS script filename
-			     :output-to "resources/public/js/personal-organiser.js"
+			     :output-to "resources/public/js/meal.js"
+
+			     ;; minimal JS optimization directive
+			     :optimizations :whitespace
+
+			     ;; generated JS code prettyfication
+			     :pretty-print true}}
+		 :dev-organism
+		 {;; CLJS source code path
+		  :source-paths ["src/brepl" "src/cljs/personal_organiser/organism"]
+
+		  ;; Google Closure (CLS) options configuration
+		  :compiler {;; CLS generated JS script filename
+			     :output-to "resources/public/js/organism.js"
+
+			     ;; minimal JS optimization directive
+			     :optimizations :whitespace
+
+			     ;; generated JS code prettyfication
+			     :pretty-print true}}
+		 :prod-grocery
+		 {;; CLJS source code path
+		  :source-paths ["src/cljs/personal_organiser/grocery"]
+
+		  ;; Google Closure (CLS) options configuration
+		  :compiler {;; CLS generated JS script filename
+			     :output-to "resources/public/js/grocery.js"
+
+			     ;; minimal JS optimization directive
+			     :optimizations :advanced
+
+			     ;; generated JS code prettyfication
+			     :pretty-print true}}
+		 :prod-meal
+		 {;; CLJS source code path
+		  :source-paths ["src/cljs/personal_organiser/meal"]
+
+		  ;; Google Closure (CLS) options configuration
+		  :compiler {;; CLS generated JS script filename
+			     :output-to "resources/public/js/meal.js"
+
+			     ;; minimal JS optimization directive
+			     :optimizations :advanced
+
+			     ;; generated JS code prettyfication
+			     :pretty-print true}}
+		 :prod-organism
+		 {;; CLJS source code path
+		  :source-paths ["src/cljs/personal_organiser/organism"]
+
+		  ;; Google Closure (CLS) options configuration
+		  :compiler {;; CLS generated JS script filename
+			     :output-to "resources/public/js/organism.js"
 
 			     ;; minimal JS optimization directive
 			     :optimizations :advanced

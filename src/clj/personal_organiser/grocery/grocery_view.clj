@@ -1,28 +1,16 @@
 (ns personal-organiser.grocery.grocery-view
   (:require [personal-organiser.neo4j :as n4j]
 	    [personal-organiser.html-generator :as hg]
-	    [net.cgrand.enlive-html :as en]))
-
-(defn add-data-to-map
-  "Add grocery data to maps"
-  [start-map node]
-  (let [id (:id node)
-	data (:data node)]
-       (assoc start-map id data)))
-
-(defn nodes-data-to-map
-  "Format data from nodes to maps"
-  [index-type]
-  (let [nodes (n4j/read-all-nodes-type-of index-type)]
-       (reduce add-data-to-map {} nodes)))
+	    [net.cgrand.enlive-html :as en]
+	    [personal-organiser.utils :refer [nodes-data-to-map]]))
 
 (en/deftemplate create-grocery
   (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/grocery/grocery-form.html", :comp-sel [:form#grocery-form]}
-	               {:temp-sel [:div.left-column], :comp "public/grocery/food-nav.html", :comp-sel [:div.food-nav]}])
+	               {:temp-sel [:div.left-column], :comp "public/grocery/grocery-nav.html", :comp-sel [:div.grocery-nav]}])
   []
   [:title] (en/content "Create grocery")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/personal-organiser.js"}, :content nil})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.jsgrocery.init();"})
+  [:div.script] (en/content {:tag :script, :attrs {:src "js/grocery.js"}, :content nil})
+  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.grocery.jsgrocery.init();"})
   [:form#grocery-form] (en/set-attr :action "/save-grocery")
   [:tr.vitamin] (en/clone-for [[id vname] (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "vitamin"))") return ID(n),n.vname order by ID(n) asc")))]
 	          [:td.vname] (en/content {:tag :label, :attrs {:for (str "value"id), :id (str "lvalue"id)}, :content vname})
@@ -36,12 +24,12 @@
 
 (en/deftemplate edit-grocery
   (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/grocery/grocery-form.html", :comp-sel [:form#grocery-form]}
-	               {:temp-sel [:div.left-column], :comp "public/grocery/food-nav.html", :comp-sel [:div.food-nav]}])
+	               {:temp-sel [:div.left-column], :comp "public/grocery/grocery-nav.html", :comp-sel [:div.grocery-nav]}])
   [node]
   [:title] (en/content "Edit grocery")
   [:h3.form-title] (en/content "Edit grocery")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/personal-organiser.js"}, :content nil})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.jsgrocery.init();"})
+  [:div.script] (en/content {:tag :script, :attrs {:src "js/grocery.js"}, :content nil})
+  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.grocery.jsgrocery.init();"})
   [:form#grocery-form] (en/set-attr :action "/update-grocery")
   [:input#gname] (en/before {:tag :input, :attrs {:type "hidden", :name "idgrocery", :id "idgrocery", :value (:id node)}, :content nil})
   [:input#gname] (en/set-attr :value (:gname (:data node)))
@@ -62,9 +50,9 @@
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"rid)));; mineral clone-for
   [:input#submit] (en/set-attr :value "Save changes"))
 
-(en/deftemplate read-all-grocery
+(en/deftemplate read-all-groceries
   (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/grocery/grocery-table.html", :comp-sel [:table.grocery-table]}
-	               {:temp-sel [:div.left-column], :comp "public/grocery/food-nav.html", :comp-sel [:div.food-nav]}])
+	               {:temp-sel [:div.left-column], :comp "public/grocery/grocery-nav.html", :comp-sel [:div.grocery-nav]}])
   []
   [:title] (en/content "Grocery table")
   [:tr.grocery-data] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
@@ -78,6 +66,6 @@
 			[:td.gedit] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/edit-grocery?id="id)}, :content "edit"})
 			[:td.gdelete] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/delete-grocery?id="id)}, :content "delete"})))
 
-(en/deftemplate food-nav
-  (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/grocery/food-nav.html", :comp-sel [:div.food-nav]}])
+(en/deftemplate grocery-nav
+  (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/grocery/grocery-nav.html", :comp-sel [:div.grocery-nav]}])
   [])

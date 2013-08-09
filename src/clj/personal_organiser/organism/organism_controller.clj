@@ -1,29 +1,8 @@
 (ns personal-organiser.organism.organism-controller
   (:require [personal-organiser.organism.organism-validators :refer [create-organism-errors]]
 	    [personal-organiser.organism.organism-view :refer [read-organism organism-nav]]
-	    [personal-organiser.neo4j :as n4j]))
-
-(defn key-to-str
-  "Change map key to be string key"
-  [param-map param-pair]
-  (assoc param-map (str (param-pair 0)) (param-pair 1)))
-
-(defn map-keys-to-str
-  "Change map keys to be string keys"
-  [req-params]
-  (reduce key-to-str {} (into [] req-params)))
-
-(defn create-rels-for-node
-  "Create relationships between node and its target nodes with data"
-  [node-id params-map cy-query-result rel]
-    (doseq [target-node-id cy-query-result]
-      (n4j/create-relationship node-id (read-string (str target-node-id)) rel {:mg (read-string (get params-map (str ":value"target-node-id)))})))
-
-(defn update-rels-for-node
-  "Update relationships between node and its target nodes with data"
-  [rel-ids params-map]
-    (doseq [rel-id rel-ids]
-      (n4j/update-relationship (read-string (str (rel-id 0))) {:mg (read-string (get params-map (str ":value"(rel-id 0))))})))
+	    [personal-organiser.neo4j :as n4j]
+	    [personal-organiser.utils :refer [map-keys-to-str create-rels-for-node update-rels-for-node]]))
 
 (defn save-organism
   "Save organism in neo4j database"

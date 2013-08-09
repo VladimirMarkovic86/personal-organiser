@@ -6,6 +6,8 @@
 	    [personal-organiser.grocery.grocery-controller :as gc]
 	    [personal-organiser.organism.organism-view :as ov]
 	    [personal-organiser.organism.organism-controller :as oc]
+	    [personal-organiser.meal.meal-view :as mlv]
+	    [personal-organiser.meal.meal-controller :as mlc]
 	    [personal-organiser.neo4j :as n4j]
 	    [ring.adapter.jetty :as jetty]))
 
@@ -14,19 +16,57 @@
 ;; turn, until a non-nil response is returned.
 (defroutes app-routes
   ; to serve document root address
-  (GET "/read-all-grocery" [] (gv/read-all-grocery)) ;;(ring.util.response/redirect "http://localhost:5000/create-grocery.html"))
-  (GET "/food-nav" [] (gv/food-nav))
-  (GET "/create-grocery" [] (gv/create-grocery))
-  (POST "/save-grocery" request (gc/save-grocery (:params request)))
-  (GET "/edit-grocery" [id] (gv/edit-grocery (n4j/read-node (read-string id))))
-  (POST "/update-grocery" request (gc/update-grocery (:params request)))
-  (GET "/delete-grocery" [id] (gc/delete-grocery (read-string id)))
-  (GET "/read-organism" [id] (ov/read-organism (n4j/read-node (read-string id))))
-  (GET "/organism-nav" [] (ov/organism-nav))
-  (GET "/create-organism" [] (ov/create-organism))
-  (POST "/save-organism" request (oc/save-organism (:params request)))
-  (GET "/edit-organism" [id] (ov/edit-organism (n4j/read-node (read-string id))))
-  (POST "/update-organism" request (oc/update-organism (:params request)))
+  (GET "/read-all-groceries"
+    []
+    (gv/read-all-groceries))
+  (GET "/grocery-nav"
+    []
+    (gv/grocery-nav))
+  (GET "/create-grocery"
+    []
+    (gv/create-grocery))
+  (POST "/save-grocery"
+    request
+    (gc/save-grocery (:params request)))
+  (GET "/edit-grocery"
+    [id]
+    (gv/edit-grocery (n4j/read-node (read-string id))))
+  (POST "/update-grocery"
+    request
+    (gc/update-grocery (:params request)))
+  (GET "/delete-grocery"
+    [id]
+    (gc/delete-grocery (read-string id)))
+  (GET "/read-organism"
+    [id]
+    (ov/read-organism (n4j/read-node (read-string id))))
+  (GET "/organism-nav"
+    []
+    (ov/organism-nav))
+  (GET "/create-organism"
+    []
+    (ov/create-organism))
+  (POST "/save-organism"
+    request
+    (oc/save-organism (:params request)))
+  (GET "/edit-organism"
+    [id]
+    (ov/edit-organism (n4j/read-node (read-string id))))
+  (POST "/update-organism"
+    request
+    (oc/update-organism (:params request)))
+  (GET "/create-meal"
+    []
+    (mlv/create-meal))
+  (POST "/save-meal"
+    request
+    (str request))
+  (GET "/read-all-meals"
+    []
+    (mlv/read-all-meals))
+  (GET "/meal-nav"
+    []
+    (mlv/meal-nav))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found

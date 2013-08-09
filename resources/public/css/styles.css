@@ -28,29 +28,43 @@ div.maincontent {
   width: 800px;
   background-color: #90b4fe;
 }
-div.food-nav a, div.organism-nav a{
+div.grocery-nav a,
+div.organism-nav a,
+div.meal-nav a{
   text-decoration: none;
   color: #fff;
 }
-div.food-nav a:hover, div.organism-nav a:hover{
+div.grocery-nav a:hover,
+div.organism-nav a:hover,
+div.meal-nav a:hover{
   color: #91dc47;
 }
-td.gedit a, td.gdelete a{
+td.gedit a,
+td.gdelete a,
+td.iremove a{
   color: #5881d8;
   text-decoration: none;
 }
-td.gedit:hover, td.gdelete:hover {
+td.gedit:hover,
+td.gdelete:hover,
+td.iremove:hover {
   background-color: #5881d8;
   color: #fff;
 }
-td.gedit:hover a, td.gdelete:hover a{
+td.gedit:hover a,
+td.gdelete:hover a,
+td.iremove:hover a{
   color: #90b4fe;
 }
-td.gedit:active, td.gdelete:active {
+td.gedit:active,
+td.gdelete:active,
+td.iremove:active {
   background-color: #fff;
   color: #fff;
 }
-td.gedit:active a, td.gdelete:active a{
+td.gedit:active a,
+td.gdelete:active a
+td.iremove:active a{
   color: #90b4fe;
 }
 div.left-column {
@@ -71,38 +85,50 @@ div.right-column {
 }
 form#grocery-form tr td:first-child,
 form#organism-form tr td:first-child,
+form#meal-form tr td:first-child,
 table.organism-table tr td:first-child {
   text-align:right;
 }
-form#grocery-form tr td:first-child + td input,
-form#grocery-form tr td:first-child + td textarea,
-form#organism-form tr td:first-child + td input,
-table.organism-table tr td:first-child + td input{
+input, textarea, select {
   color: #fff;
   background-color: #91dc47;
   border: solid 2px #fff;
+  display: inline-block;
   width: 200px;
+  outline: none;
+  border-radius: 4px;
+  box-shadow: inset 1px 1px 2px #ddd8dc;
 }
-input#submit {
+input#submit, input[type="button"] {
   width: auto !important;
 }
-input#submit:hover {
+input#submit:hover, input[type="button"]:hover {
   background-color: #63b132 !important;
 }
 input[type="radio"] {
   display:none;
 }
 input[type="radio"] + label span {
-    display:inline-block;
-    width:19px;
-    height:19px;
-    margin:-1px 4px 0 0;
-    vertical-align:middle;
-    background:url('../images/radio.png') left top no-repeat;
-    cursor:pointer;
+  display:inline-block;
+  width:19px;
+  height:19px;
+  margin:-1px 4px 0 0;
+  vertical-align:middle;
+  background:url('../images/radio.png') left top no-repeat;
+  cursor:pointer;
 }
 input[type="radio"]:checked + label span {
-    background:url('../images/radio.png') -19px top no-repeat;
+  background:url('../images/radio.png') -19px top no-repeat;
+}
+.center-align {
+  text-align: center !important;
+}
+.ingredients input{
+  text-align:right;
+  width: 60px
+}
+tr.ingredients td:first-child {
+  vertical-align: top;
 }
 /*tr.grocery-data (even) {background-color: #CCC;}
 tr.grocery-data (odd) {background-color: #FFF;}*/

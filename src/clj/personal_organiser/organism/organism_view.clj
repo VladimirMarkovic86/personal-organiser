@@ -3,28 +3,13 @@
 	    [personal-organiser.html-generator :as hg]
 	    [net.cgrand.enlive-html :as en]))
 
-(defn add-data-to-map
-  "Add node data to maps"
-  [start-map node]
-  (let [id (:id node)
-	data (:data node)]
-       (assoc start-map id data)))
-
-(defn nodes-data-to-map
-  "Format data from nodes to maps"
-  [index-type]
-  (let [nodes (n4j/read-all-nodes-type-of index-type)]
-       (reduce add-data-to-map {} nodes)))
-
 (en/deftemplate create-organism
   (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/organism/organism-form.html", :comp-sel [:form#organism-form]}
 	               {:temp-sel [:div.left-column], :comp "public/organism/organism-nav.html", :comp-sel [:div.organism-nav]}])
   []
   [:title] (en/content "Create organism")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/personal-organiser.js"}, :content nil})
-;;  [:div.script] (en/content {:tag :script, :attrs {:src "js/organism.js"}, :content nil})
-;;  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.jsorganism.init();"})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.jsgrocery.init();"})
+  [:div.script] (en/content {:tag :script, :attrs {:src "js/organism.js"}, :content nil})
+  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.organism.jsorganism.init();"})
   [:form#organism-form] (en/set-attr :action "/save-organism")
   [:tr.vitamin] (en/clone-for [[id vname vdefvalue] (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "vitamin"))") return ID(n),n.vname,n.vdefvalue order by ID(n) asc")))]
 	          [:td.vname] (en/content {:tag :label, :attrs {:for (str "value"id), :id (str "lvalue"id)}, :content vname})
@@ -42,9 +27,8 @@
   [node]
   [:title] (en/content "Edit organism")
   [:h3.form-title] (en/content "Edit organism")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/personal-organiser.js"}, :content nil})
-;;  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.jsorganism.init();"})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.jsgrocery.init();"})
+  [:div.script] (en/content {:tag :script, :attrs {:src "js/organism.js"}, :content nil})
+  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.organism.jsorganism.init();"})
   [:form#organism-form] (en/set-attr :action "/update-organism")
   [:input#ofirst-name] (comp (en/before {:tag :input, :attrs {:type "hidden", :name "idorganism", :id "idorganism", :value (:id node)}, :content nil})
 			     (en/set-attr :value (:ofirst-name (:data node))))
