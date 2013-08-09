@@ -41,29 +41,39 @@ div.meal-nav a:hover{
 }
 td.gedit a,
 td.gdelete a,
+td.mledit a,
+td.mldelete a,
 td.iremove a{
   color: #5881d8;
   text-decoration: none;
 }
 td.gedit:hover,
 td.gdelete:hover,
+td.mledit:hover,
+td.mldelete:hover,
 td.iremove:hover {
   background-color: #5881d8;
   color: #fff;
 }
 td.gedit:hover a,
 td.gdelete:hover a,
+td.mledit:hover a,
+td.mldelete:hover a,
 td.iremove:hover a{
   color: #90b4fe;
 }
 td.gedit:active,
 td.gdelete:active,
+td.mledit:active,
+td.mldelete:active,
 td.iremove:active {
   background-color: #fff;
   color: #fff;
 }
 td.gedit:active a,
-td.gdelete:active a
+td.gdelete:active a,
+td.mledit:active a,
+td.mldelete:active a,
 td.iremove:active a{
   color: #90b4fe;
 }

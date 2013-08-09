@@ -60,13 +60,19 @@
     (mlv/create-meal))
   (POST "/save-meal"
     request
-    (str request))
+    (mlc/save-meal (:params request)))
   (GET "/read-all-meals"
     []
     (mlv/read-all-meals))
   (GET "/meal-nav"
     []
     (mlv/meal-nav))
+  (GET "/delete-meal"
+    [id]
+    (mlc/delete-meal (read-string id)))
+  (GET "/edit-meal"
+    [id]
+    (mlv/edit-meal (n4j/read-node (read-string id))))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found

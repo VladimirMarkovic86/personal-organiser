@@ -35,11 +35,17 @@
   "Create relationships between node and its target nodes with data"
   ([node-id params-map cy-query-result rel]
     (doseq [target-node-id cy-query-result]
-      (n4j/create-relationship node-id (read-string (str target-node-id)) rel {:mg (read-string (get params-map (str ":value"target-node-id)))})))
-;  ([node-id params-map rel]
-;    (doseq [id ingredient-ids]
-;      (n4j/create-relationship node-id (get params-map (str ":ingredient"id)) rel {:grams (get params-map (str ":grams"id)) :quantity (get params-map (str ":quantity"id))})))
-)
+      (n4j/create-relationship node-id
+				(read-string (str target-node-id))
+				rel
+				{:mg (read-string (get params-map (str ":value"target-node-id)))})))
+  ([node-id params-vec rel]
+    (doseq [params-map params-vec]
+      (n4j/create-relationship node-id
+				(get params-map :id)
+				rel
+				{:grams (get params-map :grams)
+				 :quantity (get params-map :quantity)}))))
 
 (defn update-rels-for-node
   "Update relationships between node and its target nodes with data"

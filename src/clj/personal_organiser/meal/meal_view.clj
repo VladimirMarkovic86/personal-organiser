@@ -51,15 +51,12 @@
   []
   [:title] (en/content "Meal table")
   [:tr.meal-data] (en/clone-for [[id data] (nodes-data-to-map "meal")]
-			[:td.gname] (en/content (format "%s" (:gname data)))
-			[:td.gcalories] (en/content (format "%s" (:gcalories data)))
-			[:td.gfats] (en/content (format "%s" (:gfats data)))
-			[:td.gproteins] (en/content (format "%s" (:gproteins data)))
-			[:td.gcarbohydrates] (en/content (format "%s" (:gcarbohydrates data)))
-			[:td.gwater] (en/content (format "%s" (:gwater data)))
-			[:td.gdesc] (en/content (format "%s" (:gdesc data)))
-			[:td.gedit] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/edit-meal?id="id)}, :content "edit"})
-			[:td.gdelete] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/delete-meal?id="id)}, :content "delete"})))
+			[:td.mlname] (en/content (format "%s" (:mlname data)))
+			[:td.mlcalories] (en/content (format "%s" (:mlcalories data)))
+			[:td.mltype] (en/content (format "%s" (:mltype data)))
+			[:td.mldesc] (en/content (format "%s" (:mldesc data)))
+			[:td.mledit] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/edit-meal?id="id)}, :content "edit"})
+			[:td.mldelete] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/delete-meal?id="id)}, :content "delete"})))
 
 (en/deftemplate meal-nav
   (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/meal/meal-nav.html", :comp-sel [:div.meal-nav]}])

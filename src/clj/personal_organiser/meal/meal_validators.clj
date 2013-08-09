@@ -5,7 +5,6 @@
 (defn create-meal-errors [params]
   (validate params
 	    [:mlname present? "Name can't be empty."]
-	    [:mlcalories present? "Calories can't be empty."]
 	    [:mltype present? "Meal type can't be empty."]
 	    [:mldesc present? "Description can't be empty."]
-	    [:mlimage present? "Image can't be empty."]))
+	    [:mlimg present? "Image can't be empty."]))
