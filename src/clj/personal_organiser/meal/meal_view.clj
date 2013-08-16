@@ -2,47 +2,110 @@
   (:require [personal-organiser.neo4j :as n4j]
 	    [personal-organiser.html-generator :as hg]
 	    [net.cgrand.enlive-html :as en]
+	    [clojure.string :as cstring]
 	    [personal-organiser.utils :refer [nodes-data-to-map]]))
 
 (en/deftemplate create-meal
-  (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/meal/meal-form.html", :comp-sel [:form#meal-form]}
-	               {:temp-sel [:div.left-column], :comp "public/meal/meal-nav.html", :comp-sel [:div.meal-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.middle-column],
+			:comp "public/meal/meal-form.html",
+			:comp-sel [:form#meal-form]}
+	               {:temp-sel [:div.left-column],
+			:comp "public/meal/meal-nav.html",
+			:comp-sel [:div.meal-nav]}])
   []
   [:title] (en/content "Create meal")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/meal.js"}, :content nil})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.meal.jsmeal.init();"})
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "js/meal.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.meal.jsmeal.init();"})
   [:form#meal-form] (en/set-attr :action "/save-meal")
-  [:option#ingredient-option] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
+  [:tr.ingredient-row] nil
+  [:option#ingredient-option1] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
 				(comp (en/content (:gname data))
 				      (en/set-attr :value id)
 				      (en/remove-attr :id))))
 
+(defn exist-ing-ind
+  "Read relationship ids with given node id"
+  [id]
+  (:data (n4j/cypher-query (str "start n=node("id") match n-[r:`meal-has-grocery`]-() return ID(r)"))))
+
+(defn exist-ing-ind-str
+  "Create data out of vector separated with ;"
+  [id]
+  (cstring/replace
+    (cstring/replace
+      (reduce (fn [st-str vec] (cstring/join ";" [st-str (first vec)]))
+	      ""
+	      (exist-ing-ind id))
+      #"^;" "")
+    #";$" ""))
+
 (en/deftemplate edit-meal
-  (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/meal/meal-form.html", :comp-sel [:form#meal-form]}
-	               {:temp-sel [:div.left-column], :comp "public/meal/meal-nav.html", :comp-sel [:div.meal-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.middle-column],
+			:comp "public/meal/meal-form.html",
+			:comp-sel [:form#meal-form]}
+	               {:temp-sel [:div.left-column],
+			:comp "public/meal/meal-nav.html",
+			:comp-sel [:div.meal-nav]}])
   [node]
   [:title] (en/content "Edit meal")
   [:h3.form-title] (en/content "Edit meal")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/meal.js"}, :content nil})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.meal.jsmeal.init();"})
+  [:div.script] (en/content {:tag :script,
+				  :attrs {:src "js/meal.js"},
+				  :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.meal.jsmeal.init();"})
   [:form#meal-form] (en/set-attr :action "/update-meal")
-  [:input#gname] (en/before {:tag :input, :attrs {:type "hidden", :name "idmeal", :id "idmeal", :value (:id node)}, :content nil})
-  [:input#gname] (en/set-attr :value (:gname (:data node)))
-  [:input#gcalories] (en/set-attr :value (:gcalories (:data node)))
-  [:input#gfats] (en/set-attr :value (:gfats (:data node)))
-  [:input#gproteins] (en/set-attr :value (:gproteins (:data node)))
-  [:input#gcarbohydrates] (en/set-attr :value (:gcarbohydrates (:data node)))
-  [:input#gwater] (en/set-attr :value (:gwater (:data node)))
-  [:textarea#gdescription] (en/content (:gdesc (:data node)))
-  [:tr.vitamin] (en/clone-for [[rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`meal-has-vitamin`]-(n2) return ID(r),r.mg,n2.vname order by ID(n2) asc")))]
-		  [:td.vname] (en/content {:tag :label, :attrs {:for (str "value"rid), :id (str "lvalue"rid)}, :content vlabel})
-		  [:td.vinput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"rid), :id (str "value"rid), :value vvalue, :required "required"}, :content nil})
-		  [:td.vhelp] (en/set-attr :id (str "tdvalue"rid))
-);; vitamin clone-for
-  [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`meal-has-mineral`]-(n2) return ID(r),r.mg,n2.mname order by ID(n2) asc")))]
-		  [:td.mname] (en/content {:tag :label, :attrs {:for (str "value"rid), :id (str "lvalue"rid)}, :content mlabel})
-		  [:td.minput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"rid), :id (str "value"rid), :value mvalue, :required "required"}, :content nil})
-		  [:td.mhelp] (en/set-attr :id (str "tdvalue"rid)));; mineral clone-for
+  [:input#mlname] (en/before {:tag :input,
+			     :attrs {:type "hidden",
+				     :name "idmeal",
+				     :id "idmeal",
+				     :value (:id node)},
+			     :content nil})
+  [:input#mlname] (en/set-attr :value (:mlname (:data node)))
+  [:input#mlcalories] (en/set-attr :value (:mlcalories (:data node)))
+  [:input#mltype-breakfast] (if (= (:mltype (:data node)) "Breakfast")
+			      (en/set-attr :checked "checked")
+			      (en/set-attr :name "mltype"))
+  [:input#mltype-lunch] (if (= (:mltype (:data node)) "Lunch")
+			      (en/set-attr :checked "checked")
+			      (en/set-attr :name "mltype"))
+  [:input#mltype-dinner] (if (= (:mltype (:data node)) "Dinner")
+			      (en/set-attr :checked "checked")
+			      (en/set-attr :name "mltype"))
+  [:textarea#mldesc] (en/content (:mldesc (:data node)))
+  [:input#mlimg] (en/set-attr :value (:mlimg (:data node)))
+  [:input#ingredient-indexes] (comp (en/before {:tag :input,
+					  :attrs {:type "hidden",
+						  :name "existing-ing-ind",
+						  :id "existing-ing-ind",
+						  :value (exist-ing-ind-str (:id node))},
+					  :content nil})
+				    (en/set-attr :value (str (exist-ing-ind-str (:id node))";1")))
+  [:tr.ingredient-row] (en/clone-for [[rid grams quantity gname]
+				(:data
+				  (n4j/cypher-query
+				    (str "start n=node("(:id node)") match (n)-[r:`meal-has-grocery`]-(n2) return ID(r),r.grams,r.quantity,n2.gname order by ID(n2) asc")))]
+		  [:tr.ingredient-row] (en/set-attr :id (str "ingredient-row"rid))
+		  [:option#ingredient-option2] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
+						(comp (en/content (:gname data))
+						      (if (= gname (:gname data))
+						          (en/set-attr :selected "selected")
+						          (en/set-attr :disabled "disabled"))
+						      (en/set-attr :value id)
+						      (en/remove-attr :id)))
+		  [:select#ingredient2] (en/set-attr :name (str "ingredient"rid) :id (str "ingredient"rid))
+		  [:input#igrams2] (en/set-attr :name (str "igrams"rid) :id (str "igrams"rid) :value grams)
+		  [:input#iquantity2] (en/set-attr :name (str "iquantity"rid) :id (str "iquantity"rid) :value quantity)
+		  [:a#iremove2] (en/set-attr :name (str "iremove"rid) :id (str "iremove"rid)));; grocery clone-for
+  [:option#ingredient-option1] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
+				(comp (en/content (:gname data))
+				      (en/set-attr :value id)
+				      (en/remove-attr :id)))
   [:input#submit] (en/set-attr :value "Save changes"))
 
 (en/deftemplate read-all-meals
@@ -60,4 +123,5 @@
 
 (en/deftemplate meal-nav
   (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/meal/meal-nav.html", :comp-sel [:div.meal-nav]}])
-  [])
+  []
+  [:title] (en/content "Meal navigation"))

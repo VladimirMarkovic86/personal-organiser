@@ -24,6 +24,15 @@ public class Obrok implements Serializable {
 	public Obrok() {
 	}
 
+	public Obrok(int id, String ime, double kalorije, int vrstaObroka, String opis, String slika) {
+		this.id = id;
+		this.ime = ime;
+		this.kalorije = kalorije;
+		this.vrstaObroka = vrstaObroka;
+		this.opis = opis;
+		this.slika = slika;
+	}
+
 	public Obrok(int id, String ime, double kalorije, int vrstaObroka, String opis, String slika, List<Obrok_has_Namirnica> obrokHasNamirnicas) {
 		this.id = id;
 		this.ime = ime;

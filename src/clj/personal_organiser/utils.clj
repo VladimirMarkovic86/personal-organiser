@@ -49,9 +49,19 @@
 
 (defn update-rels-for-node
   "Update relationships between node and its target nodes with data"
-  [rel-ids params-map]
+  ([rel-ids params-map]
     (doseq [rel-id rel-ids]
       (n4j/update-relationship (read-string (str (rel-id 0))) {:mg (read-string (get params-map (str ":value"(rel-id 0))))})))
+  ([params-vec]
+    (doseq [params-map params-vec]
+      (n4j/update-relationship (get params-map :id)
+				{:grams (get params-map :grams)
+				 :quantity (get params-map :quantity)}))))
+
+(defn delete-rels-for-node
+  "Delete relationships by ids"
+  [rel-ids]
+  (n4j/delete-many-relationships rel-ids))
 
 (defn add-data-to-map
   "Add node data to map"

@@ -1,9 +1,10 @@
 (ns personal-organiser.meal.meal-controller
-  (:use [clojure.string :only [split]])
+  (:use [clojure.string :only [split]]
+	[clojure.set :only [difference intersection]])
   (:require [personal-organiser.meal.meal-validators :refer [create-meal-errors]]
 	    [personal-organiser.meal.meal-view :refer [read-all-meals]]
 	    [personal-organiser.neo4j :as n4j]
-	    [personal-organiser.utils :refer [map-keys-to-str create-rels-for-node update-rels-for-node]]))
+	    [personal-organiser.utils :refer [map-keys-to-str create-rels-for-node update-rels-for-node delete-rels-for-node]]))
 
 (defn cal-calc
   "Calculate ingredient calories in meal"
@@ -27,11 +28,22 @@
 	     :quantity (read-string (get-value acc ":iquantity" ing-index)),
 	     :id (read-string (get-value acc ":ingredient" ing-index))}))
 
+(defn add-ingredient-params-update
+  "Form ingredient params and add them to vector as map"
+  [acc ing-index]
+  (conj acc {:grams (read-string (get-value acc ":igrams" ing-index)),
+	     :quantity (read-string (get-value acc ":iquantity" ing-index)),
+	     :id (read-string ing-index)}))
+
 (defn form-map-of-ingredients
   "Form map of ingredients"
-  [req-params]
-  (let [ing-indexes (get req-params ":ingredient-indexes")]
-    (into [] (rest (reduce add-ingredient-params [req-params] (split ing-indexes #";"))))))
+  [req-params ing-indexes]
+  (into [] (rest (reduce add-ingredient-params [req-params] ing-indexes))))
+
+(defn form-map-of-ingredients-update
+  "Form map of ingredients"
+  [req-params ing-indexes]
+  (into [] (rest (reduce add-ingredient-params-update [req-params] ing-indexes))))
 
 (defn save-meal
   "Save meal in neo4j database"
@@ -42,38 +54,53 @@
 						 :mlimg (:mlimg req-params)})]
     (println (str "Meal errors: " meal-errors))
     (let [node-id (n4j/create-node "meal" {:mlname (:mlname req-params)
-						 :mlcalories (meal-cal-calc (form-map-of-ingredients (map-keys-to-str req-params)))
+						 :mlcalories (meal-cal-calc (form-map-of-ingredients (map-keys-to-str req-params)
+												     (split (:ingredient-indexes req-params) #";")))
 						 :mltype (:mltype req-params)
 						 :mldesc (:mldesc req-params)
 						 :mlimg (:mlimg req-params)})]
 	(create-rels-for-node node-id
-			      (form-map-of-ingredients (map-keys-to-str req-params))
+			      (form-map-of-ingredients (map-keys-to-str req-params)
+						       (split (:ingredient-indexes req-params) #";"))
 			      :meal-has-grocery)))
   (read-all-meals))
 
 (defn update-meal
   "Update meal in neo4j database"
   [req-params]
-  (if-let [meal-errors (create-meal-errors {:gname (:gname req-params)
-						 :gcalories (:gcalories req-params)
-						 :gfats (:gfats req-params)
-						 :gproteins (:gproteins req-params)
-						 :gcarbohydrates (:gcarbohydrates req-params)
-						 :gwater (:gwater req-params)
-						 :gdesc (:gdesc req-params)})]
+  (if-let [meal-errors (create-meal-errors {:mlname (:mlname req-params)
+					    :mltype (:mltype req-params)
+					    :mldesc (:mldesc req-params)
+					    :mlimg (:mlimg req-params)})]
     (println (str "Meal errors: " meal-errors))
-    ((n4j/update-node
-	(n4j/read-node (read-string (:idmeal req-params))) {:gname (:gname req-params)
-					  		       :gcalories (read-string (:gcalories req-params))
-					  		       :gfats (read-string (:gfats req-params))
-					  		       :gproteins (read-string (:gproteins req-params))
-					  		       :gcarbohydrates (read-string (:gcarbohydrates req-params))
-					  		       :gwater (read-string (:gwater req-params))
-					  		       :gdesc (:gdesc req-params)})
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idmeal req-params))") match n-[r:`meal-has-vitamin`]-() return ID(r)")))
-			   (map-keys-to-str req-params))
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idmeal req-params))") match n-[r:`meal-has-mineral`]-() return ID(r)")))
-			   (map-keys-to-str req-params))))
+    (let [params-map-str (map-keys-to-str req-params)]
+	(n4j/update-node
+	(n4j/read-node (read-string (:idmeal req-params))) {:mlname (:mlname req-params)
+							    :mlcalories (meal-cal-calc (form-map-of-ingredients params-map-str
+														(split (:ingredient-indexes req-params) #";")))
+							    :mltype (:mltype req-params)
+							    :mldesc (:mldesc req-params)
+							    :mlimg (:mlimg req-params)})
+     (delete-rels-for-node (reduce (fn [vec num] (conj vec (read-string num))) [] (into []
+				 (difference (into #{}
+						        (split (get params-map-str ":existing-ing-ind") #";"))
+					          (into #{}
+							(split (get params-map-str ":ingredient-indexes") #";"))))))
+     (update-rels-for-node (form-map-of-ingredients-update params-map-str
+						    (into []
+							  (intersection (into #{}
+										   (split (get params-map-str ":existing-ing-ind") #";"))
+									     (into #{}
+										   (split (get params-map-str ":ingredient-indexes") #";"))))))
+     (create-rels-for-node (read-string (:idmeal req-params))
+			   (form-map-of-ingredients params-map-str
+			   			    (into []
+							  (difference (into #{}
+						        			 (split (get params-map-str ":ingredient-indexes") #";"))
+									   (into #{}
+										 (split (get params-map-str ":existing-ing-ind") #";")))))
+			   :meal-has-grocery)
+))
   (read-all-meals))
 
 (defn delete-meal

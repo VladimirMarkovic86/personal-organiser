@@ -73,6 +73,9 @@
   (GET "/edit-meal"
     [id]
     (mlv/edit-meal (n4j/read-node (read-string id))))
+  (POST "/update-meal"
+    request
+    (mlc/update-meal (:params request)))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found

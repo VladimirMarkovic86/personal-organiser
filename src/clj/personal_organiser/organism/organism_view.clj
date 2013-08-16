@@ -4,33 +4,78 @@
 	    [net.cgrand.enlive-html :as en]))
 
 (en/deftemplate create-organism
-  (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/organism/organism-form.html", :comp-sel [:form#organism-form]}
-	               {:temp-sel [:div.left-column], :comp "public/organism/organism-nav.html", :comp-sel [:div.organism-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.middle-column],
+			:comp "public/organism/organism-form.html",
+			:comp-sel [:form#organism-form]}
+	               {:temp-sel [:div.left-column],
+			:comp "public/organism/organism-nav.html",
+			:comp-sel [:div.organism-nav]}])
   []
   [:title] (en/content "Create organism")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/organism.js"}, :content nil})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.organism.jsorganism.init();"})
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "js/organism.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.organism.jsorganism.init();"})
   [:form#organism-form] (en/set-attr :action "/save-organism")
-  [:tr.vitamin] (en/clone-for [[id vname vdefvalue] (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "vitamin"))") return ID(n),n.vname,n.vdefvalue order by ID(n) asc")))]
-	          [:td.vname] (en/content {:tag :label, :attrs {:for (str "value"id), :id (str "lvalue"id)}, :content vname})
-		  [:td.vinput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"id), :id (str "value"id), :value vdefvalue, :required "required"}, :content nil})
+  [:tr.vitamin] (en/clone-for [[id vname vdefvalue]
+				(:data
+				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "vitamin"))") return ID(n),n.vname,n.vdefvalue order by ID(n) asc")))]
+	          [:td.vname] (en/content {:tag :label,
+					   :attrs {:for (str "value"id),
+						   :id (str "lvalue"id)},
+					   :content vname})
+		  [:td.vinput] (en/content {:tag :input,
+					    :attrs {:type "number",
+						    :step "any",
+						    :name (str "value"id),
+						    :id (str "value"id),
+						    :value vdefvalue,
+						    :required "required"},
+					    :content nil})
 		  [:td.vhelp] (en/set-attr :id (str "tdvalue"id)));; vitamin clone-for
-  [:tr.mineral] (en/clone-for [[id mname mdefvalue] (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "mineral"))") return ID(n),n.mname,n.mdefvalue order by ID(n) asc")))]
-		  [:td.mname] (en/content {:tag :label, :attrs {:for (str "value"id), :id (str "lvalue"id)}, :content mname})
-		  [:td.minput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"id), :id (str "value"id), :value mdefvalue, :required "required"}, :content nil})
+  [:tr.mineral] (en/clone-for [[id mname mdefvalue]
+				(:data
+				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "mineral"))") return ID(n),n.mname,n.mdefvalue order by ID(n) asc")))]
+		  [:td.mname] (en/content {:tag :label,
+					   :attrs {:for (str "value"id),
+						   :id (str "lvalue"id)},
+					   :content mname})
+		  [:td.minput] (en/content {:tag :input,
+					    :attrs {:type "number",
+						    :step "any",
+						    :name (str "value"id),
+						    :id (str "value"id),
+						    :value mdefvalue,
+						    :required "required"},
+					    :content nil})
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"id)));; mineral clone-for
 )
 
 (en/deftemplate edit-organism
-  (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/organism/organism-form.html", :comp-sel [:form#organism-form]}
-	               {:temp-sel [:div.left-column], :comp "public/organism/organism-nav.html", :comp-sel [:div.organism-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.middle-column],
+			:comp "public/organism/organism-form.html",
+			:comp-sel [:form#organism-form]}
+	               {:temp-sel [:div.left-column],
+			:comp "public/organism/organism-nav.html",
+			:comp-sel [:div.organism-nav]}])
   [node]
   [:title] (en/content "Edit organism")
   [:h3.form-title] (en/content "Edit organism")
-  [:div.script] (en/content {:tag :script, :attrs {:src "js/organism.js"}, :content nil})
-  [:div.script] (en/append {:tag :script, :attrs nil, :content "personal_organiser.organism.jsorganism.init();"})
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "js/organism.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.organism.jsorganism.init();"})
   [:form#organism-form] (en/set-attr :action "/update-organism")
-  [:input#ofirst-name] (comp (en/before {:tag :input, :attrs {:type "hidden", :name "idorganism", :id "idorganism", :value (:id node)}, :content nil})
+  [:input#ofirst-name] (comp (en/before {:tag :input,
+					 :attrs {:type "hidden",
+						 :name "idorganism",
+						 :id "idorganism",
+						 :value (:id node)},
+					 :content nil})
 			     (en/set-attr :value (:ofirst-name (:data node))))
   [:input#olast-name] (en/set-attr :value (:olast-name (:data node)))
   [:input#oemail] (en/set-attr :value (:oemail (:data node)))
@@ -133,4 +178,5 @@
 
 (en/deftemplate organism-nav
   (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/organism/organism-nav.html", :comp-sel [:div.organism-nav]}])
-  [])
+  []
+  [:title] (en/content "Organism navigation"))

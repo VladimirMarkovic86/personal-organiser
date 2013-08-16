@@ -7,7 +7,8 @@
 
 (defn connect-neo4j
   "Connect to neo4j db"
-  [] (nr/connect! "http://localhost:7474/db/data/"))
+  []
+  (nr/connect! "http://localhost:7474/db/data/"))
 
 (defn get-indexes-node-type-of
   "Get node with indexes of particular type"
@@ -76,13 +77,25 @@
   (nn/delete id)
   (remove-node-key-from-indexes index-type id))
 
-(defn create-relationship [from to rel-type data]
+(defn create-relationship
   "Create relationship between nodes"
+  [from to rel-type data]
   (nrel/create from to rel-type data))
 
-(defn update-relationship [rel-id data]
+(defn update-relationship
   "Update relationship by id"
+  [rel-id data]
   (nrel/update rel-id data))
+
+(defn delete-relationship
+  "Delete relationship by id"
+  [rel-id]
+  (nrel/delete rel-id))
+
+(defn delete-many-relationships
+  "Delete many relationships by id"
+  [rel-ids]
+  (nrel/delete-many rel-ids))
 
 (defn cypher-query [query-statement]
   "Cypher query"

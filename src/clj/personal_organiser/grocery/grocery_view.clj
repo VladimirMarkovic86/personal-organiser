@@ -68,4 +68,5 @@
 
 (en/deftemplate grocery-nav
   (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/grocery/grocery-nav.html", :comp-sel [:div.grocery-nav]}])
-  [])
+  []
+  [:title] (en/content "Grocery navigation"))

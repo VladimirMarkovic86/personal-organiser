@@ -18,6 +18,14 @@ public class Obrok_has_Namirnica implements Serializable {
 	public Obrok_has_Namirnica() {
 	}
 
+	public Obrok_has_Namirnica(int id, double kolicinaUGramima, int komad, Namirnica namirnica, Obrok obrok) {
+		this.id = id;
+		this.kolicinaUGramima = kolicinaUGramima;
+		this.komad = komad;
+		this.namirnica = namirnica;
+		this.obrok = obrok;
+	}
+
 	public int getId() {
 		return this.id;
 	}

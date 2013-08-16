@@ -42,6 +42,18 @@ public class Namirnica implements Serializable {
 	public Namirnica() {
 	}
 
+	public Namirnica(int id, String naziv, double kalorija, double proteina, double masti, double ugljenihhidrata, double voda, String opis, int poreklo) {
+		this.id = id;
+		this.naziv = naziv;
+		this.kalorija = kalorija;
+		this.proteina = proteina;
+		this.masti = masti;
+		this.ugljenihhidrata = ugljenihhidrata;
+		this.voda = voda;
+		this.opis = opis;
+		this.poreklo = poreklo;
+	}
+
 	public int getId() {
 		return this.id;
 	}

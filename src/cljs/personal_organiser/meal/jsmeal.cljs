@@ -92,6 +92,14 @@
 	(evts/listen! (dom/by-id (str "iremove" row-index)) :click (fn [] (remove-ingredient-row row-index ing-indexes)))
 ))
 
+(defn remove-click-listener
+  ""
+  [ing-indexes]
+  (let [sel-nodes (map dom/attrs (dom/nodes (domcss/sel "a[id*='remove']")))]
+	  (doseq [sel-node sel-nodes]
+	    (evts/listen! (dom/by-id (:id sel-node)) :click (fn [] (remove-ingredient-row (js/parseInt (cstring/replace (:id sel-node) "iremove" "")) ing-indexes)))
+	)))
+
 (defn ^:export init []
   (if (and js/document
 	   (.-getElementById js/document))
@@ -101,7 +109,7 @@
 	  ing-table (dom/by-class "ingredients-tbody")]
 ;	(set! (.-onsubmit meal-form) validate-form)
 	(evts/listen! (dom/by-id "add-ingredient") :click (fn [] (add-ingredient-row ing-indexes ing-row ing-table)))
-	(evts/listen! (dom/by-id "iremove1") :click (fn [] (remove-ingredient-row 1 ing-indexes)))
+	(remove-click-listener ing-indexes)
 )))
 
 ;; (set! (.-onload js/window) init)
