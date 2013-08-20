@@ -3,17 +3,23 @@ body {
   margin-right: auto;
   width: 900px;
   background-color: #5881d8;
+  color: #fff;
 }
-
 div.topcontent {
   width: 900px;
   background-color: #fff;
-  padding: 5px 5px 0px 5px;
+  padding: 5px 5px 5px 5px;
+  border-radius: 15px;
 }
 div.navigation {
   width: 900px;
   background-color: #91dc47;
   margin-bottom: 5px;
+  border-radius: 15px;
+}
+div.navigation table {
+  margin-left: auto;
+  margin-right: auto;
 }
 div.navigation a{
   text-decoration: none;
@@ -25,8 +31,11 @@ div.navigation a:hover{
 }
 div.maincontent {
   display: inline-block;
-  width: 900px;
+  width: 890px;
   background-color: #90b4fe;
+  border-radius: 15px;
+  padding:5px;
+  margin-bottom: 5px;
 }
 div.grocery-nav a,
 div.organism-nav a,
@@ -39,41 +48,22 @@ div.organism-nav a:hover,
 div.meal-nav a:hover{
   color: #91dc47;
 }
-td.gedit a,
-td.gdelete a,
-td.mledit a,
-td.mldelete a,
 td.iremove a{
   color: #5881d8;
   text-decoration: none;
 }
-td.gedit:hover,
-td.gdelete:hover,
-td.mledit:hover,
-td.mldelete:hover,
 td.iremove:hover {
+  border-radius: 15px;
   background-color: #5881d8;
   color: #fff;
 }
-td.gedit:hover a,
-td.gdelete:hover a,
-td.mledit:hover a,
-td.mldelete:hover a,
 td.iremove:hover a{
   color: #90b4fe;
 }
-td.gedit:active,
-td.gdelete:active,
-td.mledit:active,
-td.mldelete:active,
 td.iremove:active {
   background-color: #fff;
   color: #fff;
 }
-td.gedit:active a,
-td.gdelete:active a,
-td.mledit:active a,
-td.mldelete:active a,
 td.iremove:active a{
   color: #90b4fe;
 }
@@ -84,11 +74,11 @@ div.left-column {
   border: solid 5px #fff;
   padding: 5px;
   background-color: #63b132;
+  border-radius: 15px;
 }
 div.middle-column {
   float: left;
   font-size: 14px;
-  color: #fff;
 }
 div.right-column {
   float: left;
@@ -107,13 +97,24 @@ input, textarea, select {
   width: 200px;
   outline: none;
   border-radius: 4px;
-  box-shadow: inset 1px 1px 2px #ddd8dc;
+/*  box-shadow: inset 1px 1px 2px #ddd8dc;*/
 }
 input#submit, input[type="button"] {
   width: auto !important;
 }
 input#submit:hover, input[type="button"]:hover {
   background-color: #63b132 !important;
+}
+input.option {
+  border: 0px;
+  background: none;
+  color: #5881d8;
+  width: auto !important;
+  border-radius: 15px;
+}
+input.option:hover {
+  color: #90b4fe;
+  background-color: #5881d8;
 }
 input[type="radio"] {
   display:none;
@@ -140,5 +141,63 @@ input[type="radio"]:checked + label span {
 tr.ingredients td:first-child {
   vertical-align: top;
 }
-/*tr.grocery-data (even) {background-color: #CCC;}
-tr.grocery-data (odd) {background-color: #FFF;}*/
+table.grocery-table tr:nth-child(even),
+table.meal-table tr:nth-child(even) {
+  background-color: #a5c3ff;
+}
+div.footer {
+  padding: 5px;
+  text-align:center;
+  background-color: #91dc47;
+  border-radius:15px;
+  color:#fff;
+  height:50px;
+}
+div.login {
+  background-color: #90b4fe;
+  border-radius: 15px;
+  border: solid 5px #fff;
+  position:absolute;
+  left:50%;
+  top:50%;
+  margin:-100px 0 0 -150px;
+  text-align: right;
+  padding: 5px;
+}
+div.login a {
+  text-decoration: none;
+  color: #5881d8;
+}
+div.login a:hover {
+  background-color: #5881d8;
+  color: #90b4fe;
+  border-radius: 15px;
+}
+div.login input#submit {
+  float:left;
+}
+div.img {
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+div.clj {
+  background:url('../images/clojure-logo.png') center top no-repeat;
+}
+div.lein {
+  background:url('../images/lein-logo.png') center top no-repeat;
+}
+div.drools {
+  background:url('../images/drools-logo.png') center top no-repeat;
+}
+div.made-by {
+  float: left;
+  width: 740px;
+}
+div.home {
+  margin-left: auto;
+  margin-right: auto;
+  width: 500px;
+  text-align: center;
+  padding: 20px 0;
+}

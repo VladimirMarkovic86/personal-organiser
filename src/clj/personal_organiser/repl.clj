@@ -36,7 +36,7 @@
   (n4j/connect-neo4j)
   (dosync (ref-set server (server/run-server)))
   (future (Thread/sleep 3000)
-          (browse/browse-url "http://localhost:5000/meal-nav")))
+          (browse/browse-url "http://localhost:5000/login")))
 
 (defn restart-server
   "Restart server"

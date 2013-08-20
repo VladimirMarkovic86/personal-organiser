@@ -55,6 +55,19 @@ Drools 5 introduces the Business Logic integration Platform which provides a uni
 
 Official site - http://www.jboss.org/drools/
 
+Sandbar
+=======
+
+Sandbar is a web application library which is designed to be used with <a href="http://github.com/weavejester/compojure">Compojure</a> and/or <a href="http://github.com/mmcgrana/ring">Ring</a>. It builds on these projects providing the following additional features:
+
+    Session and flash as a global map
+    Authorization and authentication, including built-in support for form-based authentication
+    Forms and form validation
+
+More documentation is located in the <a href="http://github.com/brentonashworth/sandbar/wiki">Sandbar Wiki</a>.
+
+You may also be interested in joining the <a href="http://groups.google.com/group/sandbar-library">Sandbar Google Group</a>.
+
 Input radio
 ===========
 

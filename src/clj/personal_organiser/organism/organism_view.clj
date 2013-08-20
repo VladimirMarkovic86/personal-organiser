@@ -21,7 +21,9 @@
   [:form#organism-form] (en/set-attr :action "/save-organism")
   [:tr.vitamin] (en/clone-for [[id vname vdefvalue]
 				(:data
-				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "vitamin"))") return ID(n),n.vname,n.vdefvalue order by ID(n) asc")))]
+				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","
+											     (n4j/get-type-indexes "vitamin"))")
+							  return ID(n),n.vname,n.vdefvalue order by ID(n) asc")))]
 	          [:td.vname] (en/content {:tag :label,
 					   :attrs {:for (str "value"id),
 						   :id (str "lvalue"id)},
@@ -37,7 +39,9 @@
 		  [:td.vhelp] (en/set-attr :id (str "tdvalue"id)));; vitamin clone-for
   [:tr.mineral] (en/clone-for [[id mname mdefvalue]
 				(:data
-				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "mineral"))") return ID(n),n.mname,n.mdefvalue order by ID(n) asc")))]
+				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","
+											     (n4j/get-type-indexes "mineral"))")
+							  return ID(n),n.mname,n.mdefvalue order by ID(n) asc")))]
 		  [:td.mname] (en/content {:tag :label,
 					   :attrs {:for (str "value"id),
 						   :id (str "lvalue"id)},
@@ -105,19 +109,53 @@
   [:input#oactivity-hard] (if (= (:oactivity (:data node)) "Hard")
 			    (en/set-attr :checked "checked")
 			    (en/set-attr :name "oactivity"))
-  [:tr.vitamin] (en/clone-for [[rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`organism-needs-vitamin`]-(n2) return ID(r),r.mg,n2.vname order by ID(n2) asc")))]
-		  [:td.vname] (en/content {:tag :label, :attrs {:for (str "value"rid), :id (str "lvalue"rid)}, :content vlabel})
-		  [:td.vinput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"rid), :id (str "value"rid), :value vvalue, :required "required"}, :content nil})
+  [:tr.vitamin] (en/clone-for [[rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)")
+										  match (n)-[r:`organism-needs-vitamin`]-(n2)
+										  return ID(r),
+											 r.mg,
+											 n2.vname
+											 order by ID(n2) asc")))]
+		  [:td.vname] (en/content {:tag :label,
+					   :attrs {:for (str "value"rid),
+						   :id (str "lvalue"rid)},
+					   :content vlabel})
+		  [:td.vinput] (en/content {:tag :input,
+					    :attrs {:type "number",
+						    :step "any",
+						    :name (str "value"rid),
+						    :id (str "value"rid),
+						    :value vvalue,
+						    :required "required"},
+					    :content nil})
 		  [:td.vhelp] (en/set-attr :id (str "tdvalue"rid)));; vitamin clone-for
-  [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`organism-needs-mineral`]-(n2) return ID(r),r.mg,n2.mname order by ID(n2) asc")))]
-		  [:td.mname] (en/content {:tag :label, :attrs {:for (str "value"rid), :id (str "lvalue"rid)}, :content mlabel})
-		  [:td.minput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"rid), :id (str "value"rid), :value mvalue, :required "required"}, :content nil})
+  [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)")
+										  match (n)-[r:`organism-needs-mineral`]-(n2)
+										  return ID(r),
+											 r.mg,
+											 n2.mname
+											 order by ID(n2) asc")))]
+		  [:td.mname] (en/content {:tag :label,
+					   :attrs {:for (str "value"rid),
+						   :id (str "lvalue"rid)},
+					   :content mlabel})
+		  [:td.minput] (en/content {:tag :input,
+					    :attrs {:type "number",
+						    :step "any",
+						    :name (str "value"rid),
+						    :id (str "value"rid),
+						    :value mvalue,
+						    :required "required"},
+					    :content nil})
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"rid)));; mineral clone-for
   [:input#submit] (en/set-attr :value "Save changes"))
 
 (en/deftemplate read-organism
-  (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/organism/organism-form.html", :comp-sel [:form#organism-form :table]}
-	               {:temp-sel [:div.left-column], :comp "public/organism/organism-nav.html", :comp-sel [:div.organism-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.middle-column],
+			:comp "public/organism/organism-form.html",
+			:comp-sel [:form#organism-form :table]}
+	               {:temp-sel [:div.left-column],
+			:comp "public/organism/organism-nav.html",
+			:comp-sel [:div.organism-nav]}])
   [node]
   [:title] (en/content "Organism")
   [:h3.form-title] (en/content "Organism")
@@ -165,18 +203,50 @@
 			          (en/set-attr :checked "checked")
 			          (en/set-attr :name "oactivity"))
 			    (en/set-attr :disabled "disabled"))
-  [:tr.vitamin] (en/clone-for [[rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`organism-needs-vitamin`]-(n2) return ID(r),r.mg,n2.vname order by ID(n2) asc")))]
-		  [:td.vname] (en/content {:tag :label, :attrs {:for (str "value"rid), :id (str "lvalue"rid)}, :content vlabel})
-		  [:td.vinput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"rid), :id (str "value"rid), :value vvalue, :readonly "readonly"}, :content nil})
+  [:tr.vitamin] (en/clone-for [[rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)")
+										  match (n)-[r:`organism-needs-vitamin`]-(n2)
+										  return ID(r),
+											 r.mg,
+											 n2.vname
+											 order by ID(n2) asc")))]
+		  [:td.vname] (en/content {:tag :label,
+					   :attrs {:for (str "value"rid),
+						   :id (str "lvalue"rid)},
+					   :content vlabel})
+		  [:td.vinput] (en/content {:tag :input,
+					    :attrs {:type "number",
+						    :step "any",
+						    :name (str "value"rid),
+						    :id (str "value"rid),
+						    :value vvalue,
+						    :readonly "readonly"},
+					    :content nil})
 		  [:td.vhelp] (en/set-attr :id (str "tdvalue"rid))
 );; vitamin clone-for
-  [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)") match (n)-[r:`organism-needs-mineral`]-(n2) return ID(r),r.mg,n2.mname order by ID(n2) asc")))]
-		  [:td.mname] (en/content {:tag :label, :attrs {:for (str "value"rid), :id (str "lvalue"rid)}, :content mlabel})
-		  [:td.minput] (en/content {:tag :input, :attrs {:type "number", :step "any", :name (str "value"rid), :id (str "value"rid), :value mvalue, :readonly "readonly"}, :content nil})
+  [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)")
+										  match (n)-[r:`organism-needs-mineral`]-(n2)
+										  return ID(r),
+											 r.mg,
+											 n2.mname
+											 order by ID(n2) asc")))]
+		  [:td.mname] (en/content {:tag :label,
+					   :attrs {:for (str "value"rid),
+						   :id (str "lvalue"rid)},
+					   :content mlabel})
+		  [:td.minput] (en/content {:tag :input,
+					    :attrs {:type "number",
+						    :step "any",
+						    :name (str "value"rid),
+						    :id (str "value"rid),
+						    :value mvalue,
+						    :readonly "readonly"},
+					    :content nil})
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"rid)));; mineral clone-for
   [:input#submit] (en/set-attr :type "hidden"))
 
 (en/deftemplate organism-nav
-  (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/organism/organism-nav.html", :comp-sel [:div.organism-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.left-column],
+			:comp "public/organism/organism-nav.html",
+			:comp-sel [:div.organism-nav]}])
   []
   [:title] (en/content "Organism navigation"))

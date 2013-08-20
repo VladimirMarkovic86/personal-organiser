@@ -30,7 +30,9 @@
 (defn exist-ing-ind
   "Read relationship ids with given node id"
   [id]
-  (:data (n4j/cypher-query (str "start n=node("id") match n-[r:`meal-has-grocery`]-() return ID(r)"))))
+  (:data (n4j/cypher-query (str "start n=node("id")
+				 match n-[r:`meal-has-grocery`]-()
+				 return ID(r)"))))
 
 (defn exist-ing-ind-str
   "Create data out of vector separated with ;"
@@ -89,7 +91,13 @@
   [:tr.ingredient-row] (en/clone-for [[rid grams quantity gname]
 				(:data
 				  (n4j/cypher-query
-				    (str "start n=node("(:id node)") match (n)-[r:`meal-has-grocery`]-(n2) return ID(r),r.grams,r.quantity,n2.gname order by ID(n2) asc")))]
+				    (str "start n=node("(:id node)")
+					  match (n)-[r:`meal-has-grocery`]-(n2)
+					  return ID(r),
+						 r.grams,
+						 r.quantity,
+						 n2.gname
+						 order by ID(n2) asc")))]
 		  [:tr.ingredient-row] (en/set-attr :id (str "ingredient-row"rid))
 		  [:option#ingredient-option2] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
 						(comp (en/content (:gname data))
@@ -98,10 +106,16 @@
 						          (en/set-attr :disabled "disabled"))
 						      (en/set-attr :value id)
 						      (en/remove-attr :id)))
-		  [:select#ingredient2] (en/set-attr :name (str "ingredient"rid) :id (str "ingredient"rid))
-		  [:input#igrams2] (en/set-attr :name (str "igrams"rid) :id (str "igrams"rid) :value grams)
-		  [:input#iquantity2] (en/set-attr :name (str "iquantity"rid) :id (str "iquantity"rid) :value quantity)
-		  [:a#iremove2] (en/set-attr :name (str "iremove"rid) :id (str "iremove"rid)));; grocery clone-for
+		  [:select#ingredient2] (en/set-attr :name (str "ingredient"rid)
+						     :id (str "ingredient"rid))
+		  [:input#igrams2] (en/set-attr :name (str "igrams"rid)
+						:id (str "igrams"rid)
+						:value grams)
+		  [:input#iquantity2] (en/set-attr :name (str "iquantity"rid)
+						   :id (str "iquantity"rid)
+						   :value quantity)
+		  [:a#iremove2] (en/set-attr :name (str "iremove"rid)
+					     :id (str "iremove"rid)));; grocery clone-for
   [:option#ingredient-option1] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
 				(comp (en/content (:gname data))
 				      (en/set-attr :value id)
@@ -109,19 +123,26 @@
   [:input#submit] (en/set-attr :value "Save changes"))
 
 (en/deftemplate read-all-meals
-  (hg/build-html-page [{:temp-sel [:div.middle-column], :comp "public/meal/meal-table.html", :comp-sel [:table.meal-table]}
-	               {:temp-sel [:div.left-column], :comp "public/meal/meal-nav.html", :comp-sel [:div.meal-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.middle-column],
+			:comp "public/meal/meal-table.html",
+			:comp-sel [:table.meal-table]}
+	               {:temp-sel [:div.left-column],
+			:comp "public/meal/meal-nav.html",
+			:comp-sel [:div.meal-nav]}])
   []
   [:title] (en/content "Meal table")
   [:tr.meal-data] (en/clone-for [[id data] (nodes-data-to-map "meal")]
 			[:td.mlname] (en/content (format "%s" (:mlname data)))
 			[:td.mlcalories] (en/content (format "%s" (:mlcalories data)))
 			[:td.mltype] (en/content (format "%s" (:mltype data)))
-			[:td.mldesc] (en/content (format "%s" (:mldesc data)))
-			[:td.mledit] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/edit-meal?id="id)}, :content "edit"})
-			[:td.mldelete] (en/content {:tag :a, :attrs {:href (str "http://localhost:5000/delete-meal?id="id)}, :content "delete"})))
+			[:td.mledit :form] (en/set-attr :action "http://localhost:5000/edit-meal")
+			[:td.mledit :form :input#mlid] (en/set-attr :value id)
+			[:td.mldelete :form] (en/set-attr :action "http://localhost:5000/delete-meal")
+			[:td.mldelete :form :input#mlid] (en/set-attr :value id)))
 
 (en/deftemplate meal-nav
-  (hg/build-html-page [{:temp-sel [:div.left-column], :comp "public/meal/meal-nav.html", :comp-sel [:div.meal-nav]}])
+  (hg/build-html-page [{:temp-sel [:div.left-column],
+			:comp "public/meal/meal-nav.html",
+			:comp-sel [:div.meal-nav]}])
   []
   [:title] (en/content "Meal navigation"))

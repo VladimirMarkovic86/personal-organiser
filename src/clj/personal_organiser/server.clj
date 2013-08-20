@@ -1,5 +1,6 @@
 (ns personal-organiser.server
-  (:use compojure.core)
+  (:use compojure.core
+	(sandbar stateful-session))
   (:require [compojure.handler :as handler]
 	    [compojure.route :as route]
 	    [personal-organiser.grocery.grocery-view :as gv]
@@ -8,8 +9,17 @@
 	    [personal-organiser.organism.organism-controller :as oc]
 	    [personal-organiser.meal.meal-view :as mlv]
 	    [personal-organiser.meal.meal-controller :as mlc]
+	    [personal-organiser.login.login-view :as lv]
+	    [personal-organiser.login.login-controller :as lc]
 	    [personal-organiser.neo4j :as n4j]
 	    [ring.adapter.jetty :as jetty]))
+
+(defn is-logged-in
+  "Checks if user is logged in"
+  [response-fn]
+  (if (= (session-get :organism-id) nil)
+      (lv/login)
+      response-fn))
 
 ;; defroutes macro defines a function that chains individual route
 ;; functions together. The request map is passed to each function in
@@ -18,64 +28,74 @@
   ; to serve document root address
   (GET "/read-all-groceries"
     []
-    (gv/read-all-groceries))
+    (is-logged-in (gv/read-all-groceries)))
   (GET "/grocery-nav"
     []
-    (gv/grocery-nav))
+    (is-logged-in (gv/grocery-nav)))
   (GET "/create-grocery"
     []
-    (gv/create-grocery))
+    (is-logged-in (gv/create-grocery)))
   (POST "/save-grocery"
     request
-    (gc/save-grocery (:params request)))
+    (is-logged-in (gc/save-grocery (:params request))))
   (GET "/edit-grocery"
     [id]
-    (gv/edit-grocery (n4j/read-node (read-string id))))
+    (is-logged-in (gv/edit-grocery (n4j/read-node (read-string id)))))
   (POST "/update-grocery"
     request
-    (gc/update-grocery (:params request)))
+    (is-logged-in (gc/update-grocery (:params request))))
   (GET "/delete-grocery"
     [id]
-    (gc/delete-grocery (read-string id)))
+    (is-logged-in (gc/delete-grocery (read-string id))))
   (GET "/read-organism"
     [id]
-    (ov/read-organism (n4j/read-node (read-string id))))
+    (is-logged-in (ov/read-organism (n4j/read-node (read-string id)))))
   (GET "/organism-nav"
     []
-    (ov/organism-nav))
+    (is-logged-in (ov/organism-nav)))
   (GET "/create-organism"
     []
-    (ov/create-organism))
+    (is-logged-in (ov/create-organism)))
   (POST "/save-organism"
     request
-    (oc/save-organism (:params request)))
+    (is-logged-in (oc/save-organism (:params request))))
   (GET "/edit-organism"
     [id]
-    (ov/edit-organism (n4j/read-node (read-string id))))
+    (is-logged-in (ov/edit-organism (n4j/read-node (read-string id)))))
   (POST "/update-organism"
     request
-    (oc/update-organism (:params request)))
+    (is-logged-in (oc/update-organism (:params request))))
   (GET "/create-meal"
     []
-    (mlv/create-meal))
+    (is-logged-in (mlv/create-meal)))
   (POST "/save-meal"
     request
-    (mlc/save-meal (:params request)))
+    (is-logged-in (mlc/save-meal (:params request))))
   (GET "/read-all-meals"
     []
-    (mlv/read-all-meals))
+    (is-logged-in (mlv/read-all-meals)))
   (GET "/meal-nav"
     []
-    (mlv/meal-nav))
+    (is-logged-in (mlv/meal-nav)))
   (GET "/delete-meal"
     [id]
-    (mlc/delete-meal (read-string id)))
+    (is-logged-in (mlc/delete-meal (read-string id))))
   (GET "/edit-meal"
     [id]
-    (mlv/edit-meal (n4j/read-node (read-string id))))
+    (is-logged-in (mlv/edit-meal (n4j/read-node (read-string id)))))
   (POST "/update-meal"
     request
-    (mlc/update-meal (:params request)))
+    (is-logged-in (mlc/update-meal (:params request))))
+  (GET "/home"
+    []
+    (is-logged-in (lv/home)))
+  (GET "/login"
+    []
+    (is-logged-in (lv/home)))
+  (POST "/login"
+    request
+    (do (lc/authenticate-user (:params request))
+	(is-logged-in (lv/home))))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found
@@ -83,8 +103,8 @@
 
 ;; site function creates a handler suitable for a standard website,
 ;; adding a bunch of standard ring middleware to app-route:
-(def handler
-  (handler/site app-routes))
+(def handler (-> (handler/site app-routes)
+		 wrap-stateful-session))
 
 (defn run-server
   "Run jetty server"

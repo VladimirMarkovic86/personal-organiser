@@ -24,11 +24,15 @@
 					      :gdesc (:gdesc req-params)})]
 	(create-rels-for-node node-id
 			      (map-keys-to-str req-params)
-			      (first (first (:data (n4j/cypher-query "start n=node(*) where n.type! = 'vitamin' return n.idx"))))
+			      (first (first (:data (n4j/cypher-query "start n=node(*)
+								      where n.type! = 'vitamin'
+								      return n.idx"))))
 			      :grocery-has-vitamin)
 	(create-rels-for-node node-id
 			      (map-keys-to-str req-params)
-			      (first (first (:data (n4j/cypher-query "start n=node(*) where n.type! = 'mineral' return n.idx"))))
+			      (first (first (:data (n4j/cypher-query "start n=node(*)
+								      where n.type! = 'mineral'
+								      return n.idx"))))
 			      :grocery-has-mineral)))
   (read-all-groceries))
 
@@ -51,9 +55,13 @@
 					  		       :gcarbohydrates (read-string (:gcarbohydrates req-params))
 					  		       :gwater (read-string (:gwater req-params))
 					  		       :gdesc (:gdesc req-params)})
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))") match n-[r:`grocery-has-vitamin`]-() return ID(r)")))
+     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))")
+							  match n-[r:`grocery-has-vitamin`]-()
+							  return ID(r)")))
 			   (map-keys-to-str req-params))
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))") match n-[r:`grocery-has-mineral`]-() return ID(r)")))
+     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))")
+							  match n-[r:`grocery-has-mineral`]-()
+							  return ID(r)")))
 			   (map-keys-to-str req-params))))
   (read-all-groceries))
 

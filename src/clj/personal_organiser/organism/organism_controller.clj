@@ -31,11 +31,15 @@
 						:oactivity (:oactivity req-params)})]
 	(create-rels-for-node node-id
 			      (map-keys-to-str req-params)
-			      (first (first (:data (n4j/cypher-query "start n=node(*) where n.type! = 'vitamin' return n.idx"))))
+			      (first (first (:data (n4j/cypher-query "start n=node(*)
+								      where n.type! = 'vitamin'
+								      return n.idx"))))
 			      :organism-needs-vitamin)
 	(create-rels-for-node node-id
 			      (map-keys-to-str req-params)
-			      (first (first (:data (n4j/cypher-query "start n=node(*) where n.type! = 'mineral' return n.idx"))))
+			      (first (first (:data (n4j/cypher-query "start n=node(*)
+								      where n.type! = 'mineral'
+								      return n.idx"))))
 			      :organism-needs-mineral)))
   (organism-nav))
 
@@ -65,9 +69,13 @@
 								:ogender (:ogender req-params)
 								:odiet (:odiet req-params)
 								:oactivity (:oactivity req-params)})
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))") match n-[r:`organism-needs-vitamin`]-() return ID(r)")))
+     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
+							  match n-[r:`organism-needs-vitamin`]-()
+							  return ID(r)")))
 			   (map-keys-to-str req-params))
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))") match n-[r:`organism-needs-mineral`]-() return ID(r)")))
+     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
+							  match n-[r:`organism-needs-mineral`]-()
+							  return ID(r)")))
 			   (map-keys-to-str req-params))))
   (organism-nav))
 

@@ -3,15 +3,23 @@
 	<th>Name</th>
 	<th>Calories</th>
 	<th>Type</th>
-	<th>Description</th>
 	<th colspan="2">Option</th>
       </tr>
       <tr class="meal-data">
 	<td class="mlname"></td>
 	<td class="mlcalories"></td>
 	<td class="mltype"></td>
-	<td class="mldesc"></td>
-	<td class="mledit"></td>
-	<td class="mldelete"></td>
+	<td class="mledit">
+	  <form action="" method="get" >
+	    <input type="hidden" name="id" id="mlid">
+	    <input type="submit" value="edit" class="option">
+	  </form>
+	</td>
+	<td class="mldelete">
+	  <form action="" method="get" >
+	    <input type="hidden" name="id" id="mlid">
+	    <input type="submit" value="delete" class="option">
+	  </form>
+	</td>
       </tr>
     </table>
