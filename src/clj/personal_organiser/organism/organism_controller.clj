@@ -40,8 +40,7 @@
 			      (first (first (:data (n4j/cypher-query "start n=node(*)
 								      where n.type! = 'mineral'
 								      return n.idx"))))
-			      :organism-needs-mineral)))
-  (organism-nav))
+			      :organism-needs-mineral))))
 
 (defn update-organism
   "Update organism in neo4j database"

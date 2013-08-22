@@ -29,4 +29,5 @@
 	(session-put! :diet diet)
 	(session-put! :birthday birthday)
 	(session-put! :weight weight)
-	(session-put! :height height))))
+	(session-put! :height height))
+	(session-put! :login-try 1)))

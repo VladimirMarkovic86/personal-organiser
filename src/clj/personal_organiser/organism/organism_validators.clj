@@ -2,11 +2,14 @@
   (:require [valip.core :refer [validate]]
 	    [valip.predicates :refer [present? matches email-address?]]))
 
-(defn create-organism-errors [params]
+(defn create-organism-errors
+  "Credentials for organism form"
+  [params]
   (validate params
 	    [:ofirst-name present? "First name can't be empty."]
 	    [:olast-name present? "Last name can't be empty."]
 	    [:oemail present? "Email can't be empty."]
+	    [:oemail email-address? "Email not in valid format."]
 	    [:opassword present? "Password can't be empty."]
 	    [:oconfirm-password present? "Confirm password can't be empty."]
 	    [:oheight present? "Height can't be empty."]

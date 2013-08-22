@@ -42,15 +42,15 @@
   (if (> (count (dom/value (dom/by-id (:id field)))) 0)
     true
     (do (dom/prepend! (dom/by-id (str "td"(:id field)))
-                                  (str "<div class=\"help\">Value for field "(dom/text (dom/by-id (str "l"(:id field))))" is required</div>"))
-    false)))
+		      (str "<div class=\"help\">Value for field "(dom/text (dom/by-id (str "l"(:id field))))" is required</div>"))
+	false)))
 
 (defn parse-number
   "Reads a number from a string. Returns nil if not a number."
   [s]
-  (if (re-find #"^-?\d+\.?\d*$" s)
-   (js/parseFloat s)
-   s))
+  (if (re-find #"^-?\d+\.?\d[E]?-?\d*$|^-?\d+\.?\d*$" s)
+      (js/parseFloat s)
+      s))
 
 (defn is-value-num
   "Is passed value number"
@@ -60,11 +60,11 @@
 (defn valid-if-field-number
   "Validate if field is number"
   [field]
-    (if (is-value-num (dom/value (dom/by-id (:id field))))
+  (if (is-value-num (dom/value (dom/by-id (:id field))))
       true
       (do (dom/prepend! (dom/by-id (str "td"(:id field)))
-                                  (str "<div class=\"help\">Not a number " (:type field) "</div>"))
-      false)))
+                                   (str "<div class=\"help\">Not a number " (:type field) "</div>"))
+	  false)))
 
 (defn validate-form
   "Validate form"
@@ -75,8 +75,7 @@
 	(doseq [sel-node sel-nodes]
 	       (swap! valid conj (valid-if-field-empty sel-node))
 	       (if (= (:type sel-node) "number")
-	           (swap! valid conj (valid-if-field-number sel-node)))
-	)
+	           (swap! valid conj (valid-if-field-number sel-node))))
 	(every? true? @valid)))
 
 (defn ^:export init []
@@ -91,5 +90,4 @@
 	(numeric-field (dom/by-id "gcarbohydrates"))
 	(numeric-field (dom/by-id "gwater"))
 	(doseq [sel-node sel-nodes]
-		(numeric-field (dom/by-id (:id sel-node))))
-)))
+		(numeric-field (dom/by-id (:id sel-node)))))))

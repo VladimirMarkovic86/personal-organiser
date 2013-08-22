@@ -19,7 +19,15 @@
   [response-fn]
   (if (= (session-get :organism-id) nil)
       (lv/login)
-      response-fn))
+      (do (session-pop! :login-try 1)
+	  response-fn)))
+
+(defn is-not-logged-in
+  "Checks if user is logged in"
+  [response-fn]
+  (if (= (session-get :organism-id) nil)
+      response-fn
+      (lv/home)))
 
 ;; defroutes macro defines a function that chains individual route
 ;; functions together. The request map is passed to each function in
@@ -55,10 +63,12 @@
     (is-logged-in (ov/organism-nav)))
   (GET "/create-organism"
     []
-    (is-logged-in (ov/create-organism)))
+    (do (session-pop! :login-try 1)
+	(is-not-logged-in (ov/create-organism))))
   (POST "/save-organism"
     request
-    (is-logged-in (oc/save-organism (:params request))))
+    (do (is-not-logged-in (oc/save-organism (:params request)))
+	(is-logged-in (lv/home))))
   (GET "/edit-organism"
     [id]
     (is-logged-in (ov/edit-organism (n4j/read-node (read-string id)))))
@@ -92,6 +102,10 @@
   (GET "/login"
     []
     (is-logged-in (lv/home)))
+  (GET "/logout"
+    []
+    (do (destroy-session!)
+	(is-logged-in (lv/home))))
   (POST "/login"
     request
     (do (lc/authenticate-user (:params request))

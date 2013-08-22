@@ -15,6 +15,13 @@ Tutorials from this address are followed.
 https://github.com/magomimmo/modern-cljs/blob/master/doc/tutorial-xx.md
 Except in 'tutorial-xx' instead of 'xx' type numbers from 01 to 16. Sixteen tutorials cover ClojureScript and other tehnology. In future there may be more.
 
+Valip
+=====
+
+Valip is a validation library for Clojure. It is primarily designed to validate keyword-string maps, such as one might get from a HTML form.
+
+https://github.com/cemerick/valip
+
 NEO4J
 =====
 
@@ -67,6 +74,13 @@ Sandbar is a web application library which is designed to be used with <a href="
 More documentation is located in the <a href="http://github.com/brentonashworth/sandbar/wiki">Sandbar Wiki</a>.
 
 You may also be interested in joining the <a href="http://groups.google.com/group/sandbar-library">Sandbar Google Group</a>.
+
+data.json
+=========
+
+JSON parser/generator to/from Clojure data structures.
+
+Follows the specification on http://json.org/
 
 Input radio
 ===========

@@ -1,17 +1,27 @@
 (ns personal-organiser.organism.organism-view
+  (:use (sandbar stateful-session))
   (:require [personal-organiser.neo4j :as n4j]
 	    [personal-organiser.html-generator :as hg]
 	    [net.cgrand.enlive-html :as en]))
 
 (en/deftemplate create-organism
-  (hg/build-html-page [{:temp-sel [:div.middle-column],
+  (hg/build-html-page [{:temp-sel [:div.topcontent],
 			:comp "public/organism/organism-form.html",
-			:comp-sel [:form#organism-form]}
-	               {:temp-sel [:div.left-column],
-			:comp "public/organism/organism-nav.html",
-			:comp-sel [:div.organism-nav]}])
+			:comp-sel [:form#organism-form]}])
   []
   [:title] (en/content "Create organism")
+  [:div.topcontent] (en/set-attr :class "organism")
+  [:td#to-login] (en/content {:tag :a,
+			      :attrs {:href "/login"}
+			      :content "Back to login"})
+  [:td.info] (en/content {:tag :div,
+			  :attrs nil,
+			  :content [{:tag :div,
+				    :attrs nil,
+				    :content "Following data represents grown-up daily needs"}
+				   {:tag :div,
+				    :attrs nil,
+				    :content "for vitamins and minerals and can be changed"}]})
   [:div.script] (en/content {:tag :script,
 			     :attrs {:src "js/organism.js"},
 			     :content nil})
@@ -23,7 +33,10 @@
 				(:data
 				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","
 											     (n4j/get-type-indexes "vitamin"))")
-							  return ID(n),n.vname,n.vdefvalue order by ID(n) asc")))]
+							  return ID(n),
+								 n.vname,
+								 n.vdefvalue
+								 order by ID(n) asc")))]
 	          [:td.vname] (en/content {:tag :label,
 					   :attrs {:for (str "value"id),
 						   :id (str "lvalue"id)},
@@ -41,7 +54,10 @@
 				(:data
 				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","
 											     (n4j/get-type-indexes "mineral"))")
-							  return ID(n),n.mname,n.mdefvalue order by ID(n) asc")))]
+							  return ID(n),
+								 n.mname,
+								 n.mdefvalue
+								 order by ID(n) asc")))]
 		  [:td.mname] (en/content {:tag :label,
 					   :attrs {:for (str "value"id),
 						   :id (str "lvalue"id)},
@@ -66,6 +82,8 @@
 			:comp-sel [:div.organism-nav]}])
   [node]
   [:title] (en/content "Edit organism")
+  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism?id="(session-get :organism-id)))
+  [:div.read-organism :a] (en/set-attr :href (str "/read-organism?id="(session-get :organism-id)))
   [:h3.form-title] (en/content "Edit organism")
   [:div.script] (en/content {:tag :script,
 			     :attrs {:src "js/organism.js"},
@@ -158,6 +176,8 @@
 			:comp-sel [:div.organism-nav]}])
   [node]
   [:title] (en/content "Organism")
+  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism?id="(session-get :organism-id)))
+  [:div.read-organism :a] (en/set-attr :href (str "/read-organism?id="(session-get :organism-id)))
   [:h3.form-title] (en/content "Organism")
   [:input#ofirst-name] (comp (en/set-attr :value (:ofirst-name (:data node)))
 			     (en/set-attr :readonly "readonly"))
@@ -165,6 +185,7 @@
 			    (en/set-attr :readonly "readonly"))
   [:input#oemail] (comp (en/set-attr :value (:oemail (:data node)))
 			(en/set-attr :readonly "readonly"))
+  [:td.tdpswd] (en/content nil)
   [:input#opassword] (comp (en/set-attr :value (:opassword (:data node)))
 			   (en/set-attr :readonly "readonly"))
   [:input#oconfirm-password] (comp (en/set-attr :value (:oconfirm-password (:data node)))
@@ -249,4 +270,6 @@
 			:comp "public/organism/organism-nav.html",
 			:comp-sel [:div.organism-nav]}])
   []
-  [:title] (en/content "Organism navigation"))
+  [:title] (en/content "Organism navigation")
+  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism?id="(session-get :organism-id)))
+  [:div.read-organism :a] (en/set-attr :href (str "/read-organism?id="(session-get :organism-id))))
