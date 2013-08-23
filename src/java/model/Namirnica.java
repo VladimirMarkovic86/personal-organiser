@@ -42,7 +42,7 @@ public class Namirnica implements Serializable {
 	public Namirnica() {
 	}
 
-	public Namirnica(int id, String naziv, double kalorija, double proteina, double masti, double ugljenihhidrata, double voda, String opis, int poreklo) {
+	public Namirnica(int id, String naziv, double kalorija, double proteina, double masti, double ugljenihhidrata, double voda, String opis, String poreklo) {
 		this.id = id;
 		this.naziv = naziv;
 		this.kalorija = kalorija;
@@ -51,7 +51,15 @@ public class Namirnica implements Serializable {
 		this.ugljenihhidrata = ugljenihhidrata;
 		this.voda = voda;
 		this.opis = opis;
-		this.poreklo = poreklo;
+		if (poreklo.equals("All")) {
+			this.poreklo = 1;
+		} else {
+			if (poreklo.equals("Vegetarian")) {
+				this.poreklo = 0;
+			} else {
+				this.poreklo = 1;
+			}
+		}
 	}
 
 	public int getId() {
@@ -112,6 +120,14 @@ public class Namirnica implements Serializable {
 	
 	public int getPoreklo() {
 		return poreklo;
+	}
+
+	public String getPorekloStr() {
+		switch (poreklo){
+			case 0: return "Vegetarian";
+			case 1: return "All";
+			default: return "All";
+		}
 	}
 
 	public void setPoreklo(int poreklo) {

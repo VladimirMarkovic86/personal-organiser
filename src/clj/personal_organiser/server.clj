@@ -11,6 +11,8 @@
 	    [personal-organiser.meal.meal-controller :as mlc]
 	    [personal-organiser.login.login-view :as lv]
 	    [personal-organiser.login.login-controller :as lc]
+	    [personal-organiser.planishrane.planishrane-view :as plv]
+	    [personal-organiser.planishrane.planishrane-controller :as plc]
 	    [personal-organiser.neo4j :as n4j]
 	    [ring.adapter.jetty :as jetty]))
 
@@ -110,6 +112,12 @@
     request
     (do (lc/authenticate-user (:params request))
 	(is-logged-in (lv/home))))
+  (GET "/planishrane"
+    []
+    (is-logged-in (plv/process-template)))
+  (POST "/planishrane"
+    request
+    (is-logged-in (plc/process (:params request))))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found

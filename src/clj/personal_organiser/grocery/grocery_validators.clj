@@ -10,4 +10,5 @@
 	    [:gproteins present? "Proteins can't be empty."]
 	    [:gcarbohydrates present? "Carbohydrates can't be empty."]
 	    [:gwater present? "Water can't be empty."]
+	    [:gorigin present? "Select origin of grocery."]
 	    [:gdesc present? "Description can't be empty."]))

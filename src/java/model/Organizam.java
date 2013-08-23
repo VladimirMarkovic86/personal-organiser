@@ -59,6 +59,22 @@ public class Organizam implements Serializable {
 		this.fizickaAktivnost = fizickaAktivnost;
 	}
 
+	public void setFizickaAktivnost(String fizickaAktivnost) {
+		if (fizickaAktivnost.equals("Easy")){
+			this.fizickaAktivnost = 0;
+		}else{
+			if (fizickaAktivnost.equals("Medium")){
+				this.fizickaAktivnost = 1;
+			}else{
+				if (fizickaAktivnost.equals("Hard")){
+					this.fizickaAktivnost = 2;
+				}else{
+					this.fizickaAktivnost = 0;
+				}
+			}
+		}
+	}
+
 	public int getNacinIshrane() {
 		return this.nacinIshrane;
 	}
@@ -67,12 +83,36 @@ public class Organizam implements Serializable {
 		this.nacinIshrane = nacinIshrane;
 	}
 
+	public void setNacinIshrane(String nacinIshrane) {
+		if (nacinIshrane.equals("All")){
+			this.nacinIshrane = 1;
+		}else{
+			if (nacinIshrane.equals("Vegetarian")){
+				this.nacinIshrane = 0;
+			}else{
+				this.nacinIshrane = 1;
+			}
+		}
+	}
+
 	public int getPol() {
 		return this.pol;
 	}
 
 	public void setPol(int pol) {
 		this.pol = pol;
+	}
+
+	public void setPol(String pol) {
+		if (pol.equals("Male")){
+			this.pol = 0;
+		}else{
+			if (pol.equals("Female")){
+				this.pol = 1;
+			}else{
+				this.pol = 0;
+			}
+		}
 	}
 
 	public double getTezina() {

@@ -13,6 +13,7 @@
 						 :gproteins (:gproteins req-params)
 						 :gcarbohydrates (:gcarbohydrates req-params)
 						 :gwater (:gwater req-params)
+						 :gorigin (:gorigin req-params)
 						 :gdesc (:gdesc req-params)})]
     (str "Grocery errors: " grocery-errors)
     (let [node-id (n4j/create-node "grocery" {:gname (:gname req-params)
@@ -21,6 +22,7 @@
 					      :gproteins (read-string (:gproteins req-params))
 					      :gcarbohydrates (read-string (:gcarbohydrates req-params))
 					      :gwater (read-string (:gwater req-params))
+					      :gorigin (:gorigin req-params)
 					      :gdesc (:gdesc req-params)})]
 	(create-rels-for-node node-id
 			      (map-keys-to-str req-params)
@@ -45,6 +47,7 @@
 						 :gproteins (:gproteins req-params)
 						 :gcarbohydrates (:gcarbohydrates req-params)
 						 :gwater (:gwater req-params)
+						 :gorigin (:gorigin req-params)
 						 :gdesc (:gdesc req-params)})]
     (str "Grocery errors: " grocery-errors)
     ((n4j/update-node
@@ -54,6 +57,7 @@
 					  		       :gproteins (read-string (:gproteins req-params))
 					  		       :gcarbohydrates (read-string (:gcarbohydrates req-params))
 					  		       :gwater (read-string (:gwater req-params))
+							       :gorigin (:gorigin req-params)
 					  		       :gdesc (:gdesc req-params)})
      (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))")
 							  match n-[r:`grocery-has-vitamin`]-()

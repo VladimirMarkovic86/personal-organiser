@@ -75,6 +75,15 @@ public class Obrok implements Serializable {
 		return this.vrstaObroka;
 	}
 
+	public String getVrstaObrokaStr() {
+		switch (this.vrstaObroka) {
+			case 0: return "Breakfast";
+			case 1: return "Lunch";
+			case 2: return "Dinner";
+			default: return "Breakfast";
+		}
+	}
+
 	public void setVrstaObroka(int vrstaObroka) {
 		this.vrstaObroka = vrstaObroka;
 	}

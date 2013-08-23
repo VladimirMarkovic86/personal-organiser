@@ -218,3 +218,7 @@ td#error-msgs div.help {
   list-style-position: inside;
   text-align: left;
 }
+table.planishrane-template {
+  margin-left: auto;
+  margin-right: auto;
+}

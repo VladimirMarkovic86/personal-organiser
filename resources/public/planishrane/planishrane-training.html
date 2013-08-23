@@ -1,0 +1,91 @@
+  <table class="planishrane-training">
+
+    <tr>
+      <th></th>
+      <th class="h-day">Day</th>
+    </tr>
+
+    <tr>
+      <td><label for="training-coef"
+		 id="ltraining-coef">Training</label>
+      </td>
+      <td><select name="training-coef"
+		  id="training-coef">
+	    <option value="0">No training</option>
+	    <option value="2.89">Walk 3 kmh</option>
+	    <option value="3.47">Walk 4 kmh</option>
+	    <option value="3.82">Walk 5 kmh</option>
+	    <option value="4.39">Walk 6 kmh</option>
+	    <option value="7.28">Walk 7 kmh</option>
+	    <option value="9.25">Running 8 kmh</option>
+	    <option value="11.57">Running 10 kmh</option>
+	    <option value="13.3">Running 11 kmh</option>
+	    <option value="15.61">Running 13 kmh</option>
+	    <option value="17.35">Running 15 kmh</option>
+	    <option value="18.51">Running 16 kmh</option>
+	    <option value="4.63">Bike 16 kmh</option>
+	    <option value="6.94">Bike 16-19 kmh</option>
+	    <option value="9.25">Bike 19-23 kmh</option>
+	    <option value="11.57">Bike 23-26 kmh</option>
+	    <option value="13.88">Bike 26-32 kmh</option>
+	    <option value="18.51">Bike &gt; 32 kmh</option>
+	    <option value="9.14">Push ups</option>
+	    <option value="10.41">Soccer</option>
+	    <option value="9.25">Basketball</option>
+	    <option value="5.2">Basketball shooting</option>
+	    <option value="11.57">Swim freestyle, fast</option>
+	    <option value="8.11">Swim freestyle, medium</option>
+	    <option value="7.52">Aerobic medium</option>
+	    <option value="8.11">Aerobic high</option>
+	    <option value="5.78">Aerobic low</option>
+	  </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td><label for="training-meal"
+		 id="ltraining-meal">Training in time of</label></td>
+      <td>
+	<div><input type="radio"
+		    name="training-meal"
+		    id="training-meal-no"
+		    value="0"
+		    required>
+	     <label for="training-meal-no"
+		    id="ltraining-meal-no"><span></span>No training</label></div>
+	<div><input type="radio"
+		    name="training-meal"
+		    id="training-meal-breakfast"
+		    value="1"
+		    required>
+	     <label for="training-meal-breakfast"
+		    id="ltraining-meal-breakfast"><span></span>Breakfast</label></div>
+	<div><input type="radio"
+		    name="training-meal"
+		    id="training-meal-lunch"
+		    value="2"
+		    required>
+	     <label for="training-meal-lunch"
+		    id="ltraining-meal-lunch"><span></span>Lunch</label></div>
+	<div><input type="radio"
+		    name="training-meal"
+		    id="training-meal-dinner"
+		    value="3"
+		    required>
+	     <label for="training-meal-dinner"
+		    id="ltraining-meal-dinner"><span></span>Dinner</label></div>
+      </td>
+    </tr>
+
+    <tr>
+      <td><label for="training-duration"
+		 id="ltraining-duration">Training duration</label>
+      </td>
+      <td><input type="number"
+		 name="training-duration"
+		 id="training-duration"
+		 required>
+      </td>
+    </tr>
+
+  </table>
