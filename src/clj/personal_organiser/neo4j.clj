@@ -1,4 +1,5 @@
 (ns personal-organiser.neo4j
+  "Namespace for manipulating data from database"
   (:require [clojurewerkz.neocons.rest :as nr]
             [clojurewerkz.neocons.rest.nodes :as nn]
             [clojurewerkz.neocons.rest.relationships :as nrel]

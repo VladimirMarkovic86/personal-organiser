@@ -1,4 +1,5 @@
 (ns personal-organiser.html-generator
+  "Namespace for generating html pages"
   (:require [net.cgrand.enlive-html :as en]))
 
 (defn generate-html-resource

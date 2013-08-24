@@ -358,12 +358,16 @@
 
 (defn form-result-meals
   "Form sequence of result meals"
-  [result-meals]
-  (conj (conj (conj (conj []
+  [result-meals training-coef]
+  (let [acc-seq (conj (conj (conj []
 			  ["Breakfast" (convert-to-meals (:breakfast drools-meals-result))])
 		    ["Lunch" (convert-to-meals (:lunch drools-meals-result))])
-	      ["Dinner" (convert-to-meals (:dinner drools-meals-result))])
-	["Training" (convert-to-meals (:training drools-meals-result))]))
+	      ["Dinner" (convert-to-meals (:dinner drools-meals-result))])]
+       (println (.isEmpty (:training drools-meals-result)))
+       (if (not (.isEmpty (:training drools-meals-result)))
+	   (conj acc-seq
+		 ["Training" (convert-to-meals (:training drools-meals-result))])
+	   acc-seq)))
 
 (defn knowledge-base-run
   "Fire all rules of knowledge base"
@@ -382,4 +386,4 @@
     (knowledge-base-meals-load ksession organizam)
     (.fireAllRules ksession)
     (print-meals)
-    (form-result-meals drools-meals-result)))
+    (form-result-meals drools-meals-result training-coef)))

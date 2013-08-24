@@ -1,4 +1,5 @@
 (ns personal-organiser.grocery.grocery-controller
+  "Handeling requests from grocery view forms to database"
   (:require [personal-organiser.grocery.grocery-validators :refer [create-grocery-errors]]
 	    [personal-organiser.grocery.grocery-view :refer [read-all-groceries]]
 	    [personal-organiser.neo4j :as n4j]

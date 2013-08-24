@@ -35,6 +35,12 @@
 			:comp-sel [:form#planishrane-form]}])
   []
   [:title] (en/content "Plan ishrane")
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "js/planishrane.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.planishrane.jsplanishrane.init();"})
   [:td.monday] (en/content (process "Monday" 1))
   [:td.tuesday] (en/content (process "Tuesday" 2))
   [:td.wednesday] (en/content (process "Wednesday" 3))
@@ -75,6 +81,13 @@
     saturday
     sunday]]
   [:title] (en/content "Plan ishrane results")
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "js/planishrane.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.planishrane.jsplanishrane.init();"})
+  [:td.submit] (en/content nil)
   [:td.monday] (en/content (results "Monday" monday))
   [:td.tuesday] (en/content (results "Tuesday" tuesday))
   [:td.wednesday] (en/content (results "Wednesday" wednesday))

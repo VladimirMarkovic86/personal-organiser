@@ -97,6 +97,19 @@
 
 			     ;; generated JS code prettyfication
 			     :pretty-print true}}
+		 :dev-planishrane
+		 {;; CLJS source code path
+		  :source-paths ["src/brepl" "src/cljs/personal_organiser/planishrane"]
+
+		  ;; Google Closure (CLS) options configuration
+		  :compiler {;; CLS generated JS script filename
+			     :output-to "resources/public/js/planishrane.js"
+
+			     ;; minimal JS optimization directive
+			     :optimizations :whitespace
+
+			     ;; generated JS code prettyfication
+			     :pretty-print true}}
 		 :prod-grocery
 		 {;; CLJS source code path
 		  :source-paths ["src/cljs/personal_organiser/grocery"]
@@ -134,6 +147,16 @@
 		  ;; Google Closure (CLS) options configuration
 		  :compiler {;; CLS generated JS script filename
 			     :output-to "resources/public/js/login.js"
+
+			     ;; minimal JS optimization directive
+			     :optimizations :advanced}}
+		 :prod-planishrane
+		 {;; CLJS source code path
+		  :source-paths ["src/cljs/personal_organiser/planishrane"]
+
+		  ;; Google Closure (CLS) options configuration
+		  :compiler {;; CLS generated JS script filename
+			     :output-to "resources/public/js/planishrane.js"
 
 			     ;; minimal JS optimization directive
 			     :optimizations :advanced}}}})

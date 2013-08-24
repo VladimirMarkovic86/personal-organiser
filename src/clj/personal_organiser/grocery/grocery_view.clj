@@ -4,6 +4,7 @@
 	    [net.cgrand.enlive-html :as en]
 	    [personal-organiser.utils :refer [nodes-data-to-map]]))
 
+;Build page to create grocery in database
 (en/deftemplate create-grocery
   (hg/build-html-page [{:temp-sel [:div.middle-column],
 			:comp "public/grocery/grocery-form.html",
@@ -58,6 +59,7 @@
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"id)));; mineral clone-for
 )
 
+;Build page to edit existing grocery in database
 (en/deftemplate edit-grocery
   (hg/build-html-page [{:temp-sel [:div.middle-column],
 			:comp "public/grocery/grocery-form.html",
@@ -113,8 +115,7 @@
 						    :value vvalue,
 						    :required "required"},
 					    :content nil})
-		  [:td.vhelp] (en/set-attr :id (str "tdvalue"rid))
-);; vitamin clone-for
+		  [:td.vhelp] (en/set-attr :id (str "tdvalue"rid)));; vitamin clone-for
   [:tr.mineral] (en/clone-for [[rid mvalue mlabel]
 			       (:data (n4j/cypher-query (str "start n=node("(:id node)")
 							      match (n)-[r:`grocery-has-mineral`]-(n2)
@@ -137,6 +138,7 @@
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"rid)));; mineral clone-for
   [:input#submit] (en/set-attr :value "Save changes"))
 
+;Build page that shows all groceries
 (en/deftemplate read-all-groceries
   (hg/build-html-page [{:temp-sel [:div.middle-column],
 			:comp "public/grocery/grocery-table.html",
@@ -158,6 +160,7 @@
 			[:td.gdelete :form] (en/set-attr :action "http://localhost:5000/delete-grocery")
 			[:td.gdelete :form :input#gid] (en/set-attr :value id)))
 
+;Build page with grocery page navigation
 (en/deftemplate grocery-nav
   (hg/build-html-page [{:temp-sel [:div.left-column],
 			:comp "public/grocery/grocery-nav.html",

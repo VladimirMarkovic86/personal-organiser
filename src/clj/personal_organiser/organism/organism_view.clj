@@ -242,8 +242,7 @@
 						    :value vvalue,
 						    :readonly "readonly"},
 					    :content nil})
-		  [:td.vhelp] (en/set-attr :id (str "tdvalue"rid))
-);; vitamin clone-for
+		  [:td.vhelp] (en/set-attr :id (str "tdvalue"rid)));; vitamin clone-for
   [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node("(:id node)")
 										  match (n)-[r:`organism-needs-mineral`]-(n2)
 										  return ID(r),

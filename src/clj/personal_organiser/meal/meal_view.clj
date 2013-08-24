@@ -89,15 +89,15 @@
 					  :content nil})
 				    (en/set-attr :value (str (exist-ing-ind-str (:id node))";1")))
   [:tr.ingredient-row] (en/clone-for [[rid grams quantity gname]
-				(:data
-				  (n4j/cypher-query
-				    (str "start n=node("(:id node)")
-					  match (n)-[r:`meal-has-grocery`]-(n2)
-					  return ID(r),
-						 r.grams,
-						 r.quantity,
-						 n2.gname
-						 order by ID(n2) asc")))]
+					(:data
+					  (n4j/cypher-query
+					    (str "start n=node("(:id node)")
+						  match (n)-[r:`meal-has-grocery`]-(n2)
+						  return ID(r),
+							 r.grams,
+							 r.quantity,
+							 n2.gname
+							 order by ID(n2) asc")))]
 		  [:tr.ingredient-row] (en/set-attr :id (str "ingredient-row"rid))
 		  [:option#ingredient-option2] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
 						(comp (en/content (:gname data))

@@ -56,7 +56,7 @@
 						    :ogender (:ogender req-params)
 						    :odiet (:odiet req-params)
 						    :oactivity (:oactivity req-params)})]
-    (str "Organism errors: " organism-errors)
+    (println (str "Organism errors: " organism-errors))
     ((n4j/update-node
 	(n4j/read-node (read-string (:idorganism req-params))) {:ofirst-name (:ofirst-name req-params)
 								:olast-name (:olast-name req-params)

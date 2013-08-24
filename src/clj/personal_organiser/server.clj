@@ -1,4 +1,5 @@
 (ns personal-organiser.server
+  "Requests and responses on server"
   (:use compojure.core
 	(sandbar stateful-session))
   (:require [compojure.handler :as handler]

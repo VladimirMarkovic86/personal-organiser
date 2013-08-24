@@ -1,4 +1,5 @@
 (ns personal-organiser.utils
+  "Useful functions that are repeatedly called all over the project"
   (:require [cljs.reader :refer [read-string]]
 	    [personal-organiser.neo4j :as n4j])
   (:refer-clojure :exclude [read-string]))

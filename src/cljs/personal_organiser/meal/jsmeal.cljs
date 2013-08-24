@@ -93,7 +93,6 @@
 	  (swap! valid
 		 conj
 		 (valid-if-field-empty sel-node)))
-	; Validate every grams and quantity field in form
 	(doseq [ingredient sel-ingredients]
 	  (swap! ingredient-valid
 		 conj
@@ -105,7 +104,6 @@
 	(if (not (every? true? @ingredient-valid))
 	    (dom/prepend! (dom/by-id "error-msgs")
 			  "<div class=\"help\">Value for ingredient grams and quantity is required</div>"))
-	;validate every select element in form
 	(doseq [select select-nodes]
 	  (swap! select-valid
 		 conj
@@ -160,14 +158,16 @@
 (defn remove-ingredient-row
   "Remove ingredient row"
   [row-index ing-indexes]
-  (dom/destroy! (dom/by-id (str "ingredient-row"row-index)))
-  (dom/set-attr! ing-indexes
-		 "value"
-		 (cstring/replace
-		   (cstring/replace
-		     (cstring/replace (str ";"(dom/value ing-indexes)";")
-				      (str ";"row-index";")
-				      ";") #";$" "") #"^;" "")))
+  (if (= (count (into [] (map dom/value (dom/nodes (domcss/sel "select[id*='ingredient']"))))) 1)
+	(js/alert "Meal should contain at least one ingredient")
+	(do (dom/destroy! (dom/by-id (str "ingredient-row"row-index)))
+	    (dom/set-attr! ing-indexes
+			   "value"
+			 (cstring/replace
+			   (cstring/replace
+			     (cstring/replace (str ";"(dom/value ing-indexes)";")
+					      (str ";"row-index";")
+					      ";") #";$" "") #"^;" "")))))
 
 (defn add-ingredient-row
   "Add ingredient row"

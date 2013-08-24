@@ -81,6 +81,10 @@
 							    :mltype (:mltype req-params)
 							    :mldesc (:mldesc req-params)
 							    :mlimg (:mlimg req-params)})
+	;When updating meal data:
+	;	- delete existing relations to groceries that were removed from form
+	;	- update existing relations with new data
+	; 	- create new relations
      (delete-rels-for-node (reduce (fn [vec num] (conj vec (read-string num))) [] (into []
 				 (difference (into #{}
 						        (split (get params-map-str ":existing-ing-ind") #";"))
@@ -99,8 +103,7 @@
 						        			 (split (get params-map-str ":ingredient-indexes") #";"))
 									   (into #{}
 										 (split (get params-map-str ":existing-ing-ind") #";")))))
-			   :meal-has-grocery)
-))
+			   :meal-has-grocery)))
   (read-all-meals))
 
 (defn delete-meal
