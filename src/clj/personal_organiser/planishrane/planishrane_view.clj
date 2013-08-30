@@ -36,7 +36,7 @@
   []
   [:title] (en/content "Plan ishrane")
   [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/planishrane.js"},
+			     :attrs {:src "http://localhost:5000/js/planishrane.js"},
 			     :content nil})
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,
@@ -82,7 +82,7 @@
     sunday]]
   [:title] (en/content "Plan ishrane results")
   [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/planishrane.js"},
+			     :attrs {:src "http://localhost:5000/js/planishrane.js"},
 			     :content nil})
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,

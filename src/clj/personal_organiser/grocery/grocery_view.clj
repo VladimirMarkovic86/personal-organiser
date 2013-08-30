@@ -14,12 +14,6 @@
 			:comp-sel [:div.grocery-nav]}])
   []
   [:title] (en/content "Create grocery")
-  [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/grocery.js"},
-			     :content nil})
-  [:div.script] (en/append {:tag :script,
-			    :attrs nil,
-			    :content "personal_organiser.grocery.jsgrocery.init();"})
   [:form#grocery-form] (en/set-attr :action "/save-grocery")
   [:tr.vitamin] (en/clone-for [[id vname]
 			       (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "vitamin"))")
@@ -57,6 +51,12 @@
 						    :required "required"},
 					    :content nil})
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"id)));; mineral clone-for
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "http://localhost:5000/js/grocery.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.grocery.jsgrocery.init();"})
 )
 
 ;Build page to edit existing grocery in database
@@ -70,12 +70,6 @@
   [node]
   [:title] (en/content "Edit grocery")
   [:h3.form-title] (en/content "Edit grocery")
-  [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/grocery.js"},
-			     :content nil})
-  [:div.script] (en/append {:tag :script,
-			    :attrs nil,
-			    :content "personal_organiser.grocery.jsgrocery.init();"})
   [:form#grocery-form] (en/set-attr :action "/update-grocery")
   [:input#gname] (en/before {:tag :input,
 			     :attrs {:type "hidden",
@@ -136,7 +130,13 @@
 						    :required "required"},
 					    :content nil})
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"rid)));; mineral clone-for
-  [:input#submit] (en/set-attr :value "Save changes"))
+  [:input#submit] (en/set-attr :value "Save changes")
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "http://localhost:5000/js/grocery.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.grocery.jsgrocery.init();"}))
 
 ;Build page that shows all groceries
 (en/deftemplate read-all-groceries
@@ -149,16 +149,22 @@
   []
   [:title] (en/content "Grocery table")
   [:tr.grocery-data] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
+			[:tr.grocery-data] (en/set-attr :id (str "grocery-"id))
 			[:td.gname] (en/content (format "%s" (:gname data)))
 			[:td.gcalories] (en/content (format "%s" (:gcalories data)))
 			[:td.gfats] (en/content (format "%s" (:gfats data)))
 			[:td.gproteins] (en/content (format "%s" (:gproteins data)))
 			[:td.gcarbohydrates] (en/content (format "%s" (:gcarbohydrates data)))
 			[:td.gorigin] (en/content (format "%s" (:gorigin data)))
-			[:td.gedit :form] (en/set-attr :action "http://localhost:5000/edit-grocery")
-			[:td.gedit :form :input#gid] (en/set-attr :value id)
-			[:td.gdelete :form] (en/set-attr :action "http://localhost:5000/delete-grocery")
-			[:td.gdelete :form :input#gid] (en/set-attr :value id)))
+			[:td.gedit :a] (en/set-attr :href (str "/edit-grocery/"id))
+			[:td.gdelete :a] (en/set-attr :id (str "gdelete"id)))
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "http://localhost:5000/js/grocery.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.grocery.jsgrocerytbl.init();"})
+)
 
 ;Build page with grocery page navigation
 (en/deftemplate grocery-nav

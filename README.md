@@ -8,8 +8,8 @@ Guide
 
 * Clone project with command "git clone https://github.com/VladimirMarkovic86/personal-organiser.git" from terminal
 * Download Neo4J server from http://www.neo4j.org/
-* After deleting directory "data" from Neo4J server root,
-  from project root/resources extract data.zip file in Neo4J server root
+* After deleting directory "data" from Neo4J server_root,
+  from project_root/resources extract data.zip file in Neo4J server_root
 * Start Neo4J server
   for Unix systems in terminal from "server_root/bin" run ./neo4j start
   for windows systems find in server_root/doc/neo4j.txt
@@ -175,3 +175,16 @@ Input radio - http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-ti
 Element select - http://stackoverflow.com/questions/1895476/how-to-style-a-select-dropdown-with-css-only-without-javascript
 Vertically and horizontally centering - http://tutorialzine.com/2010/03/centering-div-vertically-and-horizontally/
 Also W3Schools- http://www.w3schools.com/
+
+AJAX solution
+=============
+
+https://github.com/lorinpa/book-site-clojurescript/blob/dev-1.0/src/cljs/book_review/books.cljs
+
+File upload
+===========
+
+[org.clojure/clojure-contrib "1.2.0"]
+http://richhickey.github.io/clojure-contrib/
+
+http://milinda.pathirage.org/2012/08/27/Handling-File-Uploads-In-Clojure-Web-Apps/

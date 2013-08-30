@@ -1,4 +1,7 @@
-<form method="post" id="meal-form" novalidate>
+<form method="post"
+      id="meal-form"
+      enctype="multipart/form-data"
+      novalidate>
 <table>
 
     <tr>
@@ -52,7 +55,7 @@
     <tr>
       <td><label for="mlimg"
 		 id="lmlimg">Image</label></td>
-      <td><input type="text"
+      <td><input type="file"
 		 name="mlimg"
 		 id="mlimg"
 		 required></td>

@@ -6,5 +6,4 @@
   (validate params
 	    [:mlname present? "Name can't be empty."]
 	    [:mltype present? "Meal type can't be empty."]
-	    [:mldesc present? "Description can't be empty."]
-	    [:mlimg present? "Image can't be empty."]))
+	    [:mldesc present? "Description can't be empty."]))

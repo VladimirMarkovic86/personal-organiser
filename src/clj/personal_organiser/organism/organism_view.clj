@@ -23,7 +23,7 @@
 				    :attrs nil,
 				    :content "for vitamins and minerals and can be changed"}]})
   [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/organism.js"},
+			     :attrs {:src "http://localhost:5000/js/organism.js"},
 			     :content nil})
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,
@@ -82,11 +82,11 @@
 			:comp-sel [:div.organism-nav]}])
   [node]
   [:title] (en/content "Edit organism")
-  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism?id="(session-get :organism-id)))
-  [:div.read-organism :a] (en/set-attr :href (str "/read-organism?id="(session-get :organism-id)))
+  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism/"(session-get :organism-id)))
+  [:div.read-organism :a] (en/set-attr :href (str "/read-organism/"(session-get :organism-id)))
   [:h3.form-title] (en/content "Edit organism")
   [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/organism.js"},
+			     :attrs {:src "http://localhost:5000/js/organism.js"},
 			     :content nil})
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,
@@ -176,8 +176,8 @@
 			:comp-sel [:div.organism-nav]}])
   [node]
   [:title] (en/content "Organism")
-  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism?id="(session-get :organism-id)))
-  [:div.read-organism :a] (en/set-attr :href (str "/read-organism?id="(session-get :organism-id)))
+  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism/"(session-get :organism-id)))
+  [:div.read-organism :a] (en/set-attr :href (str "/read-organism/"(session-get :organism-id)))
   [:h3.form-title] (en/content "Organism")
   [:input#ofirst-name] (comp (en/set-attr :value (:ofirst-name (:data node)))
 			     (en/set-attr :readonly "readonly"))
@@ -270,5 +270,5 @@
 			:comp-sel [:div.organism-nav]}])
   []
   [:title] (en/content "Organism navigation")
-  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism?id="(session-get :organism-id)))
-  [:div.read-organism :a] (en/set-attr :href (str "/read-organism?id="(session-get :organism-id))))
+  [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism/"(session-get :organism-id)))
+  [:div.read-organism :a] (en/set-attr :href (str "/read-organism/"(session-get :organism-id))))

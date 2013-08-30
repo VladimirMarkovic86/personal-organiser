@@ -1,7 +1,9 @@
 (ns personal-organiser.utils
   "Useful functions that are repeatedly called all over the project"
+  (:import [java.io File])
   (:require [cljs.reader :refer [read-string]]
-	    [personal-organiser.neo4j :as n4j])
+	    [personal-organiser.neo4j :as n4j]
+	    [clojure.contrib.duck-streams :as ds])
   (:refer-clojure :exclude [read-string]))
 
 (defn parse-integer
@@ -76,3 +78,14 @@
   [index-type]
   (let [nodes (n4j/read-all-nodes-type-of index-type)]
        (reduce add-data-to-map {} nodes)))
+
+(defn file-delete
+  "Delete file from file path"
+  [file-path]
+  (.delete (File. file-path)))
+
+(defn copy-file
+  "Copy file on server"
+  [actual-file file-path file-name]
+  (ds/copy actual-file (ds/file-str file-path file-name))
+  file-name)

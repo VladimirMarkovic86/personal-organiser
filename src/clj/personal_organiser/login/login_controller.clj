@@ -31,3 +31,13 @@
 	(session-put! :weight weight)
 	(session-put! :height height))
 	(session-put! :login-try 1)))
+
+(defn check-email
+  "Checks if email exists"
+  [email]
+  (if (= (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "organism"))")"
+			    "where n.oemail? = \""email"\""
+			    "return ID(n)")))
+     [])
+	"no-exist"
+	"exist"))

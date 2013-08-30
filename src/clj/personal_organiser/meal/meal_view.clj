@@ -14,18 +14,18 @@
 			:comp-sel [:div.meal-nav]}])
   []
   [:title] (en/content "Create meal")
-  [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/meal.js"},
-			     :content nil})
-  [:div.script] (en/append {:tag :script,
-			    :attrs nil,
-			    :content "personal_organiser.meal.jsmeal.init();"})
   [:form#meal-form] (en/set-attr :action "/save-meal")
   [:tr.ingredient-row] nil
   [:option#ingredient-option1] (en/clone-for [[id data] (nodes-data-to-map "grocery")]
 				(comp (en/content (:gname data))
 				      (en/set-attr :value id)
-				      (en/remove-attr :id))))
+				      (en/remove-attr :id)))
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "http://localhost:5000/js/meal.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.meal.jsmeal.init();"}))
 
 (defn exist-ing-ind
   "Read relationship ids with given node id"
@@ -55,19 +55,7 @@
   [node]
   [:title] (en/content "Edit meal")
   [:h3.form-title] (en/content "Edit meal")
-  [:div.script] (en/content {:tag :script,
-				  :attrs {:src "js/meal.js"},
-				  :content nil})
-  [:div.script] (en/append {:tag :script,
-			    :attrs nil,
-			    :content "personal_organiser.meal.jsmeal.init();"})
-  [:form#meal-form] (en/set-attr :action "/update-meal")
-  [:input#mlname] (en/before {:tag :input,
-			     :attrs {:type "hidden",
-				     :name "idmeal",
-				     :id "idmeal",
-				     :value (:id node)},
-			     :content nil})
+  [:form#meal-form] (en/set-attr :action (str "/update-meal/"(:id node)))
   [:input#mlname] (en/set-attr :value (:mlname (:data node)))
   [:input#mlcalories] (en/set-attr :value (:mlcalories (:data node)))
   [:input#mltype-breakfast] (if (= (:mltype (:data node)) "Breakfast")
@@ -80,7 +68,11 @@
 			      (en/set-attr :checked "checked")
 			      (en/set-attr :name "mltype"))
   [:textarea#mldesc] (en/content (:mldesc (:data node)))
-  [:input#mlimg] (en/set-attr :value (:mlimg (:data node)))
+  [:input#mlimg] (en/after {:tag :input,
+			    :attrs {:type "hidden"
+				    :value (:mlimg (:data node))
+				    :name "mlhimg"}
+			    :content nil})
   [:input#ingredient-indexes] (comp (en/before {:tag :input,
 					  :attrs {:type "hidden",
 						  :name "existing-ing-ind",
@@ -120,7 +112,13 @@
 				(comp (en/content (:gname data))
 				      (en/set-attr :value id)
 				      (en/remove-attr :id)))
-  [:input#submit] (en/set-attr :value "Save changes"))
+  [:input#submit] (en/set-attr :value "Save changes")
+  [:head] (en/append {:tag :script,
+				  :attrs {:src "http://localhost:5000/js/meal.js"},
+				  :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.meal.jsmeal.init();"}))
 
 (en/deftemplate read-all-meals
   (hg/build-html-page [{:temp-sel [:div.middle-column],
@@ -132,13 +130,18 @@
   []
   [:title] (en/content "Meal table")
   [:tr.meal-data] (en/clone-for [[id data] (nodes-data-to-map "meal")]
+			[:tr.meal-data] (en/set-attr :id (str "meal-"id))
 			[:td.mlname] (en/content (format "%s" (:mlname data)))
 			[:td.mlcalories] (en/content (format "%s" (:mlcalories data)))
 			[:td.mltype] (en/content (format "%s" (:mltype data)))
-			[:td.mledit :form] (en/set-attr :action "http://localhost:5000/edit-meal")
-			[:td.mledit :form :input#mlid] (en/set-attr :value id)
-			[:td.mldelete :form] (en/set-attr :action "http://localhost:5000/delete-meal")
-			[:td.mldelete :form :input#mlid] (en/set-attr :value id)))
+			[:td.mledit :a] (en/set-attr :href (str "/edit-meal/"id))
+			[:td.mldelete :a] (en/set-attr :id (str "mldelete"id)))
+  [:div.script] (en/content {:tag :script,
+				  :attrs {:src "http://localhost:5000/js/meal.js"},
+				  :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.meal.jsmealtbl.init();"}))
 
 (en/deftemplate meal-nav
   (hg/build-html-page [{:temp-sel [:div.left-column],

@@ -1,7 +1,9 @@
 (ns personal-organiser.server
   "Requests and responses on server"
   (:use compojure.core
-	(sandbar stateful-session))
+	(sandbar stateful-session)
+	[ring.middleware.params]
+	[ring.middleware.multipart-params])
   (:require [compojure.handler :as handler]
 	    [compojure.route :as route]
 	    [personal-organiser.grocery.grocery-view :as gv]
@@ -49,16 +51,16 @@
   (POST "/save-grocery"
     request
     (is-logged-in (gc/save-grocery (:params request))))
-  (GET "/edit-grocery"
+  (GET "/edit-grocery/:id"
     [id]
     (is-logged-in (gv/edit-grocery (n4j/read-node (read-string id)))))
   (POST "/update-grocery"
     request
     (is-logged-in (gc/update-grocery (:params request))))
-  (GET "/delete-grocery"
+  (DELETE "/delete-grocery/:id"
     [id]
     (is-logged-in (gc/delete-grocery (read-string id))))
-  (GET "/read-organism"
+  (GET "/read-organism/:id"
     [id]
     (is-logged-in (ov/read-organism (n4j/read-node (read-string id)))))
   (GET "/organism-nav"
@@ -72,7 +74,7 @@
     request
     (do (is-not-logged-in (oc/save-organism (:params request)))
 	(is-logged-in (lv/home))))
-  (GET "/edit-organism"
+  (GET "/edit-organism/:id"
     [id]
     (is-logged-in (ov/edit-organism (n4j/read-node (read-string id)))))
   (POST "/update-organism"
@@ -90,13 +92,13 @@
   (GET "/meal-nav"
     []
     (is-logged-in (mlv/meal-nav)))
-  (GET "/delete-meal"
+  (DELETE "/delete-meal/:id"
     [id]
     (is-logged-in (mlc/delete-meal (read-string id))))
-  (GET "/edit-meal"
+  (GET "/edit-meal/:id"
     [id]
     (is-logged-in (mlv/edit-meal (n4j/read-node (read-string id)))))
-  (POST "/update-meal"
+  (POST "/update-meal/:idmeal"
     request
     (is-logged-in (mlc/update-meal (:params request))))
   (GET "/home"
@@ -119,15 +121,28 @@
   (POST "/planishrane"
     request
     (is-logged-in (plc/process (:params request))))
+  (POST "/check-email/:email"
+    [email]
+    (is-logged-in (lc/check-email email)))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found
-  (route/not-found "Page not found"))
+  ; (route/not-found "Page not found")
+  (GET "/:url/:id"
+    request
+    (println request))
+  (POST "/:url/:id"
+    request
+    (println request))
+  (route/not-found "Page not found")
+)
 
 ;; site function creates a handler suitable for a standard website,
 ;; adding a bunch of standard ring middleware to app-route:
 (def handler (-> (handler/site app-routes)
-		 wrap-stateful-session))
+		 wrap-stateful-session
+		 wrap-params
+		 wrap-multipart-params))
 
 (defn run-server
   "Run jetty server"

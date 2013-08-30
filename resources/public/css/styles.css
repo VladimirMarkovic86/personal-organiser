@@ -174,12 +174,21 @@ div.organism {
   position:absolute;
 }
 div.login a,
-td#to-login a {
+td#to-login a,
+td.gedit a,
+td.gdelete a,
+td.mledit a,
+td.mldelete a {
   text-decoration: none;
   color: #5881d8;
+  padding: 0 5px;
 }
 div.login a:hover,
-td#to-login a:hover {
+td#to-login a:hover,
+td.gedit a:hover,
+td.gdelete a:hover,
+td.mledit a:hover,
+td.mldelete a:hover {
   background-color: #5881d8;
   color: #90b4fe;
   border-radius: 15px;

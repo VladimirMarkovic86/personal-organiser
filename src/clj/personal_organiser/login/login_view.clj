@@ -18,7 +18,7 @@
 				       :attrs {:class "help"}
 				       :content "Data not found"}))
   [:div.script] (en/content {:tag :script,
-			     :attrs {:src "js/login.js"},
+			     :attrs {:src "http://localhost:5000/js/login.js"},
 			     :content nil})
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,

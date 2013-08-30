@@ -70,8 +70,17 @@
 			   (map-keys-to-str req-params))))
   (read-all-groceries))
 
+(defn is-grocery-in-meal
+  "Check if grocery is bound to any meal"
+  [id]
+  (:data (n4j/cypher-query (str "start n=node("id")"
+				"match (n)-[r:`meal-has-grocery`]-(n2)"
+				"return ID(n2)"))))
+
 (defn delete-grocery
   "Delete grocery from neo4j database"
   [id]
-  (n4j/delete-node "grocery" id)
-  (read-all-groceries))
+  (if (= (is-grocery-in-meal id) [])
+      (do (n4j/delete-node "grocery" id)
+	  (str id))
+      "nodelete"))
