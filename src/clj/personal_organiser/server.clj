@@ -74,10 +74,17 @@
     request
     (do (is-not-logged-in (oc/save-organism (:params request)))
 	(is-logged-in (lv/home))))
+  (GET "/delete-organism/:id"
+    [id]
+    (if (= (str id) (str (session-get :organism-id)))
+	(do (is-logged-in (oc/delete-organism (read-string id)))
+	    (destroy-session!)
+	    (is-logged-in (lv/home)))
+	(is-logged-in (lv/home))))
   (GET "/edit-organism/:id"
     [id]
     (is-logged-in (ov/edit-organism (n4j/read-node (read-string id)))))
-  (POST "/update-organism"
+  (POST "/update-organism/:idorganism"
     request
     (is-logged-in (oc/update-organism (:params request))))
   (GET "/create-meal"
@@ -98,7 +105,7 @@
   (GET "/edit-meal/:id"
     [id]
     (is-logged-in (mlv/edit-meal (n4j/read-node (read-string id)))))
-  (POST "/update-meal/:idmeal"
+  (POST "/update-meal"
     request
     (is-logged-in (mlc/update-meal (:params request))))
   (GET "/home"
@@ -123,17 +130,23 @@
     (is-logged-in (plc/process (:params request))))
   (POST "/check-email/:email"
     [email]
-    (is-logged-in (lc/check-email email)))
+    (is-not-logged-in (lc/check-email email)))
+;  (GET "/forgot-password"
+;    []
+;    (is-not-logged-in (lv/forgot-password)))
+;  (POST "/send-mail"
+;    [email]
+;    (println email))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found
   ; (route/not-found "Page not found")
-  (GET "/:url/:id"
-    request
-    (println request))
-  (POST "/:url/:id"
-    request
-    (println request))
+;  (GET "/:url/:id"
+;    request
+;    (println request))
+;  (POST "/:url/:id"
+;    request
+;    (println request))
   (route/not-found "Page not found")
 )
 

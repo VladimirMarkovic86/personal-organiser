@@ -39,7 +39,7 @@ http://clojure.org/
 Ring
 ====
 
-dependency - [ring/ring-jetty-adapter "1.1.0"]
+dependency - [ring/ring-jetty-adapter "1.1.0"] [ring/ring-core "1.2.0"]
 
 plugin - [lein-ring "0.8.5"]
 

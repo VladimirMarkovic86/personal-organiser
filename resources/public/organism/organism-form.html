@@ -81,15 +81,21 @@
     <tr>
       <td><label for="obirthday"
 		 id="lobirthday">Birthday</label></td>
-      <td><input type="date"
-		 name="obirthday"
-		 id="obirthday" required></td>
-      <td id="tdobirthday"></td>
-    </tr>
-
-    <tr>
-      <td>Date-format</td>
-      <td>yyyy-MM-dd</td>
+      <td><select name="obirthday-year"
+		  id="obirthday-year">
+		<option> - Select - </option>
+		<option id="year"></option>
+	  </select>
+	  <select name="obirthday-month"
+		  id="obirthday-month">
+		<option> - Select - </option>
+		<option id="month"></option>
+	  </select>
+	  <select name="obirthday-day"
+		  id="obirthday-day">
+		<option> - Select - </option>
+		<option id="day"></option>
+	  </select></td>
       <td id="tdobirthday"></td>
     </tr>
 

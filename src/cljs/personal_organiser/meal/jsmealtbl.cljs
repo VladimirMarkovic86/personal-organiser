@@ -38,5 +38,5 @@
 (defn ^:export init []
   (if (and js/document
       (.-getElementById js/document))
-	(delete-click-listener)
+	(do (delete-click-listener))
 ))

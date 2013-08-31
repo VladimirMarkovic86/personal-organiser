@@ -153,7 +153,8 @@ div.footer {
   color:#fff;
   height:50px;
 }
-div.login {
+div.login,
+div.forgot {
   background-color: #90b4fe;
   border-radius: 15px;
   border: solid 5px #fff;
@@ -174,6 +175,7 @@ div.organism {
   position:absolute;
 }
 div.login a,
+div.forgot a,
 td#to-login a,
 td.gedit a,
 td.gdelete a,
@@ -184,6 +186,7 @@ td.mldelete a {
   padding: 0 5px;
 }
 div.login a:hover,
+div.forgot a:hover,
 td#to-login a:hover,
 td.gedit a:hover,
 td.gdelete a:hover,
@@ -193,7 +196,8 @@ td.mldelete a:hover {
   color: #90b4fe;
   border-radius: 15px;
 }
-div.login input#submit {
+div.login input#submit,
+div.forgot input#submit {
   float:left;
 }
 div.img {
@@ -230,4 +234,13 @@ td#error-msgs div.help {
 table.planishrane-template {
   margin-left: auto;
   margin-right: auto;
+}
+select#obirthday-year {
+  width: 57px;
+}
+select#obirthday-month {
+  width: 100px;
+}
+select#obirthday-day {
+  width: 39px;
 }

@@ -48,7 +48,7 @@
 	(.setId organizam id)
 	(.setVisina organizam height)
 	(.setTezina organizam weight)
-	(.setDatumRodjenja organizam (.parse (java.text.SimpleDateFormat. "yyyy-MM-dd")
+	(.setDatumRodjenja organizam (.parse (java.text.SimpleDateFormat. "dd.MM.yyyy")
 					 birthday))
 	(.setPol organizam gender)
 	(.setNacinIshrane organizam diet)

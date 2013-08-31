@@ -14,7 +14,9 @@
 						    :oconfirm-password (:oconfirm-password req-params)
 						    :oheight (:oheight req-params)
 						    :oweight (:oweight req-params)
-						    :obirthday (:obirthday req-params)
+						    :obirthday-day (:obirthday-day req-params)
+						    :obirthday-month (:obirthday-month req-params)
+						    :obirthday-year (:obirthday-year req-params)
 						    :ogender (:ogender req-params)
 						    :odiet (:odiet req-params)
 						    :oactivity (:oactivity req-params)})]
@@ -25,7 +27,11 @@
 						:opassword (:opassword req-params)
 						:oheight (read-string (:oheight req-params))
 						:oweight (read-string (:oweight req-params))
-						:obirthday (:obirthday req-params)
+						:obirthday (str (:obirthday-day req-params)
+								"."
+								(:obirthday-month req-params)
+								"."
+								(:obirthday-year req-params))
 						:ogender (:ogender req-params)
 						:odiet (:odiet req-params)
 						:oactivity (:oactivity req-params)})]
@@ -48,26 +54,33 @@
   (if-let [organism-errors (create-organism-errors {:ofirst-name (:ofirst-name req-params)
 						    :olast-name (:olast-name req-params)
 						    :oemail (:oemail req-params)
-						    :opassword (:opassword req-params)
-						    :oconfirm-password (:oconfirm-password req-params)
+						    :opassword "default-value"
+						    :oconfirm-password "default-value"
 						    :oheight (:oheight req-params)
 						    :oweight (:oweight req-params)
-						    :obirthday (:obirthday req-params)
+						    :obirthday-day (:obirthday-day req-params)
+						    :obirthday-month (:obirthday-month req-params)
+						    :obirthday-year (:obirthday-year req-params)
 						    :ogender (:ogender req-params)
 						    :odiet (:odiet req-params)
 						    :oactivity (:oactivity req-params)})]
     (println (str "Organism errors: " organism-errors))
-    ((n4j/update-node
-	(n4j/read-node (read-string (:idorganism req-params))) {:ofirst-name (:ofirst-name req-params)
-								:olast-name (:olast-name req-params)
-								:oemail (:oemail req-params)
-								:opassword (:opassword req-params)
-								:oheight (read-string (:oheight req-params))
-								:oweight (read-string (:oweight req-params))
-								:obirthday (:obirthday req-params)
-								:ogender (:ogender req-params)
-								:odiet (:odiet req-params)
-								:oactivity (:oactivity req-params)})
+    (let [node (n4j/read-node (read-string (:idorganism req-params)))]
+      (n4j/update-node node
+		       {:ofirst-name (:ofirst-name req-params)
+			:olast-name (:olast-name req-params)
+			:oemail (:oemail req-params)
+			:opassword (:opassword (:data node))
+			:oheight (read-string (:oheight req-params))
+			:oweight (read-string (:oweight req-params))
+			:obirthday (str (:obirthday-day req-params)
+					"."
+					(:obirthday-month req-params)
+					"."
+					(:obirthday-year req-params))
+			:ogender (:ogender req-params)
+			:odiet (:odiet req-params)
+			:oactivity (:oactivity req-params)})
      (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
 							  match n-[r:`organism-needs-vitamin`]-()
 							  return ID(r)")))
@@ -81,5 +94,4 @@
 (defn delete-organism
   "Delete organism from neo4j database"
   [id]
-  (n4j/delete-node "organism" id)
-  (organism-nav))
+  (n4j/delete-node "organism" id))

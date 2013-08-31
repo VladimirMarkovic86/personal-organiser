@@ -55,8 +55,13 @@
   [node]
   [:title] (en/content "Edit meal")
   [:h3.form-title] (en/content "Edit meal")
-  [:form#meal-form] (en/set-attr :action (str "/update-meal/"(:id node)))
-  [:input#mlname] (en/set-attr :value (:mlname (:data node)))
+  [:form#meal-form] (en/set-attr :action "/update-meal")
+  [:input#mlname] (comp (en/before {:tag :input,
+					   :attrs {:type "hidden"
+						   :value (str (:id node))
+						   :name "idmeal"}
+					   :content nil})
+			(en/set-attr :value (:mlname (:data node))))
   [:input#mlcalories] (en/set-attr :value (:mlcalories (:data node)))
   [:input#mltype-breakfast] (if (= (:mltype (:data node)) "Breakfast")
 			      (en/set-attr :checked "checked")

@@ -30,3 +30,17 @@
 			:comp-sel [:div.home]}])
   []
   [:title] (en/content "Welcome"))
+
+(en/deftemplate forgot-password
+  (hg/build-html-page [{:temp-sel [:div.topcontent],
+			:comp "public/login/forgot-password.html",
+			:comp-sel [:form#forgot-form]}])
+  []
+  [:title] (en/content "Forgot password")
+  [:div.topcontent] (en/set-attr :class "forgot")
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "http://localhost:5000/js/login.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.login.jsforgot.init();"}))

@@ -13,15 +13,15 @@
   [:div.topcontent] (en/set-attr :class "organism")
   [:td#to-login] (en/content {:tag :a,
 			      :attrs {:href "/login"}
-			      :content "Back to login"})
+			      :content "back to login"})
   [:td.info] (en/content {:tag :div,
 			  :attrs nil,
 			  :content [{:tag :div,
-				    :attrs nil,
-				    :content "Following data represents grown-up daily needs"}
-				   {:tag :div,
-				    :attrs nil,
-				    :content "for vitamins and minerals and can be changed"}]})
+				     :attrs nil,
+				     :content "Following data represents grown-up daily needs"}
+				    {:tag :div,
+				     :attrs nil,
+				     :content "for vitamins and minerals and can be changed"}]})
   [:div.script] (en/content {:tag :script,
 			     :attrs {:src "http://localhost:5000/js/organism.js"},
 			     :content nil})
@@ -29,6 +29,26 @@
 			    :attrs nil,
 			    :content "personal_organiser.organism.jsorganism.init();"})
   [:form#organism-form] (en/set-attr :action "/save-organism")
+  [:option#year] (en/clone-for [year (into [] (map str (range 1970 2021 1)))]
+				(comp (en/content year)
+				      (en/set-attr :value year)
+				      (en/remove-attr :id)))
+  [:option#month] (en/clone-for [[month-num month-name] [["01" "January"]
+							 ["02" "February"]
+							 ["03" "March"]
+							 ["04" "April"]
+							 ["05" "May"]
+							 ["06" "Jun"]
+							 ["07" "July"]
+							 ["08" "August"]
+							 ["09" "September"]
+							 ["10" "October"]
+							 ["11" "November"]
+							 ["12" "December"]]]
+				(comp (en/content month-name)
+				      (en/set-attr :value month-num)
+				      (en/remove-attr :id)))
+  [:option#day] (en/content nil)
   [:tr.vitamin] (en/clone-for [[id vname vdefvalue]
 				(:data
 				  (n4j/cypher-query (str "start n=node("(clojure.string/join ","
@@ -73,6 +93,30 @@
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"id)));; mineral clone-for
 )
 
+(defn get-date-part
+  "Get year from date format dd.MM.yyyy"
+  [birthday param]
+  ((clojure.string/split birthday #"\.") param))
+
+(defn generate-day-numbers
+  ""
+  [number-of-days]
+  (into [] (map str (into [] (range 1 number-of-days 1)))))
+
+(defn day-numbers
+  ""
+  [birthday]
+  (if (contains? #{"01" "03" "05" "07" "08" "10" "12"} (get-date-part birthday 1))
+	(generate-day-numbers 32)
+	(if (contains? #{"04" "06" "09" "11"} (get-date-part birthday 1))
+		(generate-day-numbers 31)
+		(if (re-find #"^-?\d+$" (str (/ (read-string (get-date-part birthday 2)) 4)))
+			(generate-day-numbers 30)
+			(generate-day-numbers 29)
+		)
+	)
+  ))
+
 (en/deftemplate edit-organism
   (hg/build-html-page [{:temp-sel [:div.middle-column],
 			:comp "public/organism/organism-form.html",
@@ -91,21 +135,45 @@
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,
 			    :content "personal_organiser.organism.jsorganism.init();"})
-  [:form#organism-form] (en/set-attr :action "/update-organism")
-  [:input#ofirst-name] (comp (en/before {:tag :input,
-					 :attrs {:type "hidden",
-						 :name "idorganism",
-						 :id "idorganism",
-						 :value (:id node)},
-					 :content nil})
-			     (en/set-attr :value (:ofirst-name (:data node))))
+  [:form#organism-form] (en/set-attr :action (str "/update-organism/"(:id node)))
+  [:input#ofirst-name] (en/set-attr :value (:ofirst-name (:data node)))
   [:input#olast-name] (en/set-attr :value (:olast-name (:data node)))
   [:input#oemail] (en/set-attr :value (:oemail (:data node)))
-  [:input#opassword] (en/set-attr :value (:opassword (:data node)))
-  [:input#oconfirm-password] (en/set-attr :value (:oconfirm-password (:data node)))
+  [:td.tdpswd] (en/content nil)
   [:input#oheight] (en/set-attr :value (:oheight (:data node)))
   [:input#oweight] (en/set-attr :value (:oweight (:data node)))
-  [:input#obirthday] (en/set-attr :value (:obirthday (:data node)))
+  [:option#year] (en/clone-for [year (into [] (map str (range 1970 2021 1)))]
+				(comp (en/content year)
+				      (en/set-attr :value year)
+				      (en/remove-attr :id)
+				      (if (= (get-date-part (:obirthday (:data node)) 2) year)
+					  (en/set-attr :selected "selected")
+					  (en/set-attr :value year))))
+  [:option#month] (en/clone-for [[month-num month-name] [["01" "January"]
+							 ["02" "February"]
+							 ["03" "March"]
+							 ["04" "April"]
+							 ["05" "May"]
+							 ["06" "Jun"]
+							 ["07" "July"]
+							 ["08" "August"]
+							 ["09" "September"]
+							 ["10" "October"]
+							 ["11" "November"]
+							 ["12" "December"]]]
+				(comp (en/content month-name)
+				      (en/set-attr :value month-num)
+				      (en/remove-attr :id)
+				      (if (= (get-date-part (:obirthday (:data node)) 1) month-num)
+					  (en/set-attr :selected "selected")
+					  (en/set-attr :value month-num))))
+  [:option#day] (en/clone-for [day (day-numbers (:obirthday (:data node)))]
+				(comp (en/content day)
+				      (en/set-attr :value day)
+				      (en/remove-attr :id)
+				      (if (= (get-date-part (:obirthday (:data node)) 0) day)
+					  (en/set-attr :selected "selected")
+					  (en/set-attr :value day))))
   [:input#ogender-male] (if (= (:ogender (:data node)) "Male")
 			  (en/set-attr :checked "checked")
 			  (en/set-attr :name "ogender"))
@@ -179,6 +247,9 @@
   [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism/"(session-get :organism-id)))
   [:div.read-organism :a] (en/set-attr :href (str "/read-organism/"(session-get :organism-id)))
   [:h3.form-title] (en/content "Organism")
+  [:td#to-login] (en/content {:tag :a,
+			      :attrs {:href (str "/delete-organism/"(:id node))}
+			      :content "Delete organism"})
   [:input#ofirst-name] (comp (en/set-attr :value (:ofirst-name (:data node)))
 			     (en/set-attr :readonly "readonly"))
   [:input#olast-name] (comp (en/set-attr :value (:olast-name (:data node)))
@@ -186,16 +257,45 @@
   [:input#oemail] (comp (en/set-attr :value (:oemail (:data node)))
 			(en/set-attr :readonly "readonly"))
   [:td.tdpswd] (en/content nil)
-  [:input#opassword] (comp (en/set-attr :value (:opassword (:data node)))
-			   (en/set-attr :readonly "readonly"))
-  [:input#oconfirm-password] (comp (en/set-attr :value (:oconfirm-password (:data node)))
-				   (en/set-attr :readonly "readonly"))
   [:input#oheight] (comp (en/set-attr :value (:oheight (:data node)))
 			 (en/set-attr :readonly "readonly"))
   [:input#oweight] (comp (en/set-attr :value (:oweight (:data node)))
 			 (en/set-attr :readonly "readonly"))
-  [:input#obirthday] (comp (en/set-attr :value (:obirthday (:data node)))
-			   (en/set-attr :readonly "readonly"))
+  [:option#year] (en/clone-for [year (into [] (map str (range 1970 2021 1)))]
+				(comp (en/content year)
+				      (en/set-attr :value year)
+				      (en/remove-attr :id)
+				      (if (= (get-date-part (:obirthday (:data node)) 2) year)
+					  (en/set-attr :selected "selected")
+					  (en/set-attr :value year))))
+  [:select#obirthday-year] (en/set-attr :disabled "disabled")
+  [:option#month] (en/clone-for [[month-num month-name] [["01" "January"]
+							 ["02" "February"]
+							 ["03" "March"]
+							 ["04" "April"]
+							 ["05" "May"]
+							 ["06" "Jun"]
+							 ["07" "July"]
+							 ["08" "August"]
+							 ["09" "September"]
+							 ["10" "October"]
+							 ["11" "November"]
+							 ["12" "December"]]]
+				(comp (en/content month-name)
+				      (en/set-attr :value month-num :disabled "disabled")
+				      (en/remove-attr :id)
+				      (if (= (get-date-part (:obirthday (:data node)) 1) month-num)
+					  (en/set-attr :selected "selected")
+					  (en/set-attr :value month-num))))
+  [:select#obirthday-month] (en/set-attr :disabled "disabled")
+  [:option#day] (en/clone-for [day (day-numbers (:obirthday (:data node)))]
+				(comp (en/content day)
+				      (en/set-attr :value day :disabled "disabled")
+				      (en/remove-attr :id)
+				      (if (= (get-date-part (:obirthday (:data node)) 0) day)
+					  (en/set-attr :selected "selected")
+					  (en/set-attr :value day))))
+  [:select#obirthday-day] (en/set-attr :disabled "disabled")
   [:input#ogender-male] (comp (if (= (:ogender (:data node)) "Male")
 			        (en/set-attr :checked "checked")
 			        (en/set-attr :name "ogender"))
