@@ -89,3 +89,8 @@
   [actual-file file-path file-name]
   (ds/copy actual-file (ds/file-str file-path file-name))
   file-name)
+
+(def alphanumeric "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.")
+
+(defn get-random-str [length]
+  (apply str (repeatedly length #(rand-nth alphanumeric))))

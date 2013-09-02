@@ -159,6 +159,15 @@ More documentation is located in the <a href="http://github.com/brentonashworth/
 
 You may also be interested in joining the <a href="http://groups.google.com/group/sandbar-library">Sandbar Google Group</a>.
 
+postal
+======
+
+dependency - [com.draines/postal "1.11.0"]
+
+postal is a library for constructing and sending RFC822-compliant Internet email messages. It wraps the JavaMail package for message and SMTP support. It supports sendmail natively. Supports STARTTLS & SSL.
+
+https://github.com/drewr/postal
+
 data.json
 =========
 
@@ -188,3 +197,13 @@ File upload
 http://richhickey.github.io/clojure-contrib/
 
 http://milinda.pathirage.org/2012/08/27/Handling-File-Uploads-In-Clojure-Web-Apps/
+
+Central Maven Repository
+========================
+
+http://search.maven.org/
+
+Random string generate
+======================
+
+http://pwinn.tumblr.com/post/10005861570/generating-random-strings-in-clojure

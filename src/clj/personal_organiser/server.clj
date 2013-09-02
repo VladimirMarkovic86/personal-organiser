@@ -131,12 +131,13 @@
   (POST "/check-email/:email"
     [email]
     (is-not-logged-in (lc/check-email email)))
-;  (GET "/forgot-password"
-;    []
-;    (is-not-logged-in (lv/forgot-password)))
-;  (POST "/send-mail"
-;    [email]
-;    (println email))
+  (GET "/forgot-password"
+    []
+    (is-not-logged-in (lv/forgot-password)))
+  (POST "/send-mail"
+    [email]
+    (do (is-not-logged-in (oc/send-mail email))
+	(is-logged-in (lv/home))))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found

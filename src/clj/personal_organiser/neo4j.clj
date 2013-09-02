@@ -101,3 +101,8 @@
 (defn cypher-query [query-statement]
   "Cypher query"
   (cy/query query-statement))
+
+(defn set-node-property
+  "Set node property"
+  [node prop value]
+  (nn/set-property node prop value))

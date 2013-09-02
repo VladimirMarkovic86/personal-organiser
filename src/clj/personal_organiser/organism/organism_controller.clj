@@ -1,8 +1,13 @@
 (ns personal-organiser.organism.organism-controller
   (:require [personal-organiser.organism.organism-validators :refer [create-organism-errors]]
-	    [personal-organiser.organism.organism-view :refer [read-organism organism-nav]]
+	    [personal-organiser.organism.organism-view :refer [read-organism
+							       organism-nav]]
 	    [personal-organiser.neo4j :as n4j]
-	    [personal-organiser.utils :refer [map-keys-to-str create-rels-for-node update-rels-for-node]]))
+	    [personal-organiser.utils :refer [map-keys-to-str
+					      create-rels-for-node
+					      update-rels-for-node
+					      get-random-str]]
+	    [postal.core :as pcor]))
 
 (defn save-organism
   "Save organism in neo4j database"
@@ -95,3 +100,26 @@
   "Delete organism from neo4j database"
   [id]
   (n4j/delete-node "organism" id))
+
+(defn reset-password
+  "Reset organism password"
+  [email reset-password]
+  (doseq [[node-id] (:data (n4j/cypher-query (str "start n=node(*)"
+						  "where n.oemail? = \""email"\""
+						  "return ID(n)")))]
+	(let [node (n4j/read-node node-id)]
+		(n4j/set-node-property node :opassword reset-password))))
+
+(defn send-mail
+  "Send email to address"
+  [email]
+  (let [reset-pass (get-random-str 15)]
+	(reset-password email reset-pass)
+	(pcor/send-message #^{:host "smtp.mail.yahoo.com"
+			      :user "personal.clojure@yahoo.com"
+			      :pass "personal.Clojuretest7"
+			      :ssl true}
+			     {:from "personal.clojure@yahoo.com"
+			      :to email
+			      :subject "Personal-Organiser password reset"
+			      :body (str "Your password now is -> " reset-pass " <- .")})))
