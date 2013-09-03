@@ -19,21 +19,6 @@
 	    [personal-organiser.neo4j :as n4j]
 	    [ring.adapter.jetty :as jetty]))
 
-(defn is-logged-in
-  "Checks if user is logged in"
-  [response-fn]
-  (if (= (session-get :organism-id) nil)
-      (lv/login)
-      (do (session-pop! :login-try 1)
-	  response-fn)))
-
-(defn is-not-logged-in
-  "Checks if user is logged in"
-  [response-fn]
-  (if (= (session-get :organism-id) nil)
-      response-fn
-      (lv/home)))
-
 ;; defroutes macro defines a function that chains individual route
 ;; functions together. The request map is passed to each function in
 ;; turn, until a non-nil response is returned.
@@ -41,114 +26,116 @@
   ; to serve document root address
   (GET "/read-all-groceries"
     []
-    (is-logged-in (gv/read-all-groceries)))
+    (lc/is-logged-in (gv/read-all-groceries)))
   (GET "/grocery-nav"
     []
-    (is-logged-in (gv/grocery-nav)))
+    (lc/is-logged-in (gv/grocery-nav)))
   (GET "/create-grocery"
     []
-    (is-logged-in (gv/create-grocery)))
+    (lc/is-logged-in (gv/create-grocery)))
   (POST "/save-grocery"
     request
-    (is-logged-in (gc/save-grocery (:params request))))
+    (lc/is-logged-in (gc/save-grocery (:params request))))
   (GET "/edit-grocery/:id"
     [id]
-    (is-logged-in (gv/edit-grocery (n4j/read-node (read-string id)))))
+    (lc/is-logged-in (gv/edit-grocery (n4j/read-node (read-string id)))))
   (POST "/update-grocery"
     request
-    (is-logged-in (gc/update-grocery (:params request))))
+    (lc/is-logged-in (gc/update-grocery (:params request))))
   (DELETE "/delete-grocery/:id"
     [id]
-    (is-logged-in (gc/delete-grocery (read-string id))))
+    (lc/is-logged-in (gc/delete-grocery (read-string id))))
   (GET "/read-organism/:id"
     [id]
-    (is-logged-in (ov/read-organism (n4j/read-node (read-string id)))))
+    (lc/is-logged-in (ov/read-organism (n4j/read-node (read-string id)))))
   (GET "/organism-nav"
     []
-    (is-logged-in (ov/organism-nav)))
+    (lc/is-logged-in (ov/organism-nav)))
   (GET "/create-organism"
     []
     (do (session-pop! :login-try 1)
-	(is-not-logged-in (ov/create-organism))))
+	(lc/is-not-logged-in (ov/create-organism))))
   (POST "/save-organism"
     request
-    (do (is-not-logged-in (oc/save-organism (:params request)))
-	(is-logged-in (lv/home))))
+    (do (lc/is-not-logged-in (oc/save-organism (:params request)))
+	(lc/is-logged-in (lv/home))))
   (GET "/delete-organism/:id"
     [id]
     (if (= (str id) (str (session-get :organism-id)))
-	(do (is-logged-in (oc/delete-organism (read-string id)))
+	(do (lc/is-logged-in (oc/delete-organism (read-string id)))
 	    (destroy-session!)
-	    (is-logged-in (lv/home)))
-	(is-logged-in (lv/home))))
+	    (lc/is-logged-in (lv/home)))
+	(lc/is-logged-in (lv/home))))
   (GET "/edit-organism/:id"
     [id]
-    (is-logged-in (ov/edit-organism (n4j/read-node (read-string id)))))
+    (lc/is-logged-in (ov/edit-organism (n4j/read-node (read-string id)))))
   (POST "/update-organism/:idorganism"
     request
-    (is-logged-in (oc/update-organism (:params request))))
+    (lc/is-logged-in (oc/update-organism (:params request))))
   (GET "/create-meal"
     []
-    (is-logged-in (mlv/create-meal)))
+    (lc/is-logged-in (mlv/create-meal)))
   (POST "/save-meal"
     request
-    (is-logged-in (mlc/save-meal (:params request))))
+    (lc/is-logged-in (mlc/save-meal (:params request))))
   (GET "/read-all-meals"
     []
-    (is-logged-in (mlv/read-all-meals)))
+    (lc/is-logged-in (mlv/read-all-meals)))
   (GET "/meal-nav"
     []
-    (is-logged-in (mlv/meal-nav)))
+    (lc/is-logged-in (mlv/meal-nav)))
   (DELETE "/delete-meal/:id"
     [id]
-    (is-logged-in (mlc/delete-meal (read-string id))))
+    (lc/is-logged-in (mlc/delete-meal (read-string id))))
   (GET "/edit-meal/:id"
     [id]
-    (is-logged-in (mlv/edit-meal (n4j/read-node (read-string id)))))
+    (lc/is-logged-in (mlv/edit-meal (n4j/read-node (read-string id)))))
   (POST "/update-meal"
     request
-    (is-logged-in (mlc/update-meal (:params request))))
+    (lc/is-logged-in (mlc/update-meal (:params request))))
   (GET "/home"
     []
-    (is-logged-in (lv/home)))
+    (lc/is-logged-in (lv/home)))
   (GET "/login"
     []
-    (is-logged-in (lv/home)))
+    (lc/is-logged-in (lv/home)))
   (GET "/logout"
     []
     (do (destroy-session!)
-	(is-logged-in (lv/home))))
+	(lc/is-logged-in (lv/home))))
   (POST "/login"
     request
     (do (lc/authenticate-user (:params request))
-	(is-logged-in (lv/home))))
+	(lc/is-logged-in (lv/home))))
   (GET "/planishrane"
     []
-    (is-logged-in (plv/process-template)))
-  (POST "/planishrane"
+    (lc/is-logged-in (plv/process-template)))
+  (POST "/planishrane-results"
     request
-    (is-logged-in (plc/process (:params request))))
+    (lc/is-logged-in (plc/process (:params request))))
+  (POST "/planishrane-final"
+    request
+    (lc/is-logged-in (plc/final (:params request))))
   (POST "/check-email/:email"
     [email]
-    (is-not-logged-in (lc/check-email email)))
+    (lc/is-not-logged-in (lc/check-email email)))
   (GET "/forgot-password"
     []
-    (is-not-logged-in (lv/forgot-password)))
+    (lc/is-not-logged-in (lv/forgot-password)))
   (POST "/send-mail"
     [email]
-    (do (is-not-logged-in (oc/send-mail email))
-	(is-logged-in (lv/home))))
+    (do (lc/is-not-logged-in (oc/send-mail email))
+	(lc/is-logged-in (lv/home))))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found
-  ; (route/not-found "Page not found")
+  (route/not-found "Page not found")
 ;  (GET "/:url/:id"
 ;    request
 ;    (println request))
 ;  (POST "/:url/:id"
 ;    request
 ;    (println request))
-  (route/not-found "Page not found")
 )
 
 ;; site function creates a handler suitable for a standard website,

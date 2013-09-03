@@ -44,3 +44,11 @@
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,
 			    :content "personal_organiser.login.jsforgot.init();"}))
+
+(en/deftemplate page-not-found
+  (hg/build-html-page [{:temp-sel [:div.topcontent],
+			:comp "public/login/page-not-found.html",
+			:comp-sel [:div.page-not-found]}])
+  [param]
+  [:title] (en/content param)
+  [:div.page-not-found] (en/content param))

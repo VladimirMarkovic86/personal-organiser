@@ -60,6 +60,9 @@
 			[:td#meal-type] (en/content meal-type)
 			[:select.meal-day] (en/set-attr :name (str (clojure.string/lower-case meal-type)
 							     "-"
+							     (clojure.string/lower-case day))
+							:id (str (clojure.string/lower-case meal-type)
+							     "-"
 							     (clojure.string/lower-case day)))
 			[:option#meal-day-opt] (en/clone-for [ml meal]
 						 (comp (en/content (str (:mlname ml)
@@ -86,8 +89,8 @@
 			     :content nil})
   [:div.script] (en/append {:tag :script,
 			    :attrs nil,
-			    :content "personal_organiser.planishrane.jsplanishrane.init();"})
-  [:td.submit] (en/content nil)
+			    :content "personal_organiser.planishrane.jsplanishrane_result.init();"})
+  [:form#planishrane-form] (en/set-attr :action "/planishrane-final")
   [:td.monday] (en/content (results "Monday" monday))
   [:td.tuesday] (en/content (results "Tuesday" tuesday))
   [:td.wednesday] (en/content (results "Wednesday" wednesday))
@@ -95,3 +98,59 @@
   [:td.friday] (en/content (results "Friday" friday))
   [:td.saturday] (en/content (results "Saturday" saturday))
   [:td.sunday] (en/content (results "Sunday" sunday)))
+
+(defn calc-amount
+  "Calculate amount of calories, proteins, carbohydrates
+   or fats in (grams x quantity) of ingredient amount"
+  [amount-in-100g grams quantity]
+  (format "%.2f" (* (/ (* grams quantity) 100) amount-in-100g)))
+
+(en/defsnippet final-template-generator
+  (en/html-resource "public/planishrane/planishrane-meal.html")
+  [:div.planishrane-final]
+  [meal]
+  [:th.meal-type] (en/content (:mltype meal))
+  [:td.meal-name] (en/content (:mlname meal))
+  [:td.meal-calories] (en/content (str (:mlcalories meal)))
+  [:td.meal-proteins] (en/content (str (:mlproteins meal)))
+  [:td.meal-carbohydrates] (en/content (str (:mlcarbohydrates meal)))
+  [:td.meal-fats] (en/content (str (:mlfats meal)))
+  [:td.pop-up-button :input] (en/set-attr :id (str "ingredient" (let [] (def meal-id (+ meal-id 1))
+								meal-id)))
+  [:div.exit :input] (en/set-attr :id (str "exit-ing" meal-id))
+  [:div.ingredient-table] (en/set-attr :id (str "meal" meal-id))
+  [:div.ingredients-heading] (en/content (:mlname meal))
+  [:tr.ingredient] (en/clone-for [ingredient (:meal-has-groceries meal)]
+				  [:td.name] (en/content (:gname ingredient))
+				  [:td.calories] (en/content (calc-amount (:gcalories ingredient)
+									  (:grams ingredient)
+									  (:quantity ingredient)))
+				  [:td.proteins] (en/content (calc-amount (:gproteins ingredient)
+									  (:grams ingredient)
+									  (:quantity ingredient)))
+				  [:td.carbohydrates] (en/content (calc-amount (:gcarbohydrates ingredient)
+									       (:grams ingredient)
+									       (:quantity ingredient)))
+				  [:td.fats] (en/content (calc-amount (:gfats ingredient)
+								      (:grams ingredient)
+								      (:quantity ingredient)))
+				  [:td.grams] (en/content (str (:grams ingredient)))
+				  [:td.quantity] (en/content (str (:quantity ingredient)))))
+
+(en/deftemplate final-template
+  (hg/build-html-page [{:temp-sel [:div.maincontent],
+			:comp "public/planishrane/planishrane-final.html",
+			:comp-sel [:div.final-template]}])
+  [meals-by-days]
+  [:title] (en/content "Plan ishrane final")
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "http://localhost:5000/js/planishrane.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.planishrane.jsplanishrane_final.init();"})
+  [:div.final-template] (en/set-attr :meal-id (let [meal-id (def meal-id -1)]
+						   meal-id))
+  [:tr.day] (en/clone-for [day meals-by-days]
+			  [:td.meal] (en/clone-for [meal @day]
+						   [:td.meal] (en/content (final-template-generator meal)))))

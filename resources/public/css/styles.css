@@ -244,3 +244,27 @@ select#obirthday-month {
 select#obirthday-day {
   width: 39px;
 }
+div.ingredient-table {
+  background-color: #63b132;
+  border-radius: 15px;
+  border: solid 5px #fff;
+  position:absolute;
+  left:50%;
+  margin:-100px 0 0 -190px;
+  padding: 5px;
+  top: 83%;
+  text-align: right;
+}
+div.planishrane-final {
+  background-color: #91dc47;
+  border-radius: 15px;
+  border: solid 5px #fff;
+  padding: 5px;
+}
+div.exit,
+div.ingredients-heading {
+  float:left;
+}
+div.ingredients-heading {
+  width: 100px;
+}

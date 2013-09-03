@@ -339,6 +339,9 @@
    :mltype (.getVrstaObrokaStr obrok)
    :mldesc (.getOpis obrok)
    :mlimg (.getSlika obrok)
+   :mlproteins (.getProteini obrok)
+   :mlcarbohydrates (.getUgljeniHidrati obrok)
+   :mlfats (.getMasti obrok)
    :meal-has-groceries (reduce add-converted-grocery
 			       []
 			       (.getObrokHasNamirnicas obrok))})
@@ -363,7 +366,6 @@
 			  ["Breakfast" (convert-to-meals (:breakfast drools-meals-result))])
 		    ["Lunch" (convert-to-meals (:lunch drools-meals-result))])
 	      ["Dinner" (convert-to-meals (:dinner drools-meals-result))])]
-       (println (.isEmpty (:training drools-meals-result)))
        (if (not (.isEmpty (:training drools-meals-result)))
 	   (conj acc-seq
 		 ["Training" (convert-to-meals (:training drools-meals-result))])

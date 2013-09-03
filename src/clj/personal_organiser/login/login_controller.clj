@@ -1,6 +1,7 @@
 (ns personal-organiser.login.login-controller
   (:use (sandbar stateful-session))
-  (:require [personal-organiser.neo4j :as n4j]))
+  (:require [personal-organiser.neo4j :as n4j]
+	    [personal-organiser.login.login-view :as lv]))
 
 (defn authenticate-user
   "Authenticate user if exists in databse"
@@ -41,3 +42,18 @@
      [])
 	"no-exist"
 	"exist"))
+
+(defn is-logged-in
+  "Checks if user is logged in"
+  [response-fn]
+  (if (= (session-get :organism-id) nil)
+      (lv/login)
+      (do (session-pop! :login-try 1)
+	  response-fn)))
+
+(defn is-not-logged-in
+  "Checks if user is logged in"
+  [response-fn]
+  (if (= (session-get :organism-id) nil)
+      response-fn
+      (lv/home)))

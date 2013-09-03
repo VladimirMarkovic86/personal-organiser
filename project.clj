@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   ;; CLJ source code path
   :source-paths ["src/clj"]
+  :test-paths ["test" "src/clj"]
   :resource-paths ["resources"]
   :java-source-paths ["src/java"]
 

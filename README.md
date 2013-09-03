@@ -7,16 +7,16 @@ Guide
 =====
 
 * Clone project with command "git clone https://github.com/VladimirMarkovic86/personal-organiser.git" from terminal
-* Download Neo4J server from http://www.neo4j.org/
+* Download Neo4J server from http://www.neo4j.org/, extract it in project_root and name it "neo4j-community"
 * After deleting directory "data" from Neo4J server_root,
   from project_root/resources extract data.zip file in Neo4J server_root
 * Start Neo4J server
-  for Unix systems in terminal from "server_root/bin" run ./neo4j start
+  for Unix systems in terminal from "server_root/bin" run ./neo4j start or aplication will start it for you if you followed second step (works for Unix, for Windows not tested)
   for windows systems find in server_root/doc/neo4j.txt
-* Environment variable JAVA_CMD have to be set to $JAVA_HOME/bin/java
+* Environment variable JAVA_CMD have to be set to $JAVA_HOME/bin/java;
   JAVA_HOME path should reference JDK
 * From project root in terminal run command "lein run"
-  or "lein repl" and in repl run command "(dev-server)" to start application
+  or "lein repl" and in repl run command "(start-server)" to start application
 
 Leiningen
 =========
@@ -81,6 +81,17 @@ https://github.com/clojure/clojurescript
 Tutorials from this address are followed for developing project.
 https://github.com/magomimmo/modern-cljs/blob/master/doc/tutorial-##.md
 Except in 'tutorial-##' instead of '##' type numbers from 01 to 16. Sixteen tutorials cover ClojureScript and other tehnology. In future there may be more.
+
+ClojureScript One
+=================
+
+The project includes a working sample application, useful tools, and libraries in various states of development. Many of the libraries in the project will eventually mature and become their own projects. The process of creating good libraries and frameworks takes time and experience. Instead of waiting until they are finished, we thought it would be better to show you now. Once you see the potential, we know that you will want to join in and help.
+
+Great number of examples and ideas from this project were implemented in personal-organiser.
+
+Official site - http://clojurescriptone.com/
+Documentation - http://clojurescriptone.com/documentation.html
+Source - https://github.com/brentonashworth/one
 
 Valip
 =====
@@ -207,3 +218,8 @@ Random string generate
 ======================
 
 http://pwinn.tumblr.com/post/10005861570/generating-random-strings-in-clojure
+
+Testing code
+============
+
+http://nakkaya.com/2009/11/18/unit-testing-in-clojure/
