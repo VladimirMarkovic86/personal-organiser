@@ -180,7 +180,8 @@ td#to-login a,
 td.gedit a,
 td.gdelete a,
 td.mledit a,
-td.mldelete a {
+td.mldelete a,
+div.page-not-found a {
   text-decoration: none;
   color: #5881d8;
   padding: 0 5px;
@@ -191,7 +192,8 @@ td#to-login a:hover,
 td.gedit a:hover,
 td.gdelete a:hover,
 td.mledit a:hover,
-td.mldelete a:hover {
+td.mldelete a:hover,
+div.page-not-found a:hover {
   background-color: #5881d8;
   color: #90b4fe;
   border-radius: 15px;
@@ -267,4 +269,11 @@ div.ingredients-heading {
 }
 div.ingredients-heading {
   width: 100px;
+}
+div.page-not-found {
+  background-color: #91dc47;
+  border-radius: 15px;
+  text-align: center;
+  padding: 10px;
+  font-size: 25px;
 }

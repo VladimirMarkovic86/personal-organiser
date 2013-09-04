@@ -3,14 +3,18 @@
 	    [personal-organiser.planishrane.planishrane-view :as plv]
 	    [personal-organiser.utils :refer [map-keys-to-str]]
 	    [clojure.test :refer :all]))
-
+(with-test
 (defn param-exist
   "If parameter exist in request params"
   [req-params param]
   (if (= (get req-params param) nil)
       0
       (read-string (get req-params param))))
+ (is (= 1 (param-exist {":param1" "1"} ":param1")))
+ (is (= 0 (param-exist {":param1" "1"} ":param2")))
+)
 
+(with-test
 (defn add-params
   "Add params to seqence"
   [acc-seq index]
@@ -21,7 +25,27 @@
 		 (param-exist (first acc-seq)
 			      (str ":training-coef" index))
 		 ]))
+ (is (= [{":training-meal1" "2"
+	  ":training-duration1" "30"
+	  ":training-coef1" "7.5"}
+	 [2 30 7.5]] (add-params [{":training-meal1" "2"
+				   ":training-duration1" "30"
+				   ":training-coef1" "7.5"}] 1)))
+ (is (= [{":training-meal2" "2"
+	  ":training-duration2" "30"
+	  ":training-coef2" "7.5"}
+	 [0 0 0]] (add-params [{":training-meal2" "2"
+				":training-duration2" "30"
+				":training-coef2" "7.5"}] 1)))
+ (is (= [{":training-meal1" "2"
+	  ":training-duration2" "30"
+	  ":training-coef2" "7.5"}
+	 [2 0 0]] (add-params [{":training-meal1" "2"
+				":training-duration2" "30"
+				":training-coef2" "7.5"}] 1)))
+)
 
+(with-test
 (defn form-params
   "Form params for knowledge-base-run fn"
   [req-params]
@@ -29,6 +53,22 @@
 	(rest (reduce add-params
 		      [req-params]
 		      [1 2 3 4 5 6 7]))))
+ (is (= [[2 30 7.5]
+	 [3 40 9.5]
+	 [4 50 11.5]
+	 [0 0 0]
+	 [0 0 0]
+	 [0 0 0]
+	 [0 0 0]] (form-params {":training-meal1" "2"
+				":training-duration1" "30"
+				":training-coef1" "7.5"
+				":training-meal2" "3"
+				":training-duration2" "40"
+				":training-coef2" "9.5"
+				":training-meal3" "4"
+				":training-duration3" "50"
+				":training-coef3" "11.5"})))
+)
 
 (defn knowledge-base
   "Define results of knowledge base in variable"

@@ -129,7 +129,7 @@
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if page is not found
-  (route/not-found "Page not found")
+  (route/not-found (lv/page-not-found "Page not found"))
 ;  (GET "/:url/:id"
 ;    request
 ;    (println request))

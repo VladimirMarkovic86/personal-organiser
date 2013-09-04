@@ -204,7 +204,7 @@ https://github.com/lorinpa/book-site-clojurescript/blob/dev-1.0/src/cljs/book_re
 File upload
 ===========
 
-[org.clojure/clojure-contrib "1.2.0"]
+dependency - [org.clojure/clojure-contrib "1.2.0"]
 http://richhickey.github.io/clojure-contrib/
 
 http://milinda.pathirage.org/2012/08/27/Handling-File-Uploads-In-Clojure-Web-Apps/
@@ -223,3 +223,14 @@ Testing code
 ============
 
 http://nakkaya.com/2009/11/18/unit-testing-in-clojure/
+
+REPL - (run-tests), (run-tests 'your.namespace 'some.other.namespace) or (run-all-tests)
+
+Terminal - lein test
+
+Selenium
+==================================
+
+dependency - [org.seleniumhq.selenium/selenium-server "2.35.0"]
+
+Official site - http://docs.seleniumhq.org/

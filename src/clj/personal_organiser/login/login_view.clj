@@ -51,4 +51,11 @@
 			:comp-sel [:div.page-not-found]}])
   [param]
   [:title] (en/content param)
-  [:div.page-not-found] (en/content param))
+  [:div.page-not-found] (en/content {:tag :div,
+				     :attrs nil,
+				     :content param}
+				    {:tag :div,
+				     :attrs nil,
+				     :content [{:tag :a,
+						:attrs {:href "/login"},
+						:content "back"}]}))

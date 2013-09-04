@@ -6,7 +6,13 @@
 	[clojure.java.shell :only [sh]])
   (:require [clojure.java.browse :as browse]
 	    [personal-organiser.server :as server]
-	    [personal-organiser.neo4j :as n4j]))
+	    [personal-organiser.neo4j :as n4j]
+	    [personal-organiser.selenium.selenium-test :as sl]))
+
+(defn selenium-test
+  "Selenium"
+  []
+  (sl/test-suite))
 
 (defonce server (ref nil))
 
@@ -41,5 +47,7 @@
   (start-server))
 
 (println)
-(println "Type (start-server) to launch the development server.")
+(println "Type (start-server) to launch server.")
+(println "Type (restart-server) to restart server.")
+(println "Type (stop-server) to stop server.")
 (println)

@@ -2,7 +2,8 @@
   (:use (sandbar stateful-session))
   (:require [personal-organiser.neo4j :as n4j]
 	    [personal-organiser.html-generator :as hg]
-	    [net.cgrand.enlive-html :as en]))
+	    [net.cgrand.enlive-html :as en]
+	    [clojure.test :refer :all]))
 
 (en/deftemplate create-organism
   (hg/build-html-page [{:temp-sel [:div.topcontent],
@@ -93,29 +94,64 @@
 		  [:td.mhelp] (en/set-attr :id (str "tdvalue"id)));; mineral clone-for
 )
 
+(with-test
 (defn get-date-part
-  "Get year from date format dd.MM.yyyy"
+  "Get date part from date format dd.MM.yyyy"
   [birthday param]
   ((clojure.string/split birthday #"\.") param))
+ (is (= "16" (get-date-part "16.10.1986" 0)))
+ (is (= "10" (get-date-part "16.10.1986" 1)))
+ (is (= "1986" (get-date-part "16.10.1986" 2)))
+)
 
+(with-test
 (defn generate-day-numbers
-  ""
+  "Generate days numbers for html element select option"
   [number-of-days]
-  (into [] (map str (into [] (range 1 number-of-days 1)))))
+  (into [] (map str (into [] (range 1 (+ number-of-days 1) 1)))))
+ (is (= ["1" "2" "3" "4" "5"] (generate-day-numbers 5)))
+)
 
+(with-test
 (defn day-numbers
   ""
   [birthday]
   (if (contains? #{"01" "03" "05" "07" "08" "10" "12"} (get-date-part birthday 1))
-	(generate-day-numbers 32)
+	(generate-day-numbers 31)
 	(if (contains? #{"04" "06" "09" "11"} (get-date-part birthday 1))
-		(generate-day-numbers 31)
+		(generate-day-numbers 30)
 		(if (re-find #"^-?\d+$" (str (/ (read-string (get-date-part birthday 2)) 4)))
-			(generate-day-numbers 30)
 			(generate-day-numbers 29)
+			(generate-day-numbers 28)
 		)
 	)
   ))
+ (is (= ["1" "2" "3" "4" "5"
+	 "6" "7" "8" "9" "10"
+	 "11" "12" "13" "14" "15"
+	 "16" "17" "18" "19" "20"
+	 "21" "22" "23" "24" "25"
+	 "26" "27" "28" "29" "30"
+	 "31"] (day-numbers "16.10.1986")))
+ (is (= ["1" "2" "3" "4" "5"
+	 "6" "7" "8" "9" "10"
+	 "11" "12" "13" "14" "15"
+	 "16" "17" "18" "19" "20"
+	 "21" "22" "23" "24" "25"
+	 "26" "27" "28" "29" "30"] (day-numbers "16.04.1986")))
+ (is (= ["1" "2" "3" "4" "5"
+	 "6" "7" "8" "9" "10"
+	 "11" "12" "13" "14" "15"
+	 "16" "17" "18" "19" "20"
+	 "21" "22" "23" "24" "25"
+	 "26" "27" "28"] (day-numbers "16.02.1986")))
+ (is (= ["1" "2" "3" "4" "5"
+	 "6" "7" "8" "9" "10"
+	 "11" "12" "13" "14" "15"
+	 "16" "17" "18" "19" "20"
+	 "21" "22" "23" "24" "25"
+	 "26" "27" "28" "29"] (day-numbers "16.02.1984")))
+)
 
 (en/deftemplate edit-organism
   (hg/build-html-page [{:temp-sel [:div.middle-column],

@@ -9,51 +9,119 @@
 					      update-rels-for-node
 					      delete-rels-for-node
 					      file-delete
-					      copy-file]]))
+					      copy-file]]
+	    [clojure.test :refer :all]))
 
 (defn cal-calc
   "Calculate ingredient calories in meal"
   [acc ingredient]
-  (+ acc (* (* (:grams ingredient) (:quantity ingredient)) (/ (:gcalories (:data (n4j/read-node (:id ingredient)))) 100))))
+  (+ acc (* (* (:grams ingredient)
+	       (:quantity ingredient))
+	    (/ (:gcalories (:data (n4j/read-node (:id ingredient))))
+	       100))))
 
 (defn meal-cal-calc
   "Calculate meal calories of all ingredients"
   [ingredients]
   (reduce cal-calc 0 ingredients))
 
+(with-test
 (defn get-value
   "Get value from params"
   [acc param-key ing-index]
   (get (first acc) (str param-key ing-index)))
+ (is (= "value" (get-value [{":param-key1" "value"}] ":param-key" "1")))
+ (is (= "value" (get-value [{":param-key1" "value"} "element 1"
+						    ["element 2"
+						     "element 3"]] ":param-key" "1")))
+ (is (= nil (get-value [{":param-key2" "value"} "element 1"
+						    ["element 2"
+						     "element 3"]] ":param-key" "1")))
+)
 
+(with-test
 (defn add-ingredient-params
   "Form ingredient params and add them to vector as map"
   [acc ing-index]
   (conj acc {:grams (read-string (get-value acc ":igrams" ing-index)),
 	     :quantity (read-string (get-value acc ":iquantity" ing-index)),
 	     :id (read-string (get-value acc ":ingredient" ing-index))}))
+ (is (= [{":igrams1" "1",
+	  ":ingredient1" "1",
+	  ":iquantity1" "1"}
+	 {:grams 1,
+	  :quantity 1,
+	  :id 1}] (add-ingredient-params [{":igrams1" "1"
+					    ":iquantity1" "1"
+					    ":ingredient1" "1"}] "1")))
+)
 
+(with-test
 (defn add-ingredient-params-update
   "Form ingredient params and add them to vector as map"
   [acc ing-index]
   (conj acc {:grams (read-string (get-value acc ":igrams" ing-index)),
 	     :quantity (read-string (get-value acc ":iquantity" ing-index)),
 	     :id (read-string ing-index)}))
+(is (= [{":igrams1" "1",
+	 ":iquantity1" "1"}
+	 {:grams 1,
+	  :quantity 1,
+	  :id 1}] (add-ingredient-params-update [{":igrams1" "1"
+						  ":iquantity1" "1"}] "1")))
+)
 
+(with-test
 (defn form-map-of-ingredients
   "Form map of ingredients"
   [req-params ing-indexes]
   (into [] (rest (reduce add-ingredient-params [req-params] ing-indexes))))
+(is (= [{:grams 1, :quantity 1, :id 1}
+	{:grams 2, :quantity 2, :id 2}
+	{:grams 3, :quantity 3, :id 3}] (form-map-of-ingredients {":igrams1" "1"
+								  ":iquantity1" "1"
+								  ":ingredient1" "1"
+								  ":igrams2" "2"
+								  ":iquantity2" "2"
+								  ":ingredient2" "2"
+								  ":igrams3" "3"
+								  ":iquantity3" "3"
+								  ":ingredient3" "3"} ["1" "2" "3"])))
+)
 
+(with-test
 (defn form-map-of-ingredients-update
   "Form map of ingredients"
   [req-params ing-indexes]
   (into [] (rest (reduce add-ingredient-params-update [req-params] ing-indexes))))
+(is (= [{:grams 1, :quantity 1, :id 1}
+	{:grams 2, :quantity 2, :id 2}
+	{:grams 3, :quantity 3, :id 3}] (form-map-of-ingredients-update {":igrams1" "1"
+									 ":iquantity1" "1"
+									 ":ingredient1" "1"
+									 ":igrams2" "2"
+									 ":iquantity2" "2"
+									 ":ingredient2" "2"
+									 ":igrams3" "3"
+									 ":iquantity3" "3"
+									 ":ingredient3" "3"} ["1" "2" "3"])))
+)
 
+(with-test
 (defn get-file-extension
   "Get file extension"
   [filename]
-  ((split filename #"\.") 1))
+  (if (= (re-find #"\." filename) ".")
+    (let [filename-seq (split filename #"\.")
+	filename-seq-length (- (count filename-seq) 1)]
+      (filename-seq filename-seq-length))
+    ""
+  )
+)
+(is (= "extension" (get-file-extension "filename.extension")))
+(is (= "extension" (get-file-extension "file.name.extension")))
+(is (= "" (get-file-extension "filename")))
+)
 
 (defn get-img-value
   "Get value for image in database"
