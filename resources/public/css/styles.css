@@ -116,7 +116,7 @@ input.option:hover {
   color: #90b4fe;
   background-color: #5881d8;
 }
-input[type="radio"] {
+/*input[type="radio"] {
   display:none;
 }
 input[type="radio"] + label span {
@@ -130,7 +130,7 @@ input[type="radio"] + label span {
 }
 input[type="radio"]:checked + label span {
   background:url('../images/radio.png') -19px top no-repeat;
-}
+}*/
 .center-align {
   text-align: center !important;
 }
@@ -251,7 +251,7 @@ div.ingredient-table {
   border-radius: 15px;
   border: solid 5px #fff;
   position:absolute;
-  left:50%;
+  left:36%;
   margin:-100px 0 0 -190px;
   padding: 5px;
   top: 83%;
@@ -268,7 +268,7 @@ div.ingredients-heading {
   float:left;
 }
 div.ingredients-heading {
-  width: 100px;
+  padding-left: 90px;
 }
 div.page-not-found {
   background-color: #91dc47;

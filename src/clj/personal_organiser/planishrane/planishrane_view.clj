@@ -1,7 +1,9 @@
 (ns personal-organiser.planishrane.planishrane-view
   (:use (sandbar stateful-session))
   (:require [personal-organiser.html-generator :as hg]
-	    [net.cgrand.enlive-html :as en]))
+	    [net.cgrand.enlive-html :as en]
+	    [pl.danieljanus.tagsoup :as tgsoup]
+	    [clojure.string :as cstring]))
 
 (en/defsnippet process
   (en/html-resource "public/planishrane/planishrane-training.html")
@@ -35,6 +37,7 @@
 			:comp-sel [:form#planishrane-form]}])
   []
   [:title] (en/content "Plan ishrane")
+  [:td.market] (en/content nil)
   [:div.script] (en/content {:tag :script,
 			     :attrs {:src "http://localhost:5000/js/planishrane.js"},
 			     :content nil})
@@ -105,10 +108,50 @@
   [amount-in-100g grams quantity]
   (format "%.2f" (* (/ (* grams quantity) 100) amount-in-100g)))
 
+(def mapped-groceries {"Egg" 48
+		       "Mushrooms" 52
+		       "Onion" 13
+		       "Lemon" 43
+		       "Beans" 5
+		       "Pepper" 20
+		       "Tomato" 18
+		       "Cheese" 49
+		       "Peach" 30
+		       "Banana" 39
+		       "Potato" 3
+		       "Carrot" 17})
+
+(defn get-price
+  "Get price from market place for ingredient"
+  [ingredient market-id]
+  (let [tag ((((((((((tgsoup/parse "http://www.bgpijace.rs/barometer.php") 3) 2) 3) 3) 2) 3) 5) 2) 2)]
+	(if (and (not (= (get mapped-groceries (:gname ingredient)) nil))
+		 (> (count ((tag (get mapped-groceries (:gname ingredient))) market-id)) 2))
+		(((tag (get mapped-groceries (:gname ingredient))) market-id) 2)
+		"/")))
+
+(defn get-ingredient-coef
+  ""
+  [ingredient]
+  (if (= (:gname ingredient) "Egg")
+      (/ (* (:quantity ingredient) (:grams ingredient)) 60)
+      (/ (* (:quantity ingredient) (:grams ingredient)) 1000)))
+
+(defn calc-price
+  "Calculate price for ingredient"
+  [ingredient market-id]
+  (let [price (get-price ingredient market-id)]
+	(if (= (re-find #"-" price) "-")
+	    (let [low-price (read-string ((cstring/split price #"-") 0))
+		  high-price (read-string ((cstring/split price #"-") 1))
+		  coef (get-ingredient-coef ingredient)]
+		  (str (format "%.2f" (* coef low-price)) " - " (format "%.2f" (* coef high-price))))
+	     price)))
+
 (en/defsnippet final-template-generator
   (en/html-resource "public/planishrane/planishrane-meal.html")
   [:div.planishrane-final]
-  [meal]
+  [meal market-id]
   [:th.meal-type] (en/content (:mltype meal))
   [:td.meal-name] (en/content (:mlname meal))
   [:td.meal-calories] (en/content (str (:mlcalories meal)))
@@ -135,13 +178,14 @@
 								      (:grams ingredient)
 								      (:quantity ingredient)))
 				  [:td.grams] (en/content (str (:grams ingredient)))
-				  [:td.quantity] (en/content (str (:quantity ingredient)))))
+				  [:td.quantity] (en/content (str (:quantity ingredient)))
+				  [:td.price] (en/content (calc-price ingredient market-id))))
 
 (en/deftemplate final-template
   (hg/build-html-page [{:temp-sel [:div.maincontent],
 			:comp "public/planishrane/planishrane-final.html",
 			:comp-sel [:div.final-template]}])
-  [meals-by-days]
+  [meals-by-days market-id]
   [:title] (en/content "Plan ishrane final")
   [:div.script] (en/content {:tag :script,
 			     :attrs {:src "http://localhost:5000/js/planishrane.js"},
@@ -153,4 +197,4 @@
 						   meal-id))
   [:tr.day] (en/clone-for [day meals-by-days]
 			  [:td.meal] (en/clone-for [meal @day]
-						   [:td.meal] (en/content (final-template-generator meal)))))
+						   [:td.meal] (en/content (final-template-generator meal market-id)))))

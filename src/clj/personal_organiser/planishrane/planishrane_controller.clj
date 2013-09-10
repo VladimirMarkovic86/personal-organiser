@@ -179,4 +179,4 @@
    and pass it to view generator"
   [req-params]
   (form-selected-result (map-keys-to-str req-params))
-  (plv/final-template @all-results))
+  (plv/final-template @all-results (read-string (:market req-params))))
