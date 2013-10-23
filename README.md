@@ -234,3 +234,12 @@ Selenium
 dependency - [org.seleniumhq.selenium/selenium-server "2.35.0"]
 
 Official site - http://docs.seleniumhq.org/
+
+clj-tagsoup
+===========
+
+dependency - [clj-tagsoup "0.3.0"]
+
+This is a HTML parser for Clojure, somewhat akin to Common Lisp's cl-html-parse. It is a wrapper around the TagSoup Java SAX parser, but has a DOM interface. It is buildable by Leiningen.
+
+https://github.com/nathell/clj-tagsoup
