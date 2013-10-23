@@ -128,9 +128,9 @@
   [req-params]
   (if (= (:size (:mlimg req-params)) 0)
 	(:mlhimg req-params)
-	(do (file-delete (str "resources/drools/images/" (:idmeal req-params) "." (:mlhimg req-params)))
+	(do (file-delete (str "resources/public/images/" (:idmeal req-params) "." (:mlhimg req-params)))
 	    (get-file-extension (copy-file (:tempfile (:mlimg req-params))
-					   "resources/drools/images/"
+					   "resources/public/images/"
 					   (str (:idmeal req-params)
 					   "."
 					   (get-file-extension (:filename (:mlimg req-params)))))))))
@@ -153,7 +153,7 @@
 						       (split (:ingredient-indexes req-params) #";"))
 			      :meal-has-grocery)
 	(copy-file (:tempfile (:mlimg req-params))
-		   "resources/drools/images/"
+		   "resources/public/images/"
 		   (str node-id
 			"."
 			(get-file-extension (:filename (:mlimg req-params)))))))
@@ -206,7 +206,7 @@
   [id]
   (doseq [[img-extension] (:data (n4j/cypher-query (str "start n=node("id")"
 							"return n.mlimg")))]
-	(file-delete (str "resources/drools/images/"
+	(file-delete (str "resources/public/images/"
 			  id
 			  "."
 			  img-extension)))

@@ -179,7 +179,8 @@
 								      (:quantity ingredient)))
 				  [:td.grams] (en/content (str (:grams ingredient)))
 				  [:td.quantity] (en/content (str (:quantity ingredient)))
-				  [:td.price] (en/content (calc-price ingredient market-id))))
+;				  [:td.price] (en/content (calc-price ingredient market-id))))
+				  [:td.price] (en/content "/")))
 
 (en/deftemplate final-template
   (hg/build-html-page [{:temp-sel [:div.maincontent],
@@ -198,3 +199,30 @@
   [:tr.day] (en/clone-for [day meals-by-days]
 			  [:td.meal] (en/clone-for [meal @day]
 						   [:td.meal] (en/content (final-template-generator meal market-id)))))
+
+(en/defsnippet final-template-generator-clock
+  (en/html-resource "public/planishrane/planishrane-meal-clock.html")
+  [:div.drag]
+  [meal market-id]
+  [:div.drag] (en/set-attr :style (str "background:url('images/" (:mlid meal) ".jpg') center top no-repeat;background-size:50px 50px;top: 0px;left: 0px;z-index: 0;")))
+
+(en/deftemplate final-template-clock
+  (hg/build-html-page [{:temp-sel [:div.maincontent],
+			:comp "public/planishrane/planishrane-final-clock.html",
+			:comp-sel [:div.final-template]}])
+  [meals-by-days market-id]
+  [:title] (en/content "Plan ishrane final")
+  [:div.script] (en/content {:tag :script,
+			     :attrs {:src "http://localhost:5000/js/planishrane.js"},
+			     :content nil})
+  [:div.script] (en/append {:tag :script,
+			    :attrs nil,
+			    :content "personal_organiser.planishrane.jsplanishrane_final.init();"})
+  [:td.day] (en/clone-for [day meals-by-days]
+			  [:td.7] (en/content (final-template-generator-clock (@day 0) market-id))
+			  [:td.8] (try (if (= (@day 3) nil)
+					(en/set-attr :class "8")
+					(en/content (final-template-generator-clock (@day 3) market-id)))
+					(catch Exception e (do (en/set-attr :class "8"))))
+			  [:td.12] (en/content (final-template-generator-clock (@day 1) market-id))
+			  [:td.19] (en/content (final-template-generator-clock (@day 2) market-id))))

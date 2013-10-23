@@ -73,7 +73,7 @@
 (defn knowledge-base
   "Define results of knowledge base in variable"
   [req-params]
-  (defonce results (into []
+  (def results (into []
 			 (map knowledge-base-run (form-params (map-keys-to-str req-params))))))
 
 
@@ -179,4 +179,5 @@
    and pass it to view generator"
   [req-params]
   (form-selected-result (map-keys-to-str req-params))
-  (plv/final-template @all-results (read-string (:market req-params))))
+;  (plv/final-template @all-results (read-string (:market req-params))))
+  (plv/final-template-clock @all-results (read-string (:market req-params))))
