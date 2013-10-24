@@ -272,6 +272,33 @@
 							 meal-day-id
 							 1))))
 
+(defn choose-image
+  [img-index]
+  (if (contains? #{1 2 3 4 5} img-index)
+		"walk"
+		(if (contains? #{6 7 8 9 10 11} img-index)
+			"running"
+			(if (contains? #{12 13 14 15 16 17} img-index)
+				"bike"
+				(if (= 18 img-index)
+					"pushups"
+					(if (= 19 img-index)
+						"soccer"
+						(if (contains? #{20 21} img-index)
+							"basketball"
+							(if (contains? #{22 23} img-index)
+								"swim"
+								(if (contains? #{24 25 26} img-index)
+									"aerobic"
+									"training")
+							)
+						)
+					)
+				)
+			)
+		)
+	  ))
+
 (en/defsnippet final-template-generator-clock-ii
   (en/html-resource "public/planishrane/planishrane-meal-clock-ii.html")
   [:div.shell]
@@ -307,7 +334,7 @@
 			     :class (str "drag"
 					 meal-type-id
 					 meal-day-id))
-  [:div.training] (en/set-attr :style (str "background:url('images/training.png') center top no-repeat;"
+  [:div.training] (en/set-attr :style (str "background:url('images/"(choose-image (:train-index meal-ii))".png') center top no-repeat;"
 					   "background-size:50px "(* 1.67 (:train-dur meal-ii))"px;"
 					   "top: 0px;"
 					   "left: 0px;"
@@ -315,10 +342,7 @@
 					   "height: "(* 1.67 (:train-dur meal-ii))"px;")
 			     :class (str "drag"
 					 meal-type-id
-					 meal-day-id)
-			     :id (str "training"
-					meal-type-id
-					meal-day-id))
+					 meal-day-id))
   [:div.meal-ii :input] (en/set-attr :id (str "meal"
 					     meal-type-id
 					     meal-day-id
