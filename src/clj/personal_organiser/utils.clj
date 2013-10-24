@@ -142,3 +142,12 @@
 
 (defn get-random-str [length]
   (apply str (repeatedly length #(rand-nth alphanumeric))))
+
+(defn training-coef-values
+  []
+  [[0 "No training"] [2.89 "Walk 3 kmh"] [3.47 "Walk 4 kmh"] [3.82 "Walk 5 kmh"] [4.39 "Walk 6 kmh"]
+   [7.28 "Walk 7 kmh"] [9.25 "Running 8 kmh"] [11.57 "Running 10 kmh"] [13.3 "Running 11 kmh"] [15.61 "Running 13 kmh"]
+   [17.35 "Running 15 kmh"] [18.51 "Running 16 kmh"] [4.63 "Bike 16 kmh"] [6.94 "Bike 16-19 kmh"] [9.25 "Bike 19-23 kmh"]
+   [11.57 "Bike 23-26 kmh"] [13.88 "Bike 26-32 kmh"] [18.51 "Bike < 32 kmh"] [9.14 "Push ups"] [10.41 "Soccer"]
+   [9.25 "Basketball"] [5.2 "Basketball shooting"] [11.57 "Swim freestyle, fast"] [8.11 "Swim freestyle, medium"] [7.52 "Aerobic medium"]
+   [8.11 "Aerobic high"] [5.78 "Aerobic low"]])

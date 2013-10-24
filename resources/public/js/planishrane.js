@@ -33092,57 +33092,73 @@ personal_organiser.planishrane.jsplanishrane.validate_form = function validate_f
   var sel_radio_meal = domina.nodes.call(null, domina.css.sel.call(null, "input[name*='training-meal']:checked"));
   var valid = cljs.core.atom.call(null, cljs.core.PersistentVector.EMPTY);
   domina.destroy_BANG_.call(null, domina.by_class.call(null, "help"));
-  var seq__3828_3832 = cljs.core.seq.call(null, sel_nodes);
-  var chunk__3829_3833 = null;
-  var count__3830_3834 = 0;
-  var i__3831_3835 = 0;
+  var seq__3699_3703 = cljs.core.seq.call(null, sel_nodes);
+  var chunk__3700_3704 = null;
+  var count__3701_3705 = 0;
+  var i__3702_3706 = 0;
   while(true) {
-    if(i__3831_3835 < count__3830_3834) {
-      var sel_node_3836 = cljs.core._nth.call(null, chunk__3829_3833, i__3831_3835);
-      cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.valid_if_field_empty.call(null, sel_node_3836));
-      if(cljs.core._EQ_.call(null, (new cljs.core.Keyword("\ufdd0:type")).call(null, sel_node_3836), "number")) {
-        cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.is_value_num.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3836)))))
+    if(i__3702_3706 < count__3701_3705) {
+      var sel_node_3707 = cljs.core._nth.call(null, chunk__3700_3704, i__3702_3706);
+      cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.valid_if_field_empty.call(null, sel_node_3707));
+      if(cljs.core._EQ_.call(null, (new cljs.core.Keyword("\ufdd0:type")).call(null, sel_node_3707), "number")) {
+        cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.is_value_num.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3707)))))
       }else {
       }
-      var G__3837 = seq__3828_3832;
-      var G__3838 = chunk__3829_3833;
-      var G__3839 = count__3830_3834;
-      var G__3840 = i__3831_3835 + 1;
-      seq__3828_3832 = G__3837;
-      chunk__3829_3833 = G__3838;
-      count__3830_3834 = G__3839;
-      i__3831_3835 = G__3840;
+      cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, function() {
+        var and__3941__auto__ = personal_organiser.utils.jsutils.parse_number.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3707)))) >= 0;
+        if(and__3941__auto__) {
+          return personal_organiser.utils.jsutils.parse_number.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3707)))) <= 90
+        }else {
+          return and__3941__auto__
+        }
+      }());
+      var G__3708 = seq__3699_3703;
+      var G__3709 = chunk__3700_3704;
+      var G__3710 = count__3701_3705;
+      var G__3711 = i__3702_3706 + 1;
+      seq__3699_3703 = G__3708;
+      chunk__3700_3704 = G__3709;
+      count__3701_3705 = G__3710;
+      i__3702_3706 = G__3711;
       continue
     }else {
-      var temp__4092__auto___3841 = cljs.core.seq.call(null, seq__3828_3832);
-      if(temp__4092__auto___3841) {
-        var seq__3828_3842__$1 = temp__4092__auto___3841;
-        if(cljs.core.chunked_seq_QMARK_.call(null, seq__3828_3842__$1)) {
-          var c__3075__auto___3843 = cljs.core.chunk_first.call(null, seq__3828_3842__$1);
-          var G__3844 = cljs.core.chunk_rest.call(null, seq__3828_3842__$1);
-          var G__3845 = c__3075__auto___3843;
-          var G__3846 = cljs.core.count.call(null, c__3075__auto___3843);
-          var G__3847 = 0;
-          seq__3828_3832 = G__3844;
-          chunk__3829_3833 = G__3845;
-          count__3830_3834 = G__3846;
-          i__3831_3835 = G__3847;
+      var temp__4092__auto___3712 = cljs.core.seq.call(null, seq__3699_3703);
+      if(temp__4092__auto___3712) {
+        var seq__3699_3713__$1 = temp__4092__auto___3712;
+        if(cljs.core.chunked_seq_QMARK_.call(null, seq__3699_3713__$1)) {
+          var c__3075__auto___3714 = cljs.core.chunk_first.call(null, seq__3699_3713__$1);
+          var G__3715 = cljs.core.chunk_rest.call(null, seq__3699_3713__$1);
+          var G__3716 = c__3075__auto___3714;
+          var G__3717 = cljs.core.count.call(null, c__3075__auto___3714);
+          var G__3718 = 0;
+          seq__3699_3703 = G__3715;
+          chunk__3700_3704 = G__3716;
+          count__3701_3705 = G__3717;
+          i__3702_3706 = G__3718;
           continue
         }else {
-          var sel_node_3848 = cljs.core.first.call(null, seq__3828_3842__$1);
-          cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.valid_if_field_empty.call(null, sel_node_3848));
-          if(cljs.core._EQ_.call(null, (new cljs.core.Keyword("\ufdd0:type")).call(null, sel_node_3848), "number")) {
-            cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.is_value_num.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3848)))))
+          var sel_node_3719 = cljs.core.first.call(null, seq__3699_3713__$1);
+          cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.valid_if_field_empty.call(null, sel_node_3719));
+          if(cljs.core._EQ_.call(null, (new cljs.core.Keyword("\ufdd0:type")).call(null, sel_node_3719), "number")) {
+            cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, personal_organiser.utils.jsutils.is_value_num.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3719)))))
           }else {
           }
-          var G__3849 = cljs.core.next.call(null, seq__3828_3842__$1);
-          var G__3850 = null;
-          var G__3851 = 0;
-          var G__3852 = 0;
-          seq__3828_3832 = G__3849;
-          chunk__3829_3833 = G__3850;
-          count__3830_3834 = G__3851;
-          i__3831_3835 = G__3852;
+          cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, function() {
+            var and__3941__auto__ = personal_organiser.utils.jsutils.parse_number.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3719)))) >= 0;
+            if(and__3941__auto__) {
+              return personal_organiser.utils.jsutils.parse_number.call(null, domina.value.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3719)))) <= 90
+            }else {
+              return and__3941__auto__
+            }
+          }());
+          var G__3720 = cljs.core.next.call(null, seq__3699_3713__$1);
+          var G__3721 = null;
+          var G__3722 = 0;
+          var G__3723 = 0;
+          seq__3699_3703 = G__3720;
+          chunk__3700_3704 = G__3721;
+          count__3701_3705 = G__3722;
+          i__3702_3706 = G__3723;
           continue
         }
       }else {
@@ -33153,7 +33169,7 @@ personal_organiser.planishrane.jsplanishrane.validate_form = function validate_f
   cljs.core.swap_BANG_.call(null, valid, cljs.core.conj, !cljs.core._EQ_.call(null, sel_radio_meal, cljs.core.List.EMPTY));
   if(cljs.core.every_QMARK_.call(null, cljs.core.true_QMARK_, cljs.core.deref.call(null, valid))) {
   }else {
-    domina.prepend_BANG_.call(null, domina.by_id.call(null, "error-msgs"), '<div class="help">Value for every training duration is required</div><div class="help">Select one option for training in time of which meal</div>')
+    domina.prepend_BANG_.call(null, domina.by_id.call(null, "error-msgs"), '<div class="help">Value from 0 to 90 for every training duration is required</div><div class="help">Select one option for training in time of which meal</div>')
   }
   return cljs.core.every_QMARK_.call(null, cljs.core.true_QMARK_, cljs.core.deref.call(null, valid))
 };
@@ -33190,67 +33206,67 @@ personal_organiser.planishrane.jsplanishrane.init = function init() {
     var planishrane_form = domina.by_id.call(null, "planishrane-form");
     var sel_nodes = cljs.core.map.call(null, domina.attrs, domina.nodes.call(null, domina.css.sel.call(null, "input[id*='training-duration']")));
     planishrane_form.onsubmit = personal_organiser.planishrane.jsplanishrane.validate_form;
-    var seq__3861_3869 = cljs.core.seq.call(null, cljs.core.PersistentVector.fromArray([1, 2, 3, 4, 5, 6, 7], true));
-    var chunk__3862_3870 = null;
-    var count__3863_3871 = 0;
-    var i__3864_3872 = 0;
+    var seq__3732_3740 = cljs.core.seq.call(null, cljs.core.PersistentVector.fromArray([1, 2, 3, 4, 5, 6, 7], true));
+    var chunk__3733_3741 = null;
+    var count__3734_3742 = 0;
+    var i__3735_3743 = 0;
     while(true) {
-      if(i__3864_3872 < count__3863_3871) {
-        var index_3873 = cljs.core._nth.call(null, chunk__3862_3870, i__3864_3872);
-        domina.set_attr_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-meal-no"), cljs.core.str(index_3873)].join("")), "checked", "checked");
-        domina.events.listen_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3873)].join("")), "\ufdd0:change", function(seq__3861_3869, chunk__3862_3870, count__3863_3871, i__3864_3872, index_3873) {
+      if(i__3735_3743 < count__3734_3742) {
+        var index_3744 = cljs.core._nth.call(null, chunk__3733_3741, i__3735_3743);
+        domina.set_attr_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-meal-no"), cljs.core.str(index_3744)].join("")), "checked", "checked");
+        domina.events.listen_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3744)].join("")), "\ufdd0:change", function(seq__3732_3740, chunk__3733_3741, count__3734_3742, i__3735_3743, index_3744) {
           return function() {
-            if(cljs.core._EQ_.call(null, domina.value.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3873)].join(""))), "0")) {
-              return personal_organiser.planishrane.jsplanishrane.change_no_training.call(null, index_3873)
+            if(cljs.core._EQ_.call(null, domina.value.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3744)].join(""))), "0")) {
+              return personal_organiser.planishrane.jsplanishrane.change_no_training.call(null, index_3744)
             }else {
-              return personal_organiser.planishrane.jsplanishrane.change_training.call(null, index_3873)
+              return personal_organiser.planishrane.jsplanishrane.change_training.call(null, index_3744)
             }
           }
-        }(seq__3861_3869, chunk__3862_3870, count__3863_3871, i__3864_3872, index_3873));
-        var G__3874 = seq__3861_3869;
-        var G__3875 = chunk__3862_3870;
-        var G__3876 = count__3863_3871;
-        var G__3877 = i__3864_3872 + 1;
-        seq__3861_3869 = G__3874;
-        chunk__3862_3870 = G__3875;
-        count__3863_3871 = G__3876;
-        i__3864_3872 = G__3877;
+        }(seq__3732_3740, chunk__3733_3741, count__3734_3742, i__3735_3743, index_3744));
+        var G__3745 = seq__3732_3740;
+        var G__3746 = chunk__3733_3741;
+        var G__3747 = count__3734_3742;
+        var G__3748 = i__3735_3743 + 1;
+        seq__3732_3740 = G__3745;
+        chunk__3733_3741 = G__3746;
+        count__3734_3742 = G__3747;
+        i__3735_3743 = G__3748;
         continue
       }else {
-        var temp__4092__auto___3878 = cljs.core.seq.call(null, seq__3861_3869);
-        if(temp__4092__auto___3878) {
-          var seq__3861_3879__$1 = temp__4092__auto___3878;
-          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3861_3879__$1)) {
-            var c__3075__auto___3880 = cljs.core.chunk_first.call(null, seq__3861_3879__$1);
-            var G__3881 = cljs.core.chunk_rest.call(null, seq__3861_3879__$1);
-            var G__3882 = c__3075__auto___3880;
-            var G__3883 = cljs.core.count.call(null, c__3075__auto___3880);
-            var G__3884 = 0;
-            seq__3861_3869 = G__3881;
-            chunk__3862_3870 = G__3882;
-            count__3863_3871 = G__3883;
-            i__3864_3872 = G__3884;
+        var temp__4092__auto___3749 = cljs.core.seq.call(null, seq__3732_3740);
+        if(temp__4092__auto___3749) {
+          var seq__3732_3750__$1 = temp__4092__auto___3749;
+          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3732_3750__$1)) {
+            var c__3075__auto___3751 = cljs.core.chunk_first.call(null, seq__3732_3750__$1);
+            var G__3752 = cljs.core.chunk_rest.call(null, seq__3732_3750__$1);
+            var G__3753 = c__3075__auto___3751;
+            var G__3754 = cljs.core.count.call(null, c__3075__auto___3751);
+            var G__3755 = 0;
+            seq__3732_3740 = G__3752;
+            chunk__3733_3741 = G__3753;
+            count__3734_3742 = G__3754;
+            i__3735_3743 = G__3755;
             continue
           }else {
-            var index_3885 = cljs.core.first.call(null, seq__3861_3879__$1);
-            domina.set_attr_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-meal-no"), cljs.core.str(index_3885)].join("")), "checked", "checked");
-            domina.events.listen_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3885)].join("")), "\ufdd0:change", function(seq__3861_3869, chunk__3862_3870, count__3863_3871, i__3864_3872, index_3885, seq__3861_3879__$1, temp__4092__auto___3878) {
+            var index_3756 = cljs.core.first.call(null, seq__3732_3750__$1);
+            domina.set_attr_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-meal-no"), cljs.core.str(index_3756)].join("")), "checked", "checked");
+            domina.events.listen_BANG_.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3756)].join("")), "\ufdd0:change", function(seq__3732_3740, chunk__3733_3741, count__3734_3742, i__3735_3743, index_3756, seq__3732_3750__$1, temp__4092__auto___3749) {
               return function() {
-                if(cljs.core._EQ_.call(null, domina.value.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3885)].join(""))), "0")) {
-                  return personal_organiser.planishrane.jsplanishrane.change_no_training.call(null, index_3885)
+                if(cljs.core._EQ_.call(null, domina.value.call(null, domina.by_id.call(null, [cljs.core.str("training-coef"), cljs.core.str(index_3756)].join(""))), "0")) {
+                  return personal_organiser.planishrane.jsplanishrane.change_no_training.call(null, index_3756)
                 }else {
-                  return personal_organiser.planishrane.jsplanishrane.change_training.call(null, index_3885)
+                  return personal_organiser.planishrane.jsplanishrane.change_training.call(null, index_3756)
                 }
               }
-            }(seq__3861_3869, chunk__3862_3870, count__3863_3871, i__3864_3872, index_3885, seq__3861_3879__$1, temp__4092__auto___3878));
-            var G__3886 = cljs.core.next.call(null, seq__3861_3879__$1);
-            var G__3887 = null;
-            var G__3888 = 0;
-            var G__3889 = 0;
-            seq__3861_3869 = G__3886;
-            chunk__3862_3870 = G__3887;
-            count__3863_3871 = G__3888;
-            i__3864_3872 = G__3889;
+            }(seq__3732_3740, chunk__3733_3741, count__3734_3742, i__3735_3743, index_3756, seq__3732_3750__$1, temp__4092__auto___3749));
+            var G__3757 = cljs.core.next.call(null, seq__3732_3750__$1);
+            var G__3758 = null;
+            var G__3759 = 0;
+            var G__3760 = 0;
+            seq__3732_3740 = G__3757;
+            chunk__3733_3741 = G__3758;
+            count__3734_3742 = G__3759;
+            i__3735_3743 = G__3760;
             continue
           }
         }else {
@@ -33258,49 +33274,49 @@ personal_organiser.planishrane.jsplanishrane.init = function init() {
       }
       break
     }
-    var seq__3865 = cljs.core.seq.call(null, sel_nodes);
-    var chunk__3866 = null;
-    var count__3867 = 0;
-    var i__3868 = 0;
+    var seq__3736 = cljs.core.seq.call(null, sel_nodes);
+    var chunk__3737 = null;
+    var count__3738 = 0;
+    var i__3739 = 0;
     while(true) {
-      if(i__3868 < count__3867) {
-        var sel_node = cljs.core._nth.call(null, chunk__3866, i__3868);
+      if(i__3739 < count__3738) {
+        var sel_node = cljs.core._nth.call(null, chunk__3737, i__3739);
         personal_organiser.utils.jsutils.numeric_field.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node)));
-        var G__3890 = seq__3865;
-        var G__3891 = chunk__3866;
-        var G__3892 = count__3867;
-        var G__3893 = i__3868 + 1;
-        seq__3865 = G__3890;
-        chunk__3866 = G__3891;
-        count__3867 = G__3892;
-        i__3868 = G__3893;
+        var G__3761 = seq__3736;
+        var G__3762 = chunk__3737;
+        var G__3763 = count__3738;
+        var G__3764 = i__3739 + 1;
+        seq__3736 = G__3761;
+        chunk__3737 = G__3762;
+        count__3738 = G__3763;
+        i__3739 = G__3764;
         continue
       }else {
-        var temp__4092__auto__ = cljs.core.seq.call(null, seq__3865);
+        var temp__4092__auto__ = cljs.core.seq.call(null, seq__3736);
         if(temp__4092__auto__) {
-          var seq__3865__$1 = temp__4092__auto__;
-          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3865__$1)) {
-            var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3865__$1);
-            var G__3894 = cljs.core.chunk_rest.call(null, seq__3865__$1);
-            var G__3895 = c__3075__auto__;
-            var G__3896 = cljs.core.count.call(null, c__3075__auto__);
-            var G__3897 = 0;
-            seq__3865 = G__3894;
-            chunk__3866 = G__3895;
-            count__3867 = G__3896;
-            i__3868 = G__3897;
+          var seq__3736__$1 = temp__4092__auto__;
+          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3736__$1)) {
+            var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3736__$1);
+            var G__3765 = cljs.core.chunk_rest.call(null, seq__3736__$1);
+            var G__3766 = c__3075__auto__;
+            var G__3767 = cljs.core.count.call(null, c__3075__auto__);
+            var G__3768 = 0;
+            seq__3736 = G__3765;
+            chunk__3737 = G__3766;
+            count__3738 = G__3767;
+            i__3739 = G__3768;
             continue
           }else {
-            var sel_node = cljs.core.first.call(null, seq__3865__$1);
+            var sel_node = cljs.core.first.call(null, seq__3736__$1);
             personal_organiser.utils.jsutils.numeric_field.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node)));
-            var G__3898 = cljs.core.next.call(null, seq__3865__$1);
-            var G__3899 = null;
-            var G__3900 = 0;
-            var G__3901 = 0;
-            seq__3865 = G__3898;
-            chunk__3866 = G__3899;
-            count__3867 = G__3900;
-            i__3868 = G__3901;
+            var G__3769 = cljs.core.next.call(null, seq__3736__$1);
+            var G__3770 = null;
+            var G__3771 = 0;
+            var G__3772 = 0;
+            seq__3736 = G__3769;
+            chunk__3737 = G__3770;
+            count__3738 = G__3771;
+            i__3739 = G__3772;
             continue
           }
         }else {
@@ -34839,16 +34855,67 @@ personal_organiser.planishrane.jsplanishrane_final._offset_y = 0;
 personal_organiser.planishrane.jsplanishrane_final._drag_element = null;
 personal_organiser.planishrane.jsplanishrane_final._old_z_index = 0;
 personal_organiser.planishrane.jsplanishrane_final.on_mouse_move = function on_mouse_move(evt) {
+  var sel_nodes = cljs.core.map.call(null, domina.attrs, domina.nodes.call(null, domina.css.sel.call(null, [cljs.core.str("div[class*='"), cljs.core.str(domina.attr.call(null, personal_organiser.planishrane.jsplanishrane_final._drag_element, "class")), cljs.core.str("']")].join(""))));
   personal_organiser.planishrane.jsplanishrane_final.y = personal_organiser.planishrane.jsplanishrane_final._offset_y + personal_organiser.utils.jsutils.parse_number.call(null, evt.getBrowserEvent().clientY) - personal_organiser.planishrane.jsplanishrane_final._start_y;
   if(function() {
-    var and__3941__auto__ = personal_organiser.planishrane.jsplanishrane_final.y > -1;
+    var and__3941__auto__ = personal_organiser.planishrane.jsplanishrane_final.y > -57;
     if(and__3941__auto__) {
-      return personal_organiser.planishrane.jsplanishrane_final.y < 169
+      return personal_organiser.planishrane.jsplanishrane_final.y < 113
     }else {
       return and__3941__auto__
     }
   }()) {
-    return domina.set_style_BANG_.call(null, personal_organiser.planishrane.jsplanishrane_final._drag_element, "top", [cljs.core.str(personal_organiser.planishrane.jsplanishrane_final.y), cljs.core.str("px")].join(""))
+    var seq__3699 = cljs.core.seq.call(null, sel_nodes);
+    var chunk__3700 = null;
+    var count__3701 = 0;
+    var i__3702 = 0;
+    while(true) {
+      if(i__3702 < count__3701) {
+        var drag_element = cljs.core._nth.call(null, chunk__3700, i__3702);
+        domina.set_style_BANG_.call(null, domina.by_class.call(null, (new cljs.core.Keyword("\ufdd0:class")).call(null, drag_element)), "top", [cljs.core.str(personal_organiser.planishrane.jsplanishrane_final.y), cljs.core.str("px")].join(""));
+        var G__3703 = seq__3699;
+        var G__3704 = chunk__3700;
+        var G__3705 = count__3701;
+        var G__3706 = i__3702 + 1;
+        seq__3699 = G__3703;
+        chunk__3700 = G__3704;
+        count__3701 = G__3705;
+        i__3702 = G__3706;
+        continue
+      }else {
+        var temp__4092__auto__ = cljs.core.seq.call(null, seq__3699);
+        if(temp__4092__auto__) {
+          var seq__3699__$1 = temp__4092__auto__;
+          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3699__$1)) {
+            var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3699__$1);
+            var G__3707 = cljs.core.chunk_rest.call(null, seq__3699__$1);
+            var G__3708 = c__3075__auto__;
+            var G__3709 = cljs.core.count.call(null, c__3075__auto__);
+            var G__3710 = 0;
+            seq__3699 = G__3707;
+            chunk__3700 = G__3708;
+            count__3701 = G__3709;
+            i__3702 = G__3710;
+            continue
+          }else {
+            var drag_element = cljs.core.first.call(null, seq__3699__$1);
+            domina.set_style_BANG_.call(null, domina.by_class.call(null, (new cljs.core.Keyword("\ufdd0:class")).call(null, drag_element)), "top", [cljs.core.str(personal_organiser.planishrane.jsplanishrane_final.y), cljs.core.str("px")].join(""));
+            var G__3711 = cljs.core.next.call(null, seq__3699__$1);
+            var G__3712 = null;
+            var G__3713 = 0;
+            var G__3714 = 0;
+            seq__3699 = G__3711;
+            chunk__3700 = G__3712;
+            count__3701 = G__3713;
+            i__3702 = G__3714;
+            continue
+          }
+        }else {
+          return null
+        }
+      }
+      break
+    }
   }else {
     return null
   }
@@ -34859,8 +34926,6 @@ personal_organiser.planishrane.jsplanishrane_final.get_number = function get_num
 personal_organiser.planishrane.jsplanishrane_final.on_mouse_down = function on_mouse_down(evt, target) {
   personal_organiser.planishrane.jsplanishrane_final._start_y = evt.getBrowserEvent().clientY;
   personal_organiser.planishrane.jsplanishrane_final._offset_y = personal_organiser.planishrane.jsplanishrane_final.get_number.call(null, domina.style.call(null, target, "top"));
-  personal_organiser.planishrane.jsplanishrane_final._old_z_index = personal_organiser.planishrane.jsplanishrane_final.get_number.call(null, domina.style.call(null, target, "z-index"));
-  domina.set_style_BANG_.call(null, target, "z-index", "10000");
   personal_organiser.planishrane.jsplanishrane_final._drag_element = target;
   goog.events.listen(window, goog.events.EventType.MOUSEMOVE, function(evt__$1) {
     return personal_organiser.planishrane.jsplanishrane_final.on_mouse_move.call(null, evt__$1)
@@ -34868,7 +34933,6 @@ personal_organiser.planishrane.jsplanishrane_final.on_mouse_down = function on_m
   return document.body.focus()
 };
 personal_organiser.planishrane.jsplanishrane_final.on_mouse_up = function on_mouse_up(evt, drag_element) {
-  domina.set_style_BANG_.call(null, drag_element, "z-index", personal_organiser.planishrane.jsplanishrane_final._old_z_index);
   goog.events.listen(window, goog.events.EventType.MOUSEMOVE, function(evt__$1) {
     return null
   });
@@ -34883,14 +34947,14 @@ personal_organiser.planishrane.jsplanishrane_final.init = function init() {
       return and__3941__auto__
     }
   }())) {
-    var sel_nodes = cljs.core.map.call(null, domina.attrs, domina.nodes.call(null, domina.css.sel.call(null, "input[id*='ingredient']")));
+    var sel_nodes = cljs.core.map.call(null, domina.attrs, domina.nodes.call(null, domina.css.sel.call(null, "input[id*='meal']")));
     var sel_exits = cljs.core.map.call(null, domina.attrs, domina.nodes.call(null, domina.css.sel.call(null, "input[id*='exit-ing']")));
     goog.events.listen(window, goog.events.EventType.MOUSEDOWN, function(evt) {
       personal_organiser.planishrane.jsplanishrane_final.target = evt.target;
       if(function() {
         var and__3941__auto__ = cljs.core._EQ_.call(null, evt.button, 0);
         if(and__3941__auto__) {
-          return cljs.core._EQ_.call(null, domina.attr.call(null, personal_organiser.planishrane.jsplanishrane_final.target, "class"), "drag")
+          return cljs.core._EQ_.call(null, cljs.core.re_find.call(null, /drag/, domina.attr.call(null, personal_organiser.planishrane.jsplanishrane_final.target, "class")), "drag")
         }else {
           return and__3941__auto__
         }
@@ -34907,61 +34971,61 @@ personal_organiser.planishrane.jsplanishrane_final.init = function init() {
         return null
       }
     });
-    var seq__3719_3743 = cljs.core.seq.call(null, sel_nodes);
-    var chunk__3720_3744 = null;
-    var count__3721_3745 = 0;
-    var i__3722_3746 = 0;
+    var seq__3739_3763 = cljs.core.seq.call(null, sel_nodes);
+    var chunk__3740_3764 = null;
+    var count__3741_3765 = 0;
+    var i__3742_3766 = 0;
     while(true) {
-      if(i__3722_3746 < count__3721_3745) {
-        var sel_node_3747 = cljs.core._nth.call(null, chunk__3720_3744, i__3722_3746);
-        domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3747)), "\ufdd0:click", function(seq__3719_3743, chunk__3720_3744, count__3721_3745, i__3722_3746, sel_node_3747) {
+      if(i__3742_3766 < count__3741_3765) {
+        var sel_node_3767 = cljs.core._nth.call(null, chunk__3740_3764, i__3742_3766);
+        domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3767)), "\ufdd0:click", function(seq__3739_3763, chunk__3740_3764, count__3741_3765, i__3742_3766, sel_node_3767) {
           return function() {
-            var selector = domina.by_id.call(null, clojure.string.replace.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3747), "ingredient", "meal"));
+            var selector = domina.by_class.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3767));
             if(cljs.core._EQ_.call(null, cljs.core.re_find.call(null, /none/, domina.style.call(null, selector, "display")), "none")) {
               domina.set_style_BANG_.call(null, selector, "display", "block");
-              var seq__3723 = cljs.core.seq.call(null, sel_nodes);
-              var chunk__3724 = null;
-              var count__3725 = 0;
-              var i__3726 = 0;
+              var seq__3743 = cljs.core.seq.call(null, sel_nodes);
+              var chunk__3744 = null;
+              var count__3745 = 0;
+              var i__3746 = 0;
               while(true) {
-                if(i__3726 < count__3725) {
-                  var sel_node__$1 = cljs.core._nth.call(null, chunk__3724, i__3726);
+                if(i__3746 < count__3745) {
+                  var sel_node__$1 = cljs.core._nth.call(null, chunk__3744, i__3746);
                   domina.set_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node__$1)), "disabled", "disabled");
-                  var G__3748 = seq__3723;
-                  var G__3749 = chunk__3724;
-                  var G__3750 = count__3725;
-                  var G__3751 = i__3726 + 1;
-                  seq__3723 = G__3748;
-                  chunk__3724 = G__3749;
-                  count__3725 = G__3750;
-                  i__3726 = G__3751;
+                  var G__3768 = seq__3743;
+                  var G__3769 = chunk__3744;
+                  var G__3770 = count__3745;
+                  var G__3771 = i__3746 + 1;
+                  seq__3743 = G__3768;
+                  chunk__3744 = G__3769;
+                  count__3745 = G__3770;
+                  i__3746 = G__3771;
                   continue
                 }else {
-                  var temp__4092__auto__ = cljs.core.seq.call(null, seq__3723);
+                  var temp__4092__auto__ = cljs.core.seq.call(null, seq__3743);
                   if(temp__4092__auto__) {
-                    var seq__3723__$1 = temp__4092__auto__;
-                    if(cljs.core.chunked_seq_QMARK_.call(null, seq__3723__$1)) {
-                      var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3723__$1);
-                      var G__3752 = cljs.core.chunk_rest.call(null, seq__3723__$1);
-                      var G__3753 = c__3075__auto__;
-                      var G__3754 = cljs.core.count.call(null, c__3075__auto__);
-                      var G__3755 = 0;
-                      seq__3723 = G__3752;
-                      chunk__3724 = G__3753;
-                      count__3725 = G__3754;
-                      i__3726 = G__3755;
+                    var seq__3743__$1 = temp__4092__auto__;
+                    if(cljs.core.chunked_seq_QMARK_.call(null, seq__3743__$1)) {
+                      var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3743__$1);
+                      var G__3772 = cljs.core.chunk_rest.call(null, seq__3743__$1);
+                      var G__3773 = c__3075__auto__;
+                      var G__3774 = cljs.core.count.call(null, c__3075__auto__);
+                      var G__3775 = 0;
+                      seq__3743 = G__3772;
+                      chunk__3744 = G__3773;
+                      count__3745 = G__3774;
+                      i__3746 = G__3775;
                       continue
                     }else {
-                      var sel_node__$1 = cljs.core.first.call(null, seq__3723__$1);
+                      var sel_node__$1 = cljs.core.first.call(null, seq__3743__$1);
                       domina.set_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node__$1)), "disabled", "disabled");
-                      var G__3756 = cljs.core.next.call(null, seq__3723__$1);
-                      var G__3757 = null;
-                      var G__3758 = 0;
-                      var G__3759 = 0;
-                      seq__3723 = G__3756;
-                      chunk__3724 = G__3757;
-                      count__3725 = G__3758;
-                      i__3726 = G__3759;
+                      var G__3776 = cljs.core.next.call(null, seq__3743__$1);
+                      var G__3777 = null;
+                      var G__3778 = 0;
+                      var G__3779 = 0;
+                      seq__3743 = G__3776;
+                      chunk__3744 = G__3777;
+                      count__3745 = G__3778;
+                      i__3746 = G__3779;
                       continue
                     }
                   }else {
@@ -34974,81 +35038,81 @@ personal_organiser.planishrane.jsplanishrane_final.init = function init() {
               return null
             }
           }
-        }(seq__3719_3743, chunk__3720_3744, count__3721_3745, i__3722_3746, sel_node_3747));
-        var G__3760 = seq__3719_3743;
-        var G__3761 = chunk__3720_3744;
-        var G__3762 = count__3721_3745;
-        var G__3763 = i__3722_3746 + 1;
-        seq__3719_3743 = G__3760;
-        chunk__3720_3744 = G__3761;
-        count__3721_3745 = G__3762;
-        i__3722_3746 = G__3763;
+        }(seq__3739_3763, chunk__3740_3764, count__3741_3765, i__3742_3766, sel_node_3767));
+        var G__3780 = seq__3739_3763;
+        var G__3781 = chunk__3740_3764;
+        var G__3782 = count__3741_3765;
+        var G__3783 = i__3742_3766 + 1;
+        seq__3739_3763 = G__3780;
+        chunk__3740_3764 = G__3781;
+        count__3741_3765 = G__3782;
+        i__3742_3766 = G__3783;
         continue
       }else {
-        var temp__4092__auto___3764 = cljs.core.seq.call(null, seq__3719_3743);
-        if(temp__4092__auto___3764) {
-          var seq__3719_3765__$1 = temp__4092__auto___3764;
-          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3719_3765__$1)) {
-            var c__3075__auto___3766 = cljs.core.chunk_first.call(null, seq__3719_3765__$1);
-            var G__3767 = cljs.core.chunk_rest.call(null, seq__3719_3765__$1);
-            var G__3768 = c__3075__auto___3766;
-            var G__3769 = cljs.core.count.call(null, c__3075__auto___3766);
-            var G__3770 = 0;
-            seq__3719_3743 = G__3767;
-            chunk__3720_3744 = G__3768;
-            count__3721_3745 = G__3769;
-            i__3722_3746 = G__3770;
+        var temp__4092__auto___3784 = cljs.core.seq.call(null, seq__3739_3763);
+        if(temp__4092__auto___3784) {
+          var seq__3739_3785__$1 = temp__4092__auto___3784;
+          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3739_3785__$1)) {
+            var c__3075__auto___3786 = cljs.core.chunk_first.call(null, seq__3739_3785__$1);
+            var G__3787 = cljs.core.chunk_rest.call(null, seq__3739_3785__$1);
+            var G__3788 = c__3075__auto___3786;
+            var G__3789 = cljs.core.count.call(null, c__3075__auto___3786);
+            var G__3790 = 0;
+            seq__3739_3763 = G__3787;
+            chunk__3740_3764 = G__3788;
+            count__3741_3765 = G__3789;
+            i__3742_3766 = G__3790;
             continue
           }else {
-            var sel_node_3771 = cljs.core.first.call(null, seq__3719_3765__$1);
-            domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3771)), "\ufdd0:click", function(seq__3719_3743, chunk__3720_3744, count__3721_3745, i__3722_3746, sel_node_3771, seq__3719_3765__$1, temp__4092__auto___3764) {
+            var sel_node_3791 = cljs.core.first.call(null, seq__3739_3785__$1);
+            domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3791)), "\ufdd0:click", function(seq__3739_3763, chunk__3740_3764, count__3741_3765, i__3742_3766, sel_node_3791, seq__3739_3785__$1, temp__4092__auto___3784) {
               return function() {
-                var selector = domina.by_id.call(null, clojure.string.replace.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3771), "ingredient", "meal"));
+                var selector = domina.by_class.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node_3791));
                 if(cljs.core._EQ_.call(null, cljs.core.re_find.call(null, /none/, domina.style.call(null, selector, "display")), "none")) {
                   domina.set_style_BANG_.call(null, selector, "display", "block");
-                  var seq__3727 = cljs.core.seq.call(null, sel_nodes);
-                  var chunk__3728 = null;
-                  var count__3729 = 0;
-                  var i__3730 = 0;
+                  var seq__3747 = cljs.core.seq.call(null, sel_nodes);
+                  var chunk__3748 = null;
+                  var count__3749 = 0;
+                  var i__3750 = 0;
                   while(true) {
-                    if(i__3730 < count__3729) {
-                      var sel_node__$1 = cljs.core._nth.call(null, chunk__3728, i__3730);
+                    if(i__3750 < count__3749) {
+                      var sel_node__$1 = cljs.core._nth.call(null, chunk__3748, i__3750);
                       domina.set_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node__$1)), "disabled", "disabled");
-                      var G__3772 = seq__3727;
-                      var G__3773 = chunk__3728;
-                      var G__3774 = count__3729;
-                      var G__3775 = i__3730 + 1;
-                      seq__3727 = G__3772;
-                      chunk__3728 = G__3773;
-                      count__3729 = G__3774;
-                      i__3730 = G__3775;
+                      var G__3792 = seq__3747;
+                      var G__3793 = chunk__3748;
+                      var G__3794 = count__3749;
+                      var G__3795 = i__3750 + 1;
+                      seq__3747 = G__3792;
+                      chunk__3748 = G__3793;
+                      count__3749 = G__3794;
+                      i__3750 = G__3795;
                       continue
                     }else {
-                      var temp__4092__auto____$1 = cljs.core.seq.call(null, seq__3727);
+                      var temp__4092__auto____$1 = cljs.core.seq.call(null, seq__3747);
                       if(temp__4092__auto____$1) {
-                        var seq__3727__$1 = temp__4092__auto____$1;
-                        if(cljs.core.chunked_seq_QMARK_.call(null, seq__3727__$1)) {
-                          var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3727__$1);
-                          var G__3776 = cljs.core.chunk_rest.call(null, seq__3727__$1);
-                          var G__3777 = c__3075__auto__;
-                          var G__3778 = cljs.core.count.call(null, c__3075__auto__);
-                          var G__3779 = 0;
-                          seq__3727 = G__3776;
-                          chunk__3728 = G__3777;
-                          count__3729 = G__3778;
-                          i__3730 = G__3779;
+                        var seq__3747__$1 = temp__4092__auto____$1;
+                        if(cljs.core.chunked_seq_QMARK_.call(null, seq__3747__$1)) {
+                          var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3747__$1);
+                          var G__3796 = cljs.core.chunk_rest.call(null, seq__3747__$1);
+                          var G__3797 = c__3075__auto__;
+                          var G__3798 = cljs.core.count.call(null, c__3075__auto__);
+                          var G__3799 = 0;
+                          seq__3747 = G__3796;
+                          chunk__3748 = G__3797;
+                          count__3749 = G__3798;
+                          i__3750 = G__3799;
                           continue
                         }else {
-                          var sel_node__$1 = cljs.core.first.call(null, seq__3727__$1);
+                          var sel_node__$1 = cljs.core.first.call(null, seq__3747__$1);
                           domina.set_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node__$1)), "disabled", "disabled");
-                          var G__3780 = cljs.core.next.call(null, seq__3727__$1);
-                          var G__3781 = null;
-                          var G__3782 = 0;
-                          var G__3783 = 0;
-                          seq__3727 = G__3780;
-                          chunk__3728 = G__3781;
-                          count__3729 = G__3782;
-                          i__3730 = G__3783;
+                          var G__3800 = cljs.core.next.call(null, seq__3747__$1);
+                          var G__3801 = null;
+                          var G__3802 = 0;
+                          var G__3803 = 0;
+                          seq__3747 = G__3800;
+                          chunk__3748 = G__3801;
+                          count__3749 = G__3802;
+                          i__3750 = G__3803;
                           continue
                         }
                       }else {
@@ -35061,15 +35125,15 @@ personal_organiser.planishrane.jsplanishrane_final.init = function init() {
                   return null
                 }
               }
-            }(seq__3719_3743, chunk__3720_3744, count__3721_3745, i__3722_3746, sel_node_3771, seq__3719_3765__$1, temp__4092__auto___3764));
-            var G__3784 = cljs.core.next.call(null, seq__3719_3765__$1);
-            var G__3785 = null;
-            var G__3786 = 0;
-            var G__3787 = 0;
-            seq__3719_3743 = G__3784;
-            chunk__3720_3744 = G__3785;
-            count__3721_3745 = G__3786;
-            i__3722_3746 = G__3787;
+            }(seq__3739_3763, chunk__3740_3764, count__3741_3765, i__3742_3766, sel_node_3791, seq__3739_3785__$1, temp__4092__auto___3784));
+            var G__3804 = cljs.core.next.call(null, seq__3739_3785__$1);
+            var G__3805 = null;
+            var G__3806 = 0;
+            var G__3807 = 0;
+            seq__3739_3763 = G__3804;
+            chunk__3740_3764 = G__3805;
+            count__3741_3765 = G__3806;
+            i__3742_3766 = G__3807;
             continue
           }
         }else {
@@ -35077,61 +35141,61 @@ personal_organiser.planishrane.jsplanishrane_final.init = function init() {
       }
       break
     }
-    var seq__3731 = cljs.core.seq.call(null, sel_exits);
-    var chunk__3732 = null;
-    var count__3733 = 0;
-    var i__3734 = 0;
+    var seq__3751 = cljs.core.seq.call(null, sel_exits);
+    var chunk__3752 = null;
+    var count__3753 = 0;
+    var i__3754 = 0;
     while(true) {
-      if(i__3734 < count__3733) {
-        var sel_exit = cljs.core._nth.call(null, chunk__3732, i__3734);
-        domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit)), "\ufdd0:click", function(seq__3731, chunk__3732, count__3733, i__3734, sel_exit) {
+      if(i__3754 < count__3753) {
+        var sel_exit = cljs.core._nth.call(null, chunk__3752, i__3754);
+        domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit)), "\ufdd0:click", function(seq__3751, chunk__3752, count__3753, i__3754, sel_exit) {
           return function() {
-            var selector = domina.by_id.call(null, clojure.string.replace.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit), "exit-ing", "meal"));
+            var selector = domina.by_class.call(null, clojure.string.replace.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit), "exit-ing", "meal"));
             if(cljs.core._EQ_.call(null, cljs.core.re_find.call(null, /block/, domina.style.call(null, selector, "display")), "block")) {
               domina.set_style_BANG_.call(null, selector, "display", "none");
-              var seq__3735 = cljs.core.seq.call(null, sel_nodes);
-              var chunk__3736 = null;
-              var count__3737 = 0;
-              var i__3738 = 0;
+              var seq__3755 = cljs.core.seq.call(null, sel_nodes);
+              var chunk__3756 = null;
+              var count__3757 = 0;
+              var i__3758 = 0;
               while(true) {
-                if(i__3738 < count__3737) {
-                  var sel_node = cljs.core._nth.call(null, chunk__3736, i__3738);
+                if(i__3758 < count__3757) {
+                  var sel_node = cljs.core._nth.call(null, chunk__3756, i__3758);
                   domina.remove_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node)), "disabled");
-                  var G__3788 = seq__3735;
-                  var G__3789 = chunk__3736;
-                  var G__3790 = count__3737;
-                  var G__3791 = i__3738 + 1;
-                  seq__3735 = G__3788;
-                  chunk__3736 = G__3789;
-                  count__3737 = G__3790;
-                  i__3738 = G__3791;
+                  var G__3808 = seq__3755;
+                  var G__3809 = chunk__3756;
+                  var G__3810 = count__3757;
+                  var G__3811 = i__3758 + 1;
+                  seq__3755 = G__3808;
+                  chunk__3756 = G__3809;
+                  count__3757 = G__3810;
+                  i__3758 = G__3811;
                   continue
                 }else {
-                  var temp__4092__auto__ = cljs.core.seq.call(null, seq__3735);
+                  var temp__4092__auto__ = cljs.core.seq.call(null, seq__3755);
                   if(temp__4092__auto__) {
-                    var seq__3735__$1 = temp__4092__auto__;
-                    if(cljs.core.chunked_seq_QMARK_.call(null, seq__3735__$1)) {
-                      var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3735__$1);
-                      var G__3792 = cljs.core.chunk_rest.call(null, seq__3735__$1);
-                      var G__3793 = c__3075__auto__;
-                      var G__3794 = cljs.core.count.call(null, c__3075__auto__);
-                      var G__3795 = 0;
-                      seq__3735 = G__3792;
-                      chunk__3736 = G__3793;
-                      count__3737 = G__3794;
-                      i__3738 = G__3795;
+                    var seq__3755__$1 = temp__4092__auto__;
+                    if(cljs.core.chunked_seq_QMARK_.call(null, seq__3755__$1)) {
+                      var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3755__$1);
+                      var G__3812 = cljs.core.chunk_rest.call(null, seq__3755__$1);
+                      var G__3813 = c__3075__auto__;
+                      var G__3814 = cljs.core.count.call(null, c__3075__auto__);
+                      var G__3815 = 0;
+                      seq__3755 = G__3812;
+                      chunk__3756 = G__3813;
+                      count__3757 = G__3814;
+                      i__3758 = G__3815;
                       continue
                     }else {
-                      var sel_node = cljs.core.first.call(null, seq__3735__$1);
+                      var sel_node = cljs.core.first.call(null, seq__3755__$1);
                       domina.remove_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node)), "disabled");
-                      var G__3796 = cljs.core.next.call(null, seq__3735__$1);
-                      var G__3797 = null;
-                      var G__3798 = 0;
-                      var G__3799 = 0;
-                      seq__3735 = G__3796;
-                      chunk__3736 = G__3797;
-                      count__3737 = G__3798;
-                      i__3738 = G__3799;
+                      var G__3816 = cljs.core.next.call(null, seq__3755__$1);
+                      var G__3817 = null;
+                      var G__3818 = 0;
+                      var G__3819 = 0;
+                      seq__3755 = G__3816;
+                      chunk__3756 = G__3817;
+                      count__3757 = G__3818;
+                      i__3758 = G__3819;
                       continue
                     }
                   }else {
@@ -35144,81 +35208,81 @@ personal_organiser.planishrane.jsplanishrane_final.init = function init() {
               return null
             }
           }
-        }(seq__3731, chunk__3732, count__3733, i__3734, sel_exit));
-        var G__3800 = seq__3731;
-        var G__3801 = chunk__3732;
-        var G__3802 = count__3733;
-        var G__3803 = i__3734 + 1;
-        seq__3731 = G__3800;
-        chunk__3732 = G__3801;
-        count__3733 = G__3802;
-        i__3734 = G__3803;
+        }(seq__3751, chunk__3752, count__3753, i__3754, sel_exit));
+        var G__3820 = seq__3751;
+        var G__3821 = chunk__3752;
+        var G__3822 = count__3753;
+        var G__3823 = i__3754 + 1;
+        seq__3751 = G__3820;
+        chunk__3752 = G__3821;
+        count__3753 = G__3822;
+        i__3754 = G__3823;
         continue
       }else {
-        var temp__4092__auto__ = cljs.core.seq.call(null, seq__3731);
+        var temp__4092__auto__ = cljs.core.seq.call(null, seq__3751);
         if(temp__4092__auto__) {
-          var seq__3731__$1 = temp__4092__auto__;
-          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3731__$1)) {
-            var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3731__$1);
-            var G__3804 = cljs.core.chunk_rest.call(null, seq__3731__$1);
-            var G__3805 = c__3075__auto__;
-            var G__3806 = cljs.core.count.call(null, c__3075__auto__);
-            var G__3807 = 0;
-            seq__3731 = G__3804;
-            chunk__3732 = G__3805;
-            count__3733 = G__3806;
-            i__3734 = G__3807;
+          var seq__3751__$1 = temp__4092__auto__;
+          if(cljs.core.chunked_seq_QMARK_.call(null, seq__3751__$1)) {
+            var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3751__$1);
+            var G__3824 = cljs.core.chunk_rest.call(null, seq__3751__$1);
+            var G__3825 = c__3075__auto__;
+            var G__3826 = cljs.core.count.call(null, c__3075__auto__);
+            var G__3827 = 0;
+            seq__3751 = G__3824;
+            chunk__3752 = G__3825;
+            count__3753 = G__3826;
+            i__3754 = G__3827;
             continue
           }else {
-            var sel_exit = cljs.core.first.call(null, seq__3731__$1);
-            domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit)), "\ufdd0:click", function(seq__3731, chunk__3732, count__3733, i__3734, sel_exit, seq__3731__$1, temp__4092__auto__) {
+            var sel_exit = cljs.core.first.call(null, seq__3751__$1);
+            domina.events.listen_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit)), "\ufdd0:click", function(seq__3751, chunk__3752, count__3753, i__3754, sel_exit, seq__3751__$1, temp__4092__auto__) {
               return function() {
-                var selector = domina.by_id.call(null, clojure.string.replace.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit), "exit-ing", "meal"));
+                var selector = domina.by_class.call(null, clojure.string.replace.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_exit), "exit-ing", "meal"));
                 if(cljs.core._EQ_.call(null, cljs.core.re_find.call(null, /block/, domina.style.call(null, selector, "display")), "block")) {
                   domina.set_style_BANG_.call(null, selector, "display", "none");
-                  var seq__3739 = cljs.core.seq.call(null, sel_nodes);
-                  var chunk__3740 = null;
-                  var count__3741 = 0;
-                  var i__3742 = 0;
+                  var seq__3759 = cljs.core.seq.call(null, sel_nodes);
+                  var chunk__3760 = null;
+                  var count__3761 = 0;
+                  var i__3762 = 0;
                   while(true) {
-                    if(i__3742 < count__3741) {
-                      var sel_node = cljs.core._nth.call(null, chunk__3740, i__3742);
+                    if(i__3762 < count__3761) {
+                      var sel_node = cljs.core._nth.call(null, chunk__3760, i__3762);
                       domina.remove_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node)), "disabled");
-                      var G__3808 = seq__3739;
-                      var G__3809 = chunk__3740;
-                      var G__3810 = count__3741;
-                      var G__3811 = i__3742 + 1;
-                      seq__3739 = G__3808;
-                      chunk__3740 = G__3809;
-                      count__3741 = G__3810;
-                      i__3742 = G__3811;
+                      var G__3828 = seq__3759;
+                      var G__3829 = chunk__3760;
+                      var G__3830 = count__3761;
+                      var G__3831 = i__3762 + 1;
+                      seq__3759 = G__3828;
+                      chunk__3760 = G__3829;
+                      count__3761 = G__3830;
+                      i__3762 = G__3831;
                       continue
                     }else {
-                      var temp__4092__auto____$1 = cljs.core.seq.call(null, seq__3739);
+                      var temp__4092__auto____$1 = cljs.core.seq.call(null, seq__3759);
                       if(temp__4092__auto____$1) {
-                        var seq__3739__$1 = temp__4092__auto____$1;
-                        if(cljs.core.chunked_seq_QMARK_.call(null, seq__3739__$1)) {
-                          var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3739__$1);
-                          var G__3812 = cljs.core.chunk_rest.call(null, seq__3739__$1);
-                          var G__3813 = c__3075__auto__;
-                          var G__3814 = cljs.core.count.call(null, c__3075__auto__);
-                          var G__3815 = 0;
-                          seq__3739 = G__3812;
-                          chunk__3740 = G__3813;
-                          count__3741 = G__3814;
-                          i__3742 = G__3815;
+                        var seq__3759__$1 = temp__4092__auto____$1;
+                        if(cljs.core.chunked_seq_QMARK_.call(null, seq__3759__$1)) {
+                          var c__3075__auto__ = cljs.core.chunk_first.call(null, seq__3759__$1);
+                          var G__3832 = cljs.core.chunk_rest.call(null, seq__3759__$1);
+                          var G__3833 = c__3075__auto__;
+                          var G__3834 = cljs.core.count.call(null, c__3075__auto__);
+                          var G__3835 = 0;
+                          seq__3759 = G__3832;
+                          chunk__3760 = G__3833;
+                          count__3761 = G__3834;
+                          i__3762 = G__3835;
                           continue
                         }else {
-                          var sel_node = cljs.core.first.call(null, seq__3739__$1);
+                          var sel_node = cljs.core.first.call(null, seq__3759__$1);
                           domina.remove_attr_BANG_.call(null, domina.by_id.call(null, (new cljs.core.Keyword("\ufdd0:id")).call(null, sel_node)), "disabled");
-                          var G__3816 = cljs.core.next.call(null, seq__3739__$1);
-                          var G__3817 = null;
-                          var G__3818 = 0;
-                          var G__3819 = 0;
-                          seq__3739 = G__3816;
-                          chunk__3740 = G__3817;
-                          count__3741 = G__3818;
-                          i__3742 = G__3819;
+                          var G__3836 = cljs.core.next.call(null, seq__3759__$1);
+                          var G__3837 = null;
+                          var G__3838 = 0;
+                          var G__3839 = 0;
+                          seq__3759 = G__3836;
+                          chunk__3760 = G__3837;
+                          count__3761 = G__3838;
+                          i__3762 = G__3839;
                           continue
                         }
                       }else {
@@ -35231,15 +35295,15 @@ personal_organiser.planishrane.jsplanishrane_final.init = function init() {
                   return null
                 }
               }
-            }(seq__3731, chunk__3732, count__3733, i__3734, sel_exit, seq__3731__$1, temp__4092__auto__));
-            var G__3820 = cljs.core.next.call(null, seq__3731__$1);
-            var G__3821 = null;
-            var G__3822 = 0;
-            var G__3823 = 0;
-            seq__3731 = G__3820;
-            chunk__3732 = G__3821;
-            count__3733 = G__3822;
-            i__3734 = G__3823;
+            }(seq__3751, chunk__3752, count__3753, i__3754, sel_exit, seq__3751__$1, temp__4092__auto__));
+            var G__3840 = cljs.core.next.call(null, seq__3751__$1);
+            var G__3841 = null;
+            var G__3842 = 0;
+            var G__3843 = 0;
+            seq__3751 = G__3840;
+            chunk__3752 = G__3841;
+            count__3753 = G__3842;
+            i__3754 = G__3843;
             continue
           }
         }else {

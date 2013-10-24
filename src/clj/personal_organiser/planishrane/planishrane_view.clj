@@ -3,12 +3,17 @@
   (:require [personal-organiser.html-generator :as hg]
 	    [net.cgrand.enlive-html :as en]
 	    [pl.danieljanus.tagsoup :as tgsoup]
-	    [clojure.string :as cstring]))
+	    [clojure.string :as cstring]
+	    [personal-organiser.utils :as utils]))
 
 (en/defsnippet process
   (en/html-resource "public/planishrane/planishrane-training.html")
   [:table.planishrane-training]
   [day index]
+  [:option.training-coef-item] (en/clone-for [[train-coef train-lbl] (utils/training-coef-values)]
+					     [:option.training-coef-item] (comp (en/content train-lbl)
+										(en/set-attr :value (.indexOf (utils/training-coef-values) [train-coef train-lbl]))
+										(en/remove-attr :class)))
   [:th.h-day] (en/content day)
   [:select#training-coef] (en/set-attr :name (str "training-coef"index)
 				       :id (str "training-coef"index))
@@ -200,11 +205,142 @@
 			  [:td.meal] (en/clone-for [meal @day]
 						   [:td.meal] (en/content (final-template-generator meal market-id)))))
 
+(en/defsnippet final-clock-details
+  (en/html-resource "public/planishrane/planishrane-meal-clock-details.html")
+  [:table.ing-tbl]
+  [meal
+   meal-type-id
+   meal-day-id
+   meal-num
+   market-id]
+;  [:th.meal-type] (en/content (:mltype meal))
+  [:div.exit :input] (en/set-attr :id (str "exit-ing"
+					   meal-type-id
+					   meal-day-id
+					   meal-num))
+  [:div.ingredients-heading] (en/content (:mlname meal))
+  [:td.calories-acc] (en/content (str (:mlcalories meal)))
+  [:td.proteins-acc] (en/content (str (:mlproteins meal)))
+  [:td.carbohydrates-acc] (en/content (str (:mlcarbohydrates meal)))
+  [:td.fats-acc] (en/content (str (:mlfats meal)))
+  [:tr.ingredient] (en/clone-for [ingredient (:meal-has-groceries meal)]
+				  [:td.name] (en/content (:gname ingredient))
+				  [:td.calories] (en/content (calc-amount (:gcalories ingredient)
+									  (:grams ingredient)
+									  (:quantity ingredient)))
+				  [:td.proteins] (en/content (calc-amount (:gproteins ingredient)
+									  (:grams ingredient)
+									  (:quantity ingredient)))
+				  [:td.carbohydrates] (en/content (calc-amount (:gcarbohydrates ingredient)
+									       (:grams ingredient)
+									       (:quantity ingredient)))
+				  [:td.fats] (en/content (calc-amount (:gfats ingredient)
+								      (:grams ingredient)
+								      (:quantity ingredient)))
+				  [:td.grams] (en/content (str (:grams ingredient)))
+				  [:td.quantity] (en/content (str (:quantity ingredient)))
+;				  [:td.price] (en/content (calc-price ingredient market-id))))
+				  [:td.price] (en/content "/")))
+
 (en/defsnippet final-template-generator-clock
   (en/html-resource "public/planishrane/planishrane-meal-clock.html")
-  [:div.drag]
-  [meal market-id]
-  [:div.drag] (en/set-attr :style (str "background:url('images/" (:mlid meal) ".jpg') center top no-repeat;background-size:50px 50px;top: 0px;left: 0px;z-index: 0;")))
+  [:div.shell]
+  [meal
+   meal-type-id
+   meal-day-id
+   market-id]
+  [:div.drag :input] (en/set-attr :id (str "meal"
+					     meal-type-id
+					     meal-day-id
+					     1))
+  [:div.drag] (en/set-attr :style (str "background:url('images/" (:mlid meal) ".jpg') center top no-repeat;"
+					"background-size:50px 50px;"
+					"top: 0px;"
+					"left: 0px;"
+					"z-index: 0;"
+					"height: 50px;")
+			   :class (str "drag"
+					meal-type-id
+					meal-day-id))
+  [:div.meal-details] (comp (en/content (final-clock-details meal
+								meal-type-id
+								meal-day-id
+								1
+								market-id))
+				(en/set-attr :class (str "meal"
+							 meal-type-id
+							 meal-day-id
+							 1))))
+
+(en/defsnippet final-template-generator-clock-ii
+  (en/html-resource "public/planishrane/planishrane-meal-clock-ii.html")
+  [:div.shell]
+  [meal-i meal-ii meal-type-id meal-day-id market-id]
+  [:div.meal-i :input] (en/set-attr :id (str "meal"
+					     meal-type-id
+					     meal-day-id
+					     1))
+  [:div.meal-i] (en/set-attr :style (str "background:url('images/" (:mlid meal-i) ".jpg') center top no-repeat;"
+					 "background-size:50px 50px;"
+					 "top: 0px;"
+					 "left: 0px;"
+					 "z-index:0;"
+					 "height: 50px;")
+			     :class (str "drag"
+					 meal-type-id
+					 meal-day-id))
+  [:div.meal-i-details] (comp (en/content (final-clock-details meal-i
+								meal-type-id
+								meal-day-id
+								1
+								market-id))
+				(en/set-attr :class (str "meal"
+							 meal-type-id
+							 meal-day-id
+							 1)))
+  [:div.pause] (en/set-attr :style (str "background:url('images/pause.png') center top no-repeat;"
+					 "background-size:50px 25px;"
+					 "top: 0px;"
+					 "left: 0px;"
+					 "z-index:0;"
+					 "height: 25px;")
+			     :class (str "drag"
+					 meal-type-id
+					 meal-day-id))
+  [:div.training] (en/set-attr :style (str "background:url('images/training.png') center top no-repeat;"
+					   "background-size:50px "(* 1.67 (:train-dur meal-ii))"px;"
+					   "top: 0px;"
+					   "left: 0px;"
+					   "z-index:0;"
+					   "height: "(* 1.67 (:train-dur meal-ii))"px;")
+			     :class (str "drag"
+					 meal-type-id
+					 meal-day-id)
+			     :id (str "training"
+					meal-type-id
+					meal-day-id))
+  [:div.meal-ii :input] (en/set-attr :id (str "meal"
+					     meal-type-id
+					     meal-day-id
+					     2))
+  [:div.meal-ii] (en/set-attr :style (str "background:url('images/" (:mlid meal-ii) ".jpg') center top no-repeat;"
+					  "background-size:50px 50px;"
+					  "top: 0px;"
+					  "left: 0px;"
+					  "z-index:0;"
+					  "height: 50px;")
+			     :class (str "drag"
+					 meal-type-id
+					 meal-day-id))
+  [:div.meal-ii-details] (comp (en/content (final-clock-details meal-ii
+								meal-type-id
+								meal-day-id
+								2
+								market-id))
+				(en/set-attr :class (str "meal"
+							 meal-type-id
+							 meal-day-id
+							 2))))
 
 (en/deftemplate final-template-clock
   (hg/build-html-page [{:temp-sel [:div.maincontent],
@@ -219,10 +355,47 @@
 			    :attrs nil,
 			    :content "personal_organiser.planishrane.jsplanishrane_final.init();"})
   [:td.day] (en/clone-for [day meals-by-days]
-			  [:td.7] (en/content (final-template-generator-clock (@day 0) market-id))
-			  [:td.8] (try (if (= (@day 3) nil)
-					(en/set-attr :class "8")
-					(en/content (final-template-generator-clock (@day 3) market-id)))
-					(catch Exception e (do (en/set-attr :class "8"))))
-			  [:td.12] (en/content (final-template-generator-clock (@day 1) market-id))
-			  [:td.19] (en/content (final-template-generator-clock (@day 2) market-id))))
+			  [:td.73] (try (if (= (:mltype (@day 3))
+						"Breakfast")
+					(en/content (final-template-generator-clock-ii (@day 0)
+											(@day 3)
+											0
+											(.indexOf meals-by-days day)
+											market-id))
+					(en/content (final-template-generator-clock (@day 0)
+										    0
+										    (.indexOf meals-by-days day)
+										    market-id)))
+					(catch Exception e (do (en/content (final-template-generator-clock (@day 0)
+													   0
+													   (.indexOf meals-by-days day)
+													   market-id)))))
+			  [:td.123] (try (if (= (:mltype (@day 3))
+						"Lunch")
+					(en/content (final-template-generator-clock-ii (@day 1)
+											(@day 3)
+											1
+											(.indexOf meals-by-days day)
+											market-id))
+					(en/content (final-template-generator-clock (@day 1)
+										    1
+										    (.indexOf meals-by-days day)
+										    market-id)))
+					(catch Exception e (do (en/content (final-template-generator-clock (@day 1)
+													   1
+													   (.indexOf meals-by-days day)
+													   market-id)))))
+			  [:td.193] (try (if (= (:mltype (@day 3)) "Dinner")
+					(en/content (final-template-generator-clock-ii (@day 2)
+											(@day 3)
+											2
+											(.indexOf meals-by-days day)
+											market-id))
+					(en/content (final-template-generator-clock (@day 2)
+										    2
+										    (.indexOf meals-by-days day)
+										    market-id)))
+					(catch Exception e (do (en/content (final-template-generator-clock (@day 2)
+													   2
+													   (.indexOf meals-by-days day)
+													   market-id)))))))

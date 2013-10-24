@@ -21,14 +21,17 @@
 	       (if (= (:type sel-node) "number")
 	           (swap! valid
 			  conj
-			  (utils/is-value-num (dom/value (dom/by-id (:id sel-node)))))))
+			  (utils/is-value-num (dom/value (dom/by-id (:id sel-node))))))
+	       (swap! valid
+		      conj
+		      (and (>= (utils/parse-number (dom/value (dom/by-id (:id sel-node)))) 0) (<= (utils/parse-number (dom/value (dom/by-id (:id sel-node)))) 90))))
 	(swap! valid
 	       conj
 	       (not (= sel-radio-meal ())))
 	(if (every? true? @valid)
 	    true
 	    (do (dom/prepend! (dom/by-id "error-msgs")
-			      "<div class=\"help\">Value for every training duration is required</div><div class=\"help\">Select one option for training in time of which meal</div>")
+			      "<div class=\"help\">Value from 0 to 90 for every training duration is required</div><div class=\"help\">Select one option for training in time of which meal</div>")
 		false))
 	(every? true? @valid)))
 

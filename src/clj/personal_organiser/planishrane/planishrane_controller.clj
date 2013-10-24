@@ -73,8 +73,7 @@
 (defn knowledge-base
   "Define results of knowledge base in variable"
   [req-params]
-  (def results (into []
-			 (map knowledge-base-run (form-params (map-keys-to-str req-params))))))
+  (def results (into [] (map knowledge-base-run (form-params (map-keys-to-str req-params))))))
 
 
 (defn process

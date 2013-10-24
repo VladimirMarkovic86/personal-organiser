@@ -19,7 +19,8 @@
 			      KnowledgeRuntimeLoggerFactory]
 	   [org.drools.runtime StatefulKnowledgeSession]
 	   [org.drools.io ResourceFactory])
-  (:require [personal-organiser.neo4j :as n4j]))
+  (:require [personal-organiser.neo4j :as n4j]
+	    [personal-organiser.utils :as utils]))
 
 (defn organism-query
   "Read organism from db"
@@ -54,8 +55,10 @@
 	(.setNacinIshrane organizam diet)
 	(.setFizickaAktivnost organizam activity)
 	(.setTreningObrok organizam training-meal)
+	(def train-dur training-duration)
+	(def train-index training-coef)
 	(.setTrajanjeTreninga organizam training-duration)
-	(.setTrening organizam training-coef))
+	(.setTrening organizam (((utils/training-coef-values) training-coef) 0)))
       organizam))
 
 (defn read-knowledge-base
@@ -342,6 +345,8 @@
    :mlproteins (.getProteini obrok)
    :mlcarbohydrates (.getUgljeniHidrati obrok)
    :mlfats (.getMasti obrok)
+   :train-dur train-dur
+   :train-index train-index
    :meal-has-groceries (reduce add-converted-grocery
 			       []
 			       (.getObrokHasNamirnicas obrok))})
@@ -388,4 +393,4 @@
     (knowledge-base-meals-load ksession organizam)
     (.fireAllRules ksession)
     (print-meals)
-    (form-result-meals drools-meals-result training-coef)))
+    (form-result-meals drools-meals-result (((utils/training-coef-values) training-coef) 0))))

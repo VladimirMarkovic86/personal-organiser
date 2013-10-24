@@ -453,7 +453,7 @@ salience 3
         				( o.getTrajanjeTreninga() > 0 ) &&
         				( o.getTreningObrok() == VrstaObroka.VECERA ) &&
         				( indeksTelesneMase == "Normalna tezina" ) )
-        obrok : Obrok( (obrok.getProteini() > 30) &&
+        obrok : Obrok( (obrok.getProteini() > 15) &&
         				(obrok.getMasti() < 70) &&
         				(obrok.getVrstaObrokaEnum() == VrstaObroka.VECERA) )
     then
