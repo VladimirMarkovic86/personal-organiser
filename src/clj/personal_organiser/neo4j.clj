@@ -4,7 +4,8 @@
             [clojurewerkz.neocons.rest.nodes :as nn]
             [clojurewerkz.neocons.rest.relationships :as nrel]
 	    [clojurewerkz.neocons.rest.cypher :as cy]
-	    [clojure.string :refer [join]]))
+	    [clojure.string :refer [join]]
+            [clojurewerkz.neocons.rest.transaction :as tx]))
 
 (defn connect-neo4j
   "Connect to neo4j db"
@@ -14,6 +15,8 @@
 (defn get-indexes-node-type-of
   "Get node with indexes of particular type"
   [index-type]
+  (if (= (nn/all-indexes) [])
+      (nn/create-index "indexesoftypes"))
   (first (nn/query "indexesoftypes" (str "type:"index-type))))
 
 (defn vector-of-indexes
@@ -106,3 +109,15 @@
   "Set node property"
   [node prop value]
   (nn/set-property node prop value))
+
+(defn statement-conj
+  ""
+  [acc [query parameters]]
+  (conj acc (tx/statement query parameters)))
+
+(defn tx-op-execute [transaction-operations]
+  (let [transaction (tx/begin-tx)
+	[_ result] (tx/execute transaction (reduce statement-conj [] transaction-operations))]
+	(println result)
+	(tx/commit transaction))
+)

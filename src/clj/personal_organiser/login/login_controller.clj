@@ -10,8 +10,8 @@
 	password (:password req-params)]
     (doseq [[id first-name last-name gender activity diet birthday weight height]
 	    (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "organism"))")
-					   where n.oemail? = \""email"\" and
-						 n.opassword? = \""password"\"
+					   where n.oemail = \""email"\" and
+						 n.opassword = \""password"\"
 					   return ID(n),
 						  n.`ofirst-name`,
 						  n.`olast-name`,
@@ -37,7 +37,7 @@
   "Checks if email exists"
   [email]
   (if (= (:data (n4j/cypher-query (str "start n=node("(clojure.string/join ","(n4j/get-type-indexes "organism"))")"
-			    "where n.oemail? = \""email"\""
+			    "where n.oemail = \""email"\""
 			    "return ID(n)")))
      [])
 	"no-exist"

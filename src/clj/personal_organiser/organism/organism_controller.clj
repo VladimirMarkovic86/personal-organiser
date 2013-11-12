@@ -43,13 +43,13 @@
 	(create-rels-for-node node-id
 			      (map-keys-to-str req-params)
 			      (first (first (:data (n4j/cypher-query "start n=node(*)
-								      where n.type! = 'vitamin'
+								      where n.type = 'vitamin'
 								      return n.idx"))))
 			      :organism-needs-vitamin)
 	(create-rels-for-node node-id
 			      (map-keys-to-str req-params)
 			      (first (first (:data (n4j/cypher-query "start n=node(*)
-								      where n.type! = 'mineral'
+								      where n.type = 'mineral'
 								      return n.idx"))))
 			      :organism-needs-mineral))))
 
@@ -105,7 +105,7 @@
   "Reset organism password"
   [email reset-password]
   (doseq [[node-id] (:data (n4j/cypher-query (str "start n=node(*)"
-						  "where n.oemail? = \""email"\""
+						  "where n.oemail = '"email"'"
 						  "return ID(n)")))]
 	(let [node (n4j/read-node node-id)]
 		(n4j/set-node-property node :opassword reset-password))))

@@ -76,14 +76,42 @@
 					       :param-key3 "c"})))
 )
 
+(defn create-node-tx
+  "Create node query"
+  [n-properties]
+  (str "CREATE (n "n-properties")"))
+
+(defn create-rel-for-created-node-tx
+  "Create relationship for created node query"
+  [nn-id
+   rel-type
+   rel-properties]
+  (str "WITH n START nn=node("nn-id") CREATE n-[:`"rel-type"` "rel-properties"]->nn"))
+
+(defn accumulate-queries
+  ""
+  [acc [nn-id rel-type rel-properties]]
+  (str acc " " (create-rel-for-created-node-tx nn-id rel-type rel-properties)))
+
+(defn create-query
+  ""
+  [n-properties query-params]
+  (reduce accumulate-queries (create-node-tx n-properties) query-params))
+
 (defn create-rels-for-node
   "Create relationships between node and its target nodes with data"
-  ([node-id params-map cy-query-result rel]
+  ([query-params params-map cy-query-result rel]
+    (def query-paramsi query-params)
     (doseq [target-node-id cy-query-result]
-      (n4j/create-relationship node-id
-				(read-string (str target-node-id))
+      (def query-paramsi (conj query-paramsi [target-node-id
 				rel
-				{:mg (read-string (get params-map (str ":value"target-node-id)))})))
+				(str "{mg: "(get params-map (str ":value"target-node-id))"}")]))
+;      (n4j/create-relationship node-id
+;				(read-string (str target-node-id))
+;				rel
+;				{:mg (read-string (get params-map (str ":value"target-node-id)))})
+    )
+    query-paramsi)
   ([node-id params-vec rel]
     (doseq [params-map params-vec]
       (n4j/create-relationship node-id
