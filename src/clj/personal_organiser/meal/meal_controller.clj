@@ -4,12 +4,7 @@
   (:require [personal-organiser.meal.meal-validators :refer [create-meal-errors]]
 	    [personal-organiser.meal.meal-view :refer [read-all-meals]]
 	    [personal-organiser.neo4j :as n4j]
-	    [personal-organiser.utils :refer [map-keys-to-str
-					      create-rels-for-node
-					      update-rels-for-node
-					      delete-rels-for-node
-					      file-delete
-					      copy-file]]
+	    [personal-organiser.utils :as utils]
 	    [clojure.test :refer :all]))
 
 (defn cal-calc
@@ -128,8 +123,8 @@
   [req-params]
   (if (= (:size (:mlimg req-params)) 0)
 	(:mlhimg req-params)
-	(do (file-delete (str "resources/public/images/" (:idmeal req-params) "." (:mlhimg req-params)))
-	    (get-file-extension (copy-file (:tempfile (:mlimg req-params))
+	(do (utils/file-delete (str "resources/public/images/" (:idmeal req-params) "." (:mlhimg req-params)))
+	    (get-file-extension (utils/copy-file (:tempfile (:mlimg req-params))
 					   "resources/public/images/"
 					   (str (:idmeal req-params)
 					   "."
@@ -142,21 +137,32 @@
 						 :mltype (:mltype req-params)
 						 :mldesc (:mldesc req-params)})]
     (println (str "Meal errors: " meal-errors))
-    (let [node-id (n4j/create-node "meal" {:mlname (:mlname req-params)
-						 :mlcalories (meal-cal-calc (form-map-of-ingredients (map-keys-to-str req-params)
+    (let [n-properties (str "{mlname:'" (:mlname req-params)"'"
+			     ",mlcalories:" (meal-cal-calc (form-map-of-ingredients (utils/map-keys-to-str req-params)
 												     (split (:ingredient-indexes req-params) #";")))
-						 :mltype (:mltype req-params)
-						 :mldesc (:mldesc req-params)
-						 :mlimg ((split (:filename (:mlimg req-params)) #"\.") 1)})]
-	(create-rels-for-node node-id
-			      (form-map-of-ingredients (map-keys-to-str req-params)
+				",mltype:'" (:mltype req-params)"'"
+				",mldesc:'" (:mldesc req-params)"'"
+				",mlimg:'" ((split (:filename (:mlimg req-params)) #"\.") 1)"'}")]
+	(def query-params [])
+	(def query-params (utils/create-rels-for-node query-params
+			      (form-map-of-ingredients (utils/map-keys-to-str req-params)
 						       (split (:ingredient-indexes req-params) #";"))
-			      :meal-has-grocery)
-	(copy-file (:tempfile (:mlimg req-params))
-		   "resources/public/images/"
-		   (str node-id
-			"."
-			(get-file-extension (:filename (:mlimg req-params)))))))
+			      "meal-has-grocery"))
+        (def query (str (utils/create-query (utils/create-node-tx n-properties) query-params)
+			" WITH n START nn=node(*) WHERE nn.type = 'meal' SET nn.idx = nn.idx + ID(n)"))
+        (n4j/tx-op-execute [[query nil]])
+	(let [node-id (first (first (:data (n4j/cypher-query (str "START n=node(*)"
+								" WHERE n.mlname='"(:mlname req-params)"'"
+								" AND n.mltype='"(:mltype req-params)"'"
+								" AND n.mldesc='"(:mldesc req-params)"'"
+								" RETURN ID(n)")))))]
+	(utils/copy-file (:tempfile (:mlimg req-params))
+			"resources/public/images/"
+			(str node-id
+			     "."
+			     (get-file-extension (:filename (:mlimg req-params)))))
+	)
+))
   (read-all-meals))
 
 (defn update-meal
@@ -167,38 +173,47 @@
 					    :mldesc (:mldesc req-params)
 					    :mlimg (:mlimg req-params)})]
     (println (str "Meal errors: " meal-errors))
-    (let [params-map-str (map-keys-to-str req-params)
+    (let [params-map-str (utils/map-keys-to-str req-params)
 	  mlimg (get-img-value req-params)]
-	(n4j/update-node
-	(n4j/read-node (read-string (:idmeal req-params))) {:mlname (:mlname req-params)
-							    :mlcalories (meal-cal-calc (form-map-of-ingredients params-map-str
-														(split (:ingredient-indexes req-params) #";")))
-							    :mltype (:mltype req-params)
-							    :mldesc (:mldesc req-params)
-							    :mlimg mlimg})
+	(def query-params [[(str "START n=node("(:idmeal req-params)")"
+			    " SET n.mlname='"(:mlname req-params)"'"
+			    ",n.mlcalories="(meal-cal-calc (form-map-of-ingredients params-map-str
+										(split (:ingredient-indexes req-params) #";")))
+			    ",n.mltype='"(:mltype req-params)"'"
+			    ",n.mldesc='"(:mldesc req-params)"'"
+			    ",n.mlimg='" mlimg"'") nil]])
 	;When updating meal data:
 	;	- delete existing relations to groceries that were removed from form
 	;	- update existing relations with new data
 	; 	- create new relations
-     (delete-rels-for-node (reduce (fn [vec num] (conj vec (read-string num))) [] (into []
+     (def query-params (conj query-params (utils/delete-rels-for-node (reduce (fn [vec num] (conj vec (read-string num))) [] (into []
 				 (difference (into #{}
 						        (split (get params-map-str ":existing-ing-ind") #";"))
 					          (into #{}
 							(split (get params-map-str ":ingredient-indexes") #";"))))))
-     (update-rels-for-node (form-map-of-ingredients-update params-map-str
+     ))
+     (def query-params (utils/update-rels-for-node query-params
+			   (form-map-of-ingredients-update params-map-str
 						    (into []
 							  (intersection (into #{}
 										   (split (get params-map-str ":existing-ing-ind") #";"))
 									     (into #{}
 										   (split (get params-map-str ":ingredient-indexes") #";"))))))
-     (create-rels-for-node (read-string (:idmeal req-params))
+     )
+     (def sub-query [])
+     (def sub-query (utils/create-rels-for-node sub-query
 			   (form-map-of-ingredients params-map-str
 			   			    (into []
 							  (difference (into #{}
 						        			 (split (get params-map-str ":ingredient-indexes") #";"))
 									   (into #{}
 										 (split (get params-map-str ":existing-ing-ind") #";")))))
-			   :meal-has-grocery)))
+			   "meal-has-grocery"))
+    (if (= sub-query [])
+	(def query "START n=node(0) RETURN n")
+	(def query (utils/create-query (utils/start-node-tx (:idmeal req-params)) sub-query)))
+    (n4j/tx-op-execute (conj query-params [query nil]))
+))
   (read-all-meals))
 
 (defn delete-meal
@@ -206,7 +221,7 @@
   [id]
   (doseq [[img-extension] (:data (n4j/cypher-query (str "start n=node("id")"
 							"return n.mlimg")))]
-	(file-delete (str "resources/public/images/"
+	(utils/file-delete (str "resources/public/images/"
 			  id
 			  "."
 			  img-extension)))

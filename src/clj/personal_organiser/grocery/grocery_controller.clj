@@ -38,7 +38,7 @@
 								      where n.type = 'mineral'
 								      return n.idx"))))
 			      "grocery-has-mineral"))
-        (def query (str (utils/create-query n-properties query-params)
+        (def query (str (utils/create-query (utils/create-node-tx n-properties) query-params)
 			" WITH n START nn=node(*) WHERE nn.type = 'grocery' SET nn.idx = nn.idx + ID(n)"))
     (n4j/tx-op-execute [[query nil]])
 ))
@@ -56,23 +56,26 @@
 						 :gorigin (:gorigin req-params)
 						 :gdesc (:gdesc req-params)})]
     (str "Grocery errors: " grocery-errors)
-    ((n4j/update-node
-	(n4j/read-node (read-string (:idgrocery req-params))) {:gname (:gname req-params)
-					  		       :gcalories (read-string (:gcalories req-params))
-					  		       :gfats (read-string (:gfats req-params))
-					  		       :gproteins (read-string (:gproteins req-params))
-					  		       :gcarbohydrates (read-string (:gcarbohydrates req-params))
-					  		       :gwater (read-string (:gwater req-params))
-							       :gorigin (:gorigin req-params)
-					  		       :gdesc (:gdesc req-params)})
-     (utils/update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))")
+    (do (def query-params [[(str "START n=node("(:idgrocery req-params)") SET n.gname='"(:gname req-params)"'"
+				",n.gcalories="(read-string (:gcalories req-params))
+				",n.gfats="(read-string (:gfats req-params))
+				",n.gproteins="(read-string (:gproteins req-params))
+				",n.gcarbohydrates="(read-string (:gcarbohydrates req-params))
+				",n.gwater="(read-string (:gwater req-params))
+				",n.gorigin='"(:gorigin req-params)"'"
+				",n.gdesc='"(:gdesc req-params)"'") nil]])
+     (def query-params (utils/update-rels-for-node query-params
+			   (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))")
 							  match n-[r:`grocery-has-vitamin`]-()
 							  return ID(r)")))
-			   (utils/map-keys-to-str req-params))
-     (utils/update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))")
+			   (utils/map-keys-to-str req-params)))
+     (def query-params (utils/update-rels-for-node query-params
+			   (:data (n4j/cypher-query (str "start n=node("(read-string (:idgrocery req-params))")
 							  match n-[r:`grocery-has-mineral`]-()
 							  return ID(r)")))
-			   (utils/map-keys-to-str req-params))))
+			   (utils/map-keys-to-str req-params)))
+     (n4j/tx-op-execute query-params)
+))
   (read-all-groceries))
 
 (defn is-grocery-in-meal

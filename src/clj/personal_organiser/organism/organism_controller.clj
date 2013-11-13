@@ -3,10 +3,7 @@
 	    [personal-organiser.organism.organism-view :refer [read-organism
 							       organism-nav]]
 	    [personal-organiser.neo4j :as n4j]
-	    [personal-organiser.utils :refer [map-keys-to-str
-					      create-rels-for-node
-					      update-rels-for-node
-					      get-random-str]]
+	    [personal-organiser.utils :as utils]
 	    [postal.core :as pcor]))
 
 (defn save-organism
@@ -26,32 +23,37 @@
 						    :odiet (:odiet req-params)
 						    :oactivity (:oactivity req-params)})]
     (println (str "Organism errors: " organism-errors))
-    (let [node-id (n4j/create-node "organism" {:ofirst-name (:ofirst-name req-params)
-						:olast-name (:olast-name req-params)
-						:oemail (:oemail req-params)
-						:opassword (:opassword req-params)
-						:oheight (read-string (:oheight req-params))
-						:oweight (read-string (:oweight req-params))
-						:obirthday (str (:obirthday-day req-params)
-								"."
-								(:obirthday-month req-params)
-								"."
-								(:obirthday-year req-params))
-						:ogender (:ogender req-params)
-						:odiet (:odiet req-params)
-						:oactivity (:oactivity req-params)})]
-	(create-rels-for-node node-id
-			      (map-keys-to-str req-params)
+    (let [n-properties (str "{`ofirst-name`:'" (:ofirst-name req-params)"'"
+				",`olast-name`:'" (:olast-name req-params)"'"
+				",oemail:'" (:oemail req-params)"'"
+				",opassword:'" (:opassword req-params)"'"
+				",oheight:" (read-string (:oheight req-params))
+				",oweight:" (read-string (:oweight req-params))
+				",obirthday:'" (str (:obirthday-day req-params)
+							"."
+							(:obirthday-month req-params)
+							"."
+							(:obirthday-year req-params))"'"
+				",ogender:'" (:ogender req-params)"'"
+				",odiet:'" (:odiet req-params)"'"
+				",oactivity:'" (:oactivity req-params)"'}")]
+	(def query-params [])
+	(def query-params (utils/create-rels-for-node query-params
+			      (utils/map-keys-to-str req-params)
 			      (first (first (:data (n4j/cypher-query "start n=node(*)
 								      where n.type = 'vitamin'
 								      return n.idx"))))
-			      :organism-needs-vitamin)
-	(create-rels-for-node node-id
-			      (map-keys-to-str req-params)
+			      "organism-needs-vitamin"))
+	(def query-params (utils/create-rels-for-node query-params
+			      (utils/map-keys-to-str req-params)
 			      (first (first (:data (n4j/cypher-query "start n=node(*)
 								      where n.type = 'mineral'
 								      return n.idx"))))
-			      :organism-needs-mineral))))
+			      "organism-needs-mineral"))
+        (def query (str (utils/create-query (utils/create-node-tx n-properties) query-params)
+			" WITH n START nn=node(*) WHERE nn.type = 'organism' SET nn.idx = nn.idx + ID(n)"))
+    (n4j/tx-op-execute [[query nil]])
+)))
 
 (defn update-organism
   "Update organism in neo4j database"
@@ -70,30 +72,32 @@
 						    :odiet (:odiet req-params)
 						    :oactivity (:oactivity req-params)})]
     (println (str "Organism errors: " organism-errors))
-    (let [node (n4j/read-node (read-string (:idorganism req-params)))]
-      (n4j/update-node node
-		       {:ofirst-name (:ofirst-name req-params)
-			:olast-name (:olast-name req-params)
-			:oemail (:oemail req-params)
-			:opassword (:opassword (:data node))
-			:oheight (read-string (:oheight req-params))
-			:oweight (read-string (:oweight req-params))
-			:obirthday (str (:obirthday-day req-params)
-					"."
-					(:obirthday-month req-params)
-					"."
-					(:obirthday-year req-params))
-			:ogender (:ogender req-params)
-			:odiet (:odiet req-params)
-			:oactivity (:oactivity req-params)})
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
+    (do (def query-params [[(str "START n=node("(:idorganism req-params)")"
+				" SET n.`ofirst-name`='"(:ofirst-name req-params)"'"
+				",n.`olast-name`='" (:olast-name req-params)"'"
+				",n.oemail='" (:oemail req-params)"'"
+				",n.oheight=" (read-string (:oheight req-params))
+				",n.oweight=" (read-string (:oweight req-params))
+				",n.obirthday='" (str (:obirthday-day req-params)
+						"."
+						(:obirthday-month req-params)
+						"."
+						(:obirthday-year req-params))"'"
+				",n.ogender='" (:ogender req-params)"'"
+				",n.odiet='" (:odiet req-params)"'"
+				",n.oactivity='" (:oactivity req-params)"'") nil]])
+     (def query-params (utils/update-rels-for-node query-params
+			   (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
 							  match n-[r:`organism-needs-vitamin`]-()
 							  return ID(r)")))
-			   (map-keys-to-str req-params))
-     (update-rels-for-node (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
+			   (utils/map-keys-to-str req-params)))
+     (def query-params (utils/update-rels-for-node query-params
+			   (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
 							  match n-[r:`organism-needs-mineral`]-()
 							  return ID(r)")))
-			   (map-keys-to-str req-params))))
+			   (utils/map-keys-to-str req-params)))
+     (n4j/tx-op-execute query-params)
+))
   (organism-nav))
 
 (defn delete-organism
@@ -113,7 +117,7 @@
 (defn send-mail
   "Send email to address"
   [email]
-  (let [reset-pass (get-random-str 15)]
+  (let [reset-pass (utils/get-random-str 15)]
 	(reset-password email reset-pass)
 	(pcor/send-message #^{:host "smtp.mail.yahoo.com"
 			      :user "personal.clojure@yahoo.com"
