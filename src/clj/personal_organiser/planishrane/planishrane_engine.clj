@@ -83,7 +83,7 @@
   "Read meals of particular type and set numeric value for that type"
   [meal-type meal-type-num]
   (:data (n4j/cypher-query (str "start n=node(*)
-				 where n.mltype! =\""meal-type"\"
+				 where n.mltype =\""meal-type"\"
 				 return ID(n),
 					n.mlname,
 					n.mlcalories,
