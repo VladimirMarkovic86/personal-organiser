@@ -107,15 +107,15 @@
   (neo4j-start)
   (Thread/sleep 15000)
   (n4j/connect-neo4j)
-  (dosync (ref-set server (server/run-server)))
-  (future (Thread/sleep 3000)
-          (browse/browse-url "http://localhost:5000/login")))
+  (def server (server/run-server))
+  (Thread/sleep 3000)
+  (browse/browse-url "http://localhost:5000/login"))
 
 (defn stop-server
   "Stop server"
   []
   (neo4j-stop)
-  (.stop @server))
+  (.stop server))
 
 (defn restart-server
   "Restart server"
