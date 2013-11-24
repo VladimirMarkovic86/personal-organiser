@@ -17,8 +17,6 @@
   []
   (sl/test-suite))
 
-(defonce server (ref nil))
-
 (defn cmd-term
   "Execute command prompt/terminal command"
   [command]
