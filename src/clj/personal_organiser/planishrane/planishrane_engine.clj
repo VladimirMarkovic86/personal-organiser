@@ -20,7 +20,8 @@
            [org.drools.runtime StatefulKnowledgeSession]
            [org.drools.io ResourceFactory])
   (:require [personal-organiser.neo4j :as n4j]
-            [personal-organiser.utils :as utils]))
+            [personal-organiser.utils :as utils]
+            [personal-organiser.mongo :as mon]))
 
 (defn organism-query
   "Read organism from db"
@@ -58,7 +59,7 @@
       (def train-dur training-duration)
       (def train-index training-coef)
       (.setTrajanjeTreninga organizam training-duration)
-      (.setTrening organizam (((utils/training-coef-values) training-coef) 0)))
+      (.setTrening organizam training-coef))
     organizam))
 
 (defn read-knowledge-base
@@ -366,7 +367,7 @@
 
 (defn form-result-meals
   "Form sequence of result meals"
-  [result-meals training-coef]
+  [result-meals]
   (let [acc-seq (conj (conj (conj []
                                   ["Breakfast" (convert-to-meals (:breakfast drools-meals-result))])
                             ["Lunch" (convert-to-meals (:lunch drools-meals-result))])
@@ -393,4 +394,4 @@
     (knowledge-base-meals-load ksession organizam)
     (.fireAllRules ksession)
     (print-meals)
-    (form-result-meals drools-meals-result (((utils/training-coef-values) training-coef) 0))))
+    (form-result-meals drools-meals-result)))

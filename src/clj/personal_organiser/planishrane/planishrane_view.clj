@@ -4,15 +4,16 @@
             [net.cgrand.enlive-html :as en]
             [pl.danieljanus.tagsoup :as tgsoup]
             [clojure.string :as cstring]
-            [personal-organiser.utils :as utils]))
+            [personal-organiser.utils :as utils]
+            [personal-organiser.mongo :as mon]))
 
 (en/defsnippet process
                (en/html-resource "public/planishrane/planishrane-training.html")
                [:table.planishrane-training]
                [day index]
-               [:option.training-coef-item] (en/clone-for [[train-coef train-lbl] (utils/training-coef-values)]
-                                                          [:option.training-coef-item] (comp (en/content train-lbl)
-                                                                                             (en/set-attr :value (.indexOf (utils/training-coef-values) [train-coef train-lbl]))
+               [:option.training-coef-item] (en/clone-for [training (mon/findAll "training")]
+                                                          [:option.training-coef-item] (comp (en/content (:trainingName training))
+                                                                                             (en/set-attr :value (:coef training))
                                                                                              (en/remove-attr :class)))
                [:th.h-day] (en/content day)
                [:select#training-coef] (en/set-attr :name (str "training-coef" index)

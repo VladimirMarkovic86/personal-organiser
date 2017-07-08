@@ -2,166 +2,173 @@
       id="meal-form"
       enctype="multipart/form-data"
       novalidate>
-<table>
+    <table>
 
-    <tr>
-      <td><h3 class="form-title">Create meal</h3></td>
-      <td></td>
-      <td></td>
-    </tr>
+        <tr>
+            <td><h3 class="form-title">Create meal</h3></td>
+            <td></td>
+            <td></td>
+        </tr>
 
-    <tr>
-      <td><label for="mlname"
-		 id="lmlname">Name</label></td>
-      <td><input type="text"
-		 name="mlname"
-		 id="mlname"
-		 required></td>
-      <td id="tdmlname"></td>
-    </tr>
+        <tr>
+            <td><label for="mlname"
+                       id="lmlname">Name</label></td>
+            <td><input type="text"
+                       name="mlname"
+                       id="mlname"
+                       required></td>
+            <td id="tdmlname"></td>
+        </tr>
 
-    <tr>
-      <td><label for="mltype"
-		 id="lmltype">Meal type</label></td>
-      <td>
-	<div><input type="radio"
-		    name="mltype"
-		    id="mltype-breakfast"
-		    value="Breakfast" >
-	     <label for="mltype-breakfast"><span></span>Breakfast</label></div>
-	<div><input type="radio"
-		    name="mltype"
-		    id="mltype-lunch"
-		    value="Lunch" >
-	     <label for="mltype-lunch"><span></span>Lunch</label></div>
-	<div><input type="radio"
-		    name="mltype"
-		    id="mltype-dinner"
-		    value="Dinner" >
-	     <label for="mltype-dinner"><span></span>Dinner</label></div>
-      </td>
-      <td id="tdmltype"></td>
-    </tr>
+        <tr>
+            <td><label for="mltype"
+                       id="lmltype">Meal type</label></td>
+            <td>
+                <div><input type="radio"
+                            name="mltype"
+                            id="mltype-breakfast"
+                            value="Breakfast">
+                    <label for="mltype-breakfast"><span></span>Breakfast</label></div>
+                <div><input type="radio"
+                            name="mltype"
+                            id="mltype-lunch"
+                            value="Lunch">
+                    <label for="mltype-lunch"><span></span>Lunch</label></div>
+                <div><input type="radio"
+                            name="mltype"
+                            id="mltype-dinner"
+                            value="Dinner">
+                    <label for="mltype-dinner"><span></span>Dinner</label></div>
+            </td>
+            <td id="tdmltype"></td>
+        </tr>
 
-    <tr>
-      <td><label for="mldesc"
-		 id="lmldesc">Description</label></td>
-      <td><textarea name="mldesc"
-		    id="mldesc"
-		    required></textarea></td>
-      <td id="tdmldesc"></td>
-    </tr>
+        <tr>
+            <td><label for="mldesc"
+                       id="lmldesc">Description</label></td>
+            <td><textarea name="mldesc"
+                          id="mldesc"
+                          required></textarea></td>
+            <td id="tdmldesc"></td>
+        </tr>
 
-    <tr>
-      <td><label for="mlimg"
-		 id="lmlimg">Image</label></td>
-      <td><input type="file"
-		 name="mlimg"
-		 id="mlimg"
-		 required></td>
-      <td id="tdmlimg"></td>
-    </tr>
+        <tr>
+            <td><label for="mlimg"
+                       id="lmlimg">Image</label></td>
+            <td><input type="file"
+                       name="mlimg"
+                       id="mlimg"
+                       required></td>
+            <td id="tdmlimg"></td>
+        </tr>
 
-    <tr>
-      <td><h4>Ingredients</h4></td>
-      <td></td>
-      <td></td>
-    </tr>
+        <tr>
+            <td><h4>Ingredients</h4></td>
+            <td></td>
+            <td></td>
+        </tr>
 
-    <tr class="ingredients">
-      <td>
-	<input type="button"
-	       name="add-ingredient"
-	       id="add-ingredient"
-	       value="Add ingredient">
-	<input type="hidden"
-	       name="ingredient-indexes"
-	       id="ingredient-indexes"
-	       value="1">
-      </td>
-      <td colspan="2">
-	<table class="ingredients-table"><tbody class="ingredients-tbody">
+        <tr class="ingredients">
+            <td>
+                <input type="button"
+                       name="add-ingredient"
+                       id="add-ingredient"
+                       value="Add ingredient">
+                <input type="hidden"
+                       name="ingredient-indexes"
+                       id="ingredient-indexes"
+                       value="1">
+            </td>
+            <td colspan="2">
+                <table class="ingredients-table">
+                    <tbody class="ingredients-tbody">
 
-	  <tr class="center-align">
-	    <th style="text-align: center;">Ingredient</td>
-	    <th>Grams</td>
-	    <th>Quantity</td>
-	    <th>Option</td>
-	  </tr>
+                    <tr class="center-align">
+                        <th style="text-align: center;">Ingredient
+                        </td>
+                        <th>Grams
+                        </td>
+                        <th>Quantity
+                        </td>
+                        <th>Option
+                        </td>
+                    </tr>
 
-	  <tr class="ingredient-row"
-	      id="ingredient-row2">
-	    <td class="iname">
-	      <select name="ingredient2"
-		      id="ingredient2">
-		<option> - Select - </option>
-		<option id="ingredient-option2"></option>
-	      </select>
-	    </td>
-	    <td class="igrams"><input type="number"
-				      name="igrams2"
-				      id="igrams2"
-				      value=""
-				      require></td>
-	    <td class="iquantity"><input type="number"
-					 name="iquantity2"
-					 id="iquantity2"
-					 value=""
-					 require></td>
-	    <td class="iremove"><a id="iremove2"
-				   href="#">remove</a></td>
-	    <td>
-	      <div id="tdigrams2"></div>
-	      <div id="tdiquantity2"></div>
-	    </td>
-	  </tr>
+                    <tr class="ingredient-row"
+                        id="ingredient-row2">
+                        <td class="iname">
+                            <select name="ingredient2"
+                                    id="ingredient2">
+                                <option> - Select -</option>
+                                <option id="ingredient-option2"></option>
+                            </select>
+                        </td>
+                        <td class="igrams"><input type="number"
+                                                  name="igrams2"
+                                                  id="igrams2"
+                                                  value=""
+                                                  require></td>
+                        <td class="iquantity"><input type="number"
+                                                     name="iquantity2"
+                                                     id="iquantity2"
+                                                     value=""
+                                                     require></td>
+                        <td class="iremove"><a id="iremove2"
+                                               href="#">remove</a></td>
+                        <td>
+                            <div id="tdigrams2"></div>
+                            <div id="tdiquantity2"></div>
+                        </td>
+                    </tr>
 
-	  <tr id="ingredient-row1">
-	    <td class="iname">
-	      <select name="ingredient1"
-		      id="ingredient1">
-		<option> - Select - </option>
-		<option id="ingredient-option1"></option>
-	      </select>
-	    </td>
-	    <td class="igrams"><label for="igrams1"
-		 		      id="ligrams1"
-				      style="display:none;">Grams</label>
-			       <input type="number"
-				      name="igrams1"
-				      id="igrams1"
-				      value=""
-				      require></td>
-	    <td class="iquantity"><label for="iquantity1"
-		 		      id="liquantity1"
-				      style="display:none;">Quantity</label>
-			          <input type="number"
-					 name="iquantity1"
-					 id="iquantity1"
-					 value=""
-					 require></td>
-	    <td class="iremove"><a id="iremove1"
-				   href="#">remove</a></td>
-	    <td>
-	      <div id="tdigrams1"></div>
-	      <div id="tdiquantity1"></div>
-	    </td>
-	  </tr>
+                    <tr id="ingredient-row1">
+                        <td class="iname">
+                            <select name="ingredient1"
+                                    id="ingredient1">
+                                <option> - Select -</option>
+                                <option id="ingredient-option1"></option>
+                            </select>
+                        </td>
+                        <td class="igrams"><label for="igrams1"
+                                                  id="ligrams1"
+                                                  style="display:none;">Grams</label>
+                            <input type="number"
+                                   name="igrams1"
+                                   id="igrams1"
+                                   value=""
+                                   require></td>
+                        <td class="iquantity"><label for="iquantity1"
+                                                     id="liquantity1"
+                                                     style="display:none;">Quantity</label>
+                            <input type="number"
+                                   name="iquantity1"
+                                   id="iquantity1"
+                                   value=""
+                                   require></td>
+                        <td class="iremove"><a id="iremove1"
+                                               href="#">remove</a></td>
+                        <td>
+                            <div id="tdigrams1"></div>
+                            <div id="tdiquantity1"></div>
+                        </td>
+                    </tr>
 
-	</tbody></table>
-      </td>
-    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
 
-    <tr>
-      <td></td>
-      <td><input type="submit"
-		 value="Create"
-		 id="submit"></td>
-      <td></td>
-    </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit"
+                       value="Create"
+                       id="submit"></td>
+            <td></td>
+        </tr>
 
-    <tr>
-      <td id="error-msgs" colspan="3"><td>
-    </tr>
-</table>
+        <tr>
+            <td id="error-msgs" colspan="3">
+            <td>
+        </tr>
+    </table>
 </form>

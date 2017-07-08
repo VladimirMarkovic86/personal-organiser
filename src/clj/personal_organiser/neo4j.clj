@@ -1,5 +1,5 @@
 (ns personal-organiser.neo4j
-  "Namespace for manipulating data from database"
+  "Namespace for manipulating data from neo4j database"
   (:require [clojurewerkz.neocons.rest :as nr]
             [clojurewerkz.neocons.rest.nodes :as nn]
             [clojurewerkz.neocons.rest.relationships :as nrel]
@@ -101,8 +101,9 @@
   [rel-ids]
   (nrel/delete-many rel-ids))
 
-(defn cypher-query [query-statement]
+(defn cypher-query
   "Cypher query"
+  [query-statement]
   (cy/query query-statement))
 
 (defn set-node-property

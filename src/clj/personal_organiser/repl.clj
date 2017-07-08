@@ -10,6 +10,7 @@
   (:require [clojure.java.browse :as browse]
             [personal-organiser.server :as server]
             [personal-organiser.neo4j :as n4j]
+            [personal-organiser.mongo :as mon]
             [personal-organiser.selenium.selenium-test :as sl]))
 
 (defn selenium-test
@@ -98,13 +99,25 @@
       (if (neo4j-win)
         (neo4j-stop-win)))))
 
+(defn mongodb-start-mac
+  ""
+  []
+  (cmd-term "mongod --config resources/mongodb/conf/mongod.conf --smallfiles --fork"))
+
+(defn mongodb-stop-mac
+  ""
+  []
+  (cmd-term "mongod --shutdown"))
+
 (defn start-server
   "Start the development server and open the host application in the
   default browser."
   []
-  (neo4j-start)
+  ;(neo4j-start)
+  ;(mongo-start)
   (Thread/sleep 15000)
   (n4j/connect-neo4j)
+  (mon/connect-mongo)
   (def server (server/run-server))
   (Thread/sleep 3000)
   (browse/browse-url "http://localhost:5000/login"))

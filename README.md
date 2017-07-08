@@ -12,12 +12,14 @@ Guide
 =====
 
 * Clone project with command "git clone https://github.com/VladimirMarkovic86/personal-organiser.git" from terminal
-* Download Neo4J server from http://www.neo4j.org/, extract it in project_root and name it "neo4j-community"
-* After deleting directory "data" from Neo4J server_root,
-  from project_root/resources extract data.zip file in Neo4J server_root
-* Start Neo4J server
-  for Unix systems in terminal from "server_root/bin" run ./neo4j start or aplication will start it for you if you followed second step (works for Unix, for Windows not tested)
-  for windows systems find in server_root/doc/neo4j.txt
+* Download/Install Neo4J server from http://www.neo4j.org/
+* Add cypher.default_language_version=3.1 at the end of .neo4j.conf file
+* From project_root/resources extract data.zip file and reference data/graph.db folder with Neo4J application
+* You can start Neo4j server now
+* Download/Install MongoDB server from https://www.mongodb.com/
+* From project_root/resources extract mongodb.zip file to <extracted_path>
+* Modify <extracted_path>/mongodb/conf/mongod.conf file so it references mongodb folders structure
+* From terminal execute next command mongod --config <extracted_path>/mongodb/conf/mongod.conf --smallfiles --fork
 * Environment variable JAVA_CMD have to be set to $JAVA_HOME/bin/java;
   JAVA_HOME path should reference JDK
 * From project root in terminal run command "lein run"
@@ -112,12 +114,22 @@ NEO4J
 
 dependency - [clojurewerkz/neocons "1.1.0"]
 
-NEO4J graph database is implemented with neocons library for Clojure developers.
+NEO4J graph database is accessed with neocons library for Clojure developers.
 
 Neocons => http://clojureneo4j.info
 Neocons documentation => http://reference.clojureneo4j.info/
 NEO4J server => http://www.neo4j.org/
 Cypher => http://docs.neo4j.org/chunked/1.9.1/cypher-query-lang.html
+
+MongoDB
+=======
+
+dependency - [com.novemberain/monger "3.1.0"]
+
+MongoDB document database is accessed with monger library for Clojure developers.
+
+Monger documentation => http://reference.clojuremongodb.info/
+MongoDB server => https://www.mongodb.com/
 
 Enlive
 ======
