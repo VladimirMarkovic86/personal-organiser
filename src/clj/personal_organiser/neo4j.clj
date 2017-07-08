@@ -10,7 +10,7 @@
 (defn connect-neo4j
   "Connect to neo4j db"
   []
-  (nr/connect! "http://localhost:7474/db/data/"))
+  (nr/connect! "http://localhost:7474/db/data/" "neo4j" "vlada"))
 
 (defn get-indexes-node-type-of
   "Get node with indexes of particular type"

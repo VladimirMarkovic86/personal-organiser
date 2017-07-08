@@ -93,7 +93,7 @@
    rel-properties]
   (str "WITH n"
 	" START nn=node("nn-id")"
-	" CREATE n-[:`"rel-type"` "rel-properties"]->nn"))
+	" CREATE (n)-[:`"rel-type"` "rel-properties"]->(nn)"))
 
 (defn accumulate-queries
   ""

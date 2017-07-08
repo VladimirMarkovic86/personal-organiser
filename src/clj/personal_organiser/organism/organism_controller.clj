@@ -88,12 +88,12 @@
 				",n.oactivity='" (:oactivity req-params)"'") nil]])
      (def query-params (utils/update-rels-for-node query-params
 			   (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
-							  match n-[r:`organism-needs-vitamin`]-()
+							  match (n)-[r:`organism-needs-vitamin`]-()
 							  return ID(r)")))
 			   (utils/map-keys-to-str req-params)))
      (def query-params (utils/update-rels-for-node query-params
 			   (:data (n4j/cypher-query (str "start n=node("(read-string (:idorganism req-params))")
-							  match n-[r:`organism-needs-mineral`]-()
+							  match (n)-[r:`organism-needs-mineral`]-()
 							  return ID(r)")))
 			   (utils/map-keys-to-str req-params)))
      (n4j/tx-op-execute query-params)
