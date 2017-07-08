@@ -1,3 +1,3 @@
 package enums;
 
-public enum Pol {MUSKI,ZENSKI}
+public enum Pol {MUSKI, ZENSKI}

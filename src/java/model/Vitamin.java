@@ -4,87 +4,87 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Vitamin implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int id;
+    private int id;
 
-	private String naziv;
+    private String naziv;
 
-	private String opis;
+    private String opis;
 
-	private List<Namirnica_has_Vitamin> namirnicaHasVitamins;
+    private List<Namirnica_has_Vitamin> namirnicaHasVitamins;
 
-	private List<Organizam_needs_Vitamin> organizamNeedsVitamins;
+    private List<Organizam_needs_Vitamin> organizamNeedsVitamins;
 
-	public Vitamin() {
-	}
+    public Vitamin() {
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getNaziv() {
-		return this.naziv;
-	}
+    public String getNaziv() {
+        return this.naziv;
+    }
 
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
-	}
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
 
-	public String getOpis() {
-		return this.opis;
-	}
+    public String getOpis() {
+        return this.opis;
+    }
 
-	public void setOpis(String opis) {
-		this.opis = opis;
-	}
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
 
-	public List<Namirnica_has_Vitamin> getNamirnicaHasVitamins() {
-		return this.namirnicaHasVitamins;
-	}
+    public List<Namirnica_has_Vitamin> getNamirnicaHasVitamins() {
+        return this.namirnicaHasVitamins;
+    }
 
-	public void setNamirnicaHasVitamins(List<Namirnica_has_Vitamin> namirnicaHasVitamins) {
-		this.namirnicaHasVitamins = namirnicaHasVitamins;
-	}
+    public void setNamirnicaHasVitamins(List<Namirnica_has_Vitamin> namirnicaHasVitamins) {
+        this.namirnicaHasVitamins = namirnicaHasVitamins;
+    }
 
-	public Namirnica_has_Vitamin addNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
-		getNamirnicaHasVitamins().add(namirnicaHasVitamin);
-		namirnicaHasVitamin.setVitamin(this);
+    public Namirnica_has_Vitamin addNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
+        getNamirnicaHasVitamins().add(namirnicaHasVitamin);
+        namirnicaHasVitamin.setVitamin(this);
 
-		return namirnicaHasVitamin;
-	}
+        return namirnicaHasVitamin;
+    }
 
-	public Namirnica_has_Vitamin removeNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
-		getNamirnicaHasVitamins().remove(namirnicaHasVitamin);
-		namirnicaHasVitamin.setVitamin(null);
+    public Namirnica_has_Vitamin removeNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
+        getNamirnicaHasVitamins().remove(namirnicaHasVitamin);
+        namirnicaHasVitamin.setVitamin(null);
 
-		return namirnicaHasVitamin;
-	}
+        return namirnicaHasVitamin;
+    }
 
-	public List<Organizam_needs_Vitamin> getOrganizamNeedsVitamins() {
-		return this.organizamNeedsVitamins;
-	}
+    public List<Organizam_needs_Vitamin> getOrganizamNeedsVitamins() {
+        return this.organizamNeedsVitamins;
+    }
 
-	public void setOrganizamNeedsVitamins(List<Organizam_needs_Vitamin> organizamNeedsVitamins) {
-		this.organizamNeedsVitamins = organizamNeedsVitamins;
-	}
+    public void setOrganizamNeedsVitamins(List<Organizam_needs_Vitamin> organizamNeedsVitamins) {
+        this.organizamNeedsVitamins = organizamNeedsVitamins;
+    }
 
-	public Organizam_needs_Vitamin addOrganizamNeedsVitamin(Organizam_needs_Vitamin organizamNeedsVitamin) {
-		getOrganizamNeedsVitamins().add(organizamNeedsVitamin);
-		organizamNeedsVitamin.setVitamin(this);
+    public Organizam_needs_Vitamin addOrganizamNeedsVitamin(Organizam_needs_Vitamin organizamNeedsVitamin) {
+        getOrganizamNeedsVitamins().add(organizamNeedsVitamin);
+        organizamNeedsVitamin.setVitamin(this);
 
-		return organizamNeedsVitamin;
-	}
+        return organizamNeedsVitamin;
+    }
 
-	public Organizam_needs_Vitamin removeOrganizamNeedsVitamin(Organizam_needs_Vitamin organizamNeedsVitamin) {
-		getOrganizamNeedsVitamins().remove(organizamNeedsVitamin);
-		organizamNeedsVitamin.setVitamin(null);
+    public Organizam_needs_Vitamin removeOrganizamNeedsVitamin(Organizam_needs_Vitamin organizamNeedsVitamin) {
+        getOrganizamNeedsVitamins().remove(organizamNeedsVitamin);
+        organizamNeedsVitamin.setVitamin(null);
 
-		return organizamNeedsVitamin;
-	}
+        return organizamNeedsVitamin;
+    }
 
 }

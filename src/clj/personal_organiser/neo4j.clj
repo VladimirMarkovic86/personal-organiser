@@ -3,8 +3,8 @@
   (:require [clojurewerkz.neocons.rest :as nr]
             [clojurewerkz.neocons.rest.nodes :as nn]
             [clojurewerkz.neocons.rest.relationships :as nrel]
-	    [clojurewerkz.neocons.rest.cypher :as cy]
-	    [clojure.string :refer [join]]
+            [clojurewerkz.neocons.rest.cypher :as cy]
+            [clojure.string :refer [join]]
             [clojurewerkz.neocons.rest.transaction :as tx]))
 
 (defn connect-neo4j
@@ -16,8 +16,8 @@
   "Get node with indexes of particular type"
   [index-type]
   (if (= (nn/all-indexes) [])
-      (nn/create-index "indexesoftypes"))
-  (first (nn/query "indexesoftypes" (str "type:"index-type))))
+    (nn/create-index "indexesoftypes"))
+  (first (nn/query "indexesoftypes" (str "type:" index-type))))
 
 (defn vector-of-indexes
   "Vector of indexes in type node"
@@ -28,7 +28,7 @@
   "Returns indexes of particular type nodes"
   [index-type]
   (let [type-idx (get-indexes-node-type-of index-type)]
-	     (vector-of-indexes type-idx)))
+    (vector-of-indexes type-idx)))
 
 (defn read-all-nodes-type-of
   "Return all nodes of particular type"
@@ -38,7 +38,7 @@
 (defn create-type-node [node-data]
   "Create type node that is indexed and contains indexes of all nodes of that type in :idx property"
   (let [node (nn/create node-data)]
-  (nn/add-to-index node "indexesoftypes" "type" (:type node-data))))
+    (nn/add-to-index node "indexesoftypes" "type" (:type node-data))))
 
 (defn add-node-key-to-indexes
   "Add new node index to node that contains indexes of nodes with same type"
@@ -117,7 +117,7 @@
 
 (defn tx-op-execute [transaction-operations]
   (let [transaction (tx/begin-tx)
-	[_ result] (tx/execute transaction (reduce statement-conj [] transaction-operations))]
-	(println result)
-	(tx/commit transaction))
-)
+        [_ result] (tx/execute transaction (reduce statement-conj [] transaction-operations))]
+    (println result)
+    (tx/commit transaction))
+  )

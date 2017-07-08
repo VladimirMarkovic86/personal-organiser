@@ -5,7 +5,7 @@
   "Start selenium session and open browser"
   []
   (tx/set-driver! {:browser :firefox} "http://localhost:5000/login")
-)
+  )
 
 (defn stop-selenium-session
   "Stop selenium session and close browser"
@@ -18,7 +18,7 @@
   (tx/input-text "#email" "email@mail.com")
   (tx/input-text "#password" "email.1")
   (tx/submit "#password")
-)
+  )
 
 (defn delete-organism
   "Delete organism from application"
@@ -26,7 +26,7 @@
   (tx/click "a[href='/organism-nav']")
   (tx/click "a[href*='/read-organism/']")
   (tx/click "a[href*='/delete-organism/']")
-)
+  )
 
 (defn register
   "Register into application"
@@ -46,7 +46,7 @@
   (tx/click "#odiet-all")
   (tx/click "#oactivity-easy")
   (tx/submit "#opassword")
-)
+  )
 
 (defn test-suite
   "Execute test suite"

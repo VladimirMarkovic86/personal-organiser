@@ -11,7 +11,7 @@
       (en/html-resource template)
       (:temp-sel components)
       (fn [selected-tag]
-	  (assoc selected-tag :content (en/select (en/html-resource (:comp components)) (:comp-sel components)))))))
+        (assoc selected-tag :content (en/select (en/html-resource (:comp components)) (:comp-sel components)))))))
 
 (defn build-html-page
   "Build html page with vector of maps where every map contains 

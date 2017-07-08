@@ -5,246 +5,249 @@ import java.util.List;
 
 
 public class Namirnica implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int id;
+    private int id;
 
-	private double kalorija;
+    private double kalorija;
 
-	private double masti;
+    private double masti;
 
-	private String naziv;
+    private String naziv;
 
-	private double proteina;
+    private double proteina;
 
-	private double ugljenihhidrata;
-	
-	private double voda;
-	
-	private int poreklo;
-	
-	private String opis;
-	
-	private int opstipacija;
-	
-	private int dijareja;
-	
-	private int smanjenjeHolesterola;
-	
-	private int normalizovanjePritiska;
+    private double ugljenihhidrata;
 
-	private List<Namirnica_has_Mineral> namirnicaHasMinerals;
+    private double voda;
 
-	private List<Namirnica_has_Vitamin> namirnicaHasVitamins;
+    private int poreklo;
 
-	private List<Obrok_has_Namirnica> obrokHasNamirnicas;
+    private String opis;
 
-	public Namirnica() {
-	}
+    private int opstipacija;
 
-	public Namirnica(int id, String naziv, double kalorija, double proteina, double masti, double ugljenihhidrata, double voda, String opis, String poreklo) {
-		this.id = id;
-		this.naziv = naziv;
-		this.kalorija = kalorija;
-		this.proteina = proteina;
-		this.masti = masti;
-		this.ugljenihhidrata = ugljenihhidrata;
-		this.voda = voda;
-		this.opis = opis;
-		if (poreklo.equals("All")) {
-			this.poreklo = 1;
-		} else {
-			if (poreklo.equals("Vegetarian")) {
-				this.poreklo = 0;
-			} else {
-				this.poreklo = 1;
-			}
-		}
-	}
+    private int dijareja;
 
-	public int getId() {
-		return this.id;
-	}
+    private int smanjenjeHolesterola;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    private int normalizovanjePritiska;
 
-	public double getKalorija() {
-		return this.kalorija;
-	}
+    private List<Namirnica_has_Mineral> namirnicaHasMinerals;
 
-	public void setKalorija(double kalorija) {
-		this.kalorija = kalorija;
-	}
+    private List<Namirnica_has_Vitamin> namirnicaHasVitamins;
 
-	public double getMasti() {
-		return this.masti;
-	}
+    private List<Obrok_has_Namirnica> obrokHasNamirnicas;
 
-	public void setMasti(double masti) {
-		this.masti = masti;
-	}
+    public Namirnica() {
+    }
 
-	public String getNaziv() {
-		return this.naziv;
-	}
+    public Namirnica(int id, String naziv, double kalorija, double proteina, double masti, double ugljenihhidrata, double voda, String opis, String poreklo) {
+        this.id = id;
+        this.naziv = naziv;
+        this.kalorija = kalorija;
+        this.proteina = proteina;
+        this.masti = masti;
+        this.ugljenihhidrata = ugljenihhidrata;
+        this.voda = voda;
+        this.opis = opis;
+        if (poreklo.equals("All")) {
+            this.poreklo = 1;
+        } else {
+            if (poreklo.equals("Vegetarian")) {
+                this.poreklo = 0;
+            } else {
+                this.poreklo = 1;
+            }
+        }
+    }
 
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public double getProteina() {
-		return this.proteina;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setProteina(double proteina) {
-		this.proteina = proteina;
-	}
+    public double getKalorija() {
+        return this.kalorija;
+    }
 
-	public double getUgljenihhidrata() {
-		return this.ugljenihhidrata;
-	}
+    public void setKalorija(double kalorija) {
+        this.kalorija = kalorija;
+    }
 
-	public void setUgljenihhidrata(double ugljenihhidrata) {
-		this.ugljenihhidrata = ugljenihhidrata;
-	}
+    public double getMasti() {
+        return this.masti;
+    }
 
-	public double getVoda() {
-		return voda;
-	}
+    public void setMasti(double masti) {
+        this.masti = masti;
+    }
 
-	public void setVoda(double voda) {
-		this.voda = voda;
-	}
-	
-	public int getPoreklo() {
-		return poreklo;
-	}
+    public String getNaziv() {
+        return this.naziv;
+    }
 
-	public String getPorekloStr() {
-		switch (poreklo){
-			case 0: return "Vegetarian";
-			case 1: return "All";
-			default: return "All";
-		}
-	}
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
 
-	public void setPoreklo(int poreklo) {
-		this.poreklo = poreklo;
-	}
+    public double getProteina() {
+        return this.proteina;
+    }
 
-	public String getOpis() {
-		return opis;
-	}
+    public void setProteina(double proteina) {
+        this.proteina = proteina;
+    }
 
-	public void setOpis(String opis) {
-		this.opis = opis;
-	}
+    public double getUgljenihhidrata() {
+        return this.ugljenihhidrata;
+    }
 
-	public int getOpstipacija() {
-		return opstipacija;
-	}
+    public void setUgljenihhidrata(double ugljenihhidrata) {
+        this.ugljenihhidrata = ugljenihhidrata;
+    }
 
-	public void setOpstipacija(int opstipacija) {
-		this.opstipacija = opstipacija;
-	}
+    public double getVoda() {
+        return voda;
+    }
 
-	public int getDijareja() {
-		return dijareja;
-	}
+    public void setVoda(double voda) {
+        this.voda = voda;
+    }
 
-	public void setDijareja(int dijareja) {
-		this.dijareja = dijareja;
-	}
+    public int getPoreklo() {
+        return poreklo;
+    }
 
-	public int getSmanjenjeHolesterola() {
-		return smanjenjeHolesterola;
-	}
+    public String getPorekloStr() {
+        switch (poreklo) {
+            case 0:
+                return "Vegetarian";
+            case 1:
+                return "All";
+            default:
+                return "All";
+        }
+    }
 
-	public void setSmanjenjeHolesterola(int smanjenjeHolesterola) {
-		this.smanjenjeHolesterola = smanjenjeHolesterola;
-	}
+    public void setPoreklo(int poreklo) {
+        this.poreklo = poreklo;
+    }
 
-	public int getNormalizovanjePritiska() {
-		return normalizovanjePritiska;
-	}
+    public String getOpis() {
+        return opis;
+    }
 
-	public void setNormalizovanjePritiska(int normalizovanjePritiska) {
-		this.normalizovanjePritiska = normalizovanjePritiska;
-	}
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
 
-	public List<Namirnica_has_Mineral> getNamirnicaHasMinerals() {
-		return this.namirnicaHasMinerals;
-	}
+    public int getOpstipacija() {
+        return opstipacija;
+    }
 
-	public void setNamirnicaHasMinerals(List<Namirnica_has_Mineral> namirnicaHasMinerals) {
-		this.namirnicaHasMinerals = namirnicaHasMinerals;
-	}
+    public void setOpstipacija(int opstipacija) {
+        this.opstipacija = opstipacija;
+    }
 
-	public Namirnica_has_Mineral addNamirnicaHasMineral(Namirnica_has_Mineral namirnicaHasMineral) {
-		getNamirnicaHasMinerals().add(namirnicaHasMineral);
-		namirnicaHasMineral.setNamirnica(this);
+    public int getDijareja() {
+        return dijareja;
+    }
 
-		return namirnicaHasMineral;
-	}
+    public void setDijareja(int dijareja) {
+        this.dijareja = dijareja;
+    }
 
-	public Namirnica_has_Mineral removeNamirnicaHasMineral(Namirnica_has_Mineral namirnicaHasMineral) {
-		getNamirnicaHasMinerals().remove(namirnicaHasMineral);
-		namirnicaHasMineral.setNamirnica(null);
+    public int getSmanjenjeHolesterola() {
+        return smanjenjeHolesterola;
+    }
 
-		return namirnicaHasMineral;
-	}
+    public void setSmanjenjeHolesterola(int smanjenjeHolesterola) {
+        this.smanjenjeHolesterola = smanjenjeHolesterola;
+    }
 
-	public List<Namirnica_has_Vitamin> getNamirnicaHasVitamins() {
-		return this.namirnicaHasVitamins;
-	}
+    public int getNormalizovanjePritiska() {
+        return normalizovanjePritiska;
+    }
 
-	public void setNamirnicaHasVitamins(List<Namirnica_has_Vitamin> namirnicaHasVitamins) {
-		this.namirnicaHasVitamins = namirnicaHasVitamins;
-	}
+    public void setNormalizovanjePritiska(int normalizovanjePritiska) {
+        this.normalizovanjePritiska = normalizovanjePritiska;
+    }
 
-	public Namirnica_has_Vitamin addNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
-		getNamirnicaHasVitamins().add(namirnicaHasVitamin);
-		namirnicaHasVitamin.setNamirnica(this);
+    public List<Namirnica_has_Mineral> getNamirnicaHasMinerals() {
+        return this.namirnicaHasMinerals;
+    }
 
-		return namirnicaHasVitamin;
-	}
+    public void setNamirnicaHasMinerals(List<Namirnica_has_Mineral> namirnicaHasMinerals) {
+        this.namirnicaHasMinerals = namirnicaHasMinerals;
+    }
 
-	public Namirnica_has_Vitamin removeNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
-		getNamirnicaHasVitamins().remove(namirnicaHasVitamin);
-		namirnicaHasVitamin.setNamirnica(null);
+    public Namirnica_has_Mineral addNamirnicaHasMineral(Namirnica_has_Mineral namirnicaHasMineral) {
+        getNamirnicaHasMinerals().add(namirnicaHasMineral);
+        namirnicaHasMineral.setNamirnica(this);
 
-		return namirnicaHasVitamin;
-	}
+        return namirnicaHasMineral;
+    }
 
-	public List<Obrok_has_Namirnica> getObrokHasNamirnicas() {
-		return this.obrokHasNamirnicas;
-	}
+    public Namirnica_has_Mineral removeNamirnicaHasMineral(Namirnica_has_Mineral namirnicaHasMineral) {
+        getNamirnicaHasMinerals().remove(namirnicaHasMineral);
+        namirnicaHasMineral.setNamirnica(null);
 
-	public void setObrokHasNamirnicas(List<Obrok_has_Namirnica> obrokHasNamirnicas) {
-		this.obrokHasNamirnicas = obrokHasNamirnicas;
-	}
+        return namirnicaHasMineral;
+    }
 
-	public Obrok_has_Namirnica addObrokHasNamirnica(Obrok_has_Namirnica obrokHasNamirnica) {
-		getObrokHasNamirnicas().add(obrokHasNamirnica);
-		obrokHasNamirnica.setNamirnica(this);
+    public List<Namirnica_has_Vitamin> getNamirnicaHasVitamins() {
+        return this.namirnicaHasVitamins;
+    }
 
-		return obrokHasNamirnica;
-	}
+    public void setNamirnicaHasVitamins(List<Namirnica_has_Vitamin> namirnicaHasVitamins) {
+        this.namirnicaHasVitamins = namirnicaHasVitamins;
+    }
 
-	public Obrok_has_Namirnica removeObrokHasNamirnica(Obrok_has_Namirnica obrokHasNamirnica) {
-		getObrokHasNamirnicas().remove(obrokHasNamirnica);
-		obrokHasNamirnica.setNamirnica(null);
+    public Namirnica_has_Vitamin addNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
+        getNamirnicaHasVitamins().add(namirnicaHasVitamin);
+        namirnicaHasVitamin.setNamirnica(this);
 
-		return obrokHasNamirnica;
-	}
+        return namirnicaHasVitamin;
+    }
 
-	public boolean isNamirnicaVegetarijanska() {
-		if(poreklo == 0){
-			return true;
-		}
-		return false;
-	}
+    public Namirnica_has_Vitamin removeNamirnicaHasVitamin(Namirnica_has_Vitamin namirnicaHasVitamin) {
+        getNamirnicaHasVitamins().remove(namirnicaHasVitamin);
+        namirnicaHasVitamin.setNamirnica(null);
+
+        return namirnicaHasVitamin;
+    }
+
+    public List<Obrok_has_Namirnica> getObrokHasNamirnicas() {
+        return this.obrokHasNamirnicas;
+    }
+
+    public void setObrokHasNamirnicas(List<Obrok_has_Namirnica> obrokHasNamirnicas) {
+        this.obrokHasNamirnicas = obrokHasNamirnicas;
+    }
+
+    public Obrok_has_Namirnica addObrokHasNamirnica(Obrok_has_Namirnica obrokHasNamirnica) {
+        getObrokHasNamirnicas().add(obrokHasNamirnica);
+        obrokHasNamirnica.setNamirnica(this);
+
+        return obrokHasNamirnica;
+    }
+
+    public Obrok_has_Namirnica removeObrokHasNamirnica(Obrok_has_Namirnica obrokHasNamirnica) {
+        getObrokHasNamirnicas().remove(obrokHasNamirnica);
+        obrokHasNamirnica.setNamirnica(null);
+
+        return obrokHasNamirnica;
+    }
+
+    public boolean isNamirnicaVegetarijanska() {
+        if (poreklo == 0) {
+            return true;
+        }
+        return false;
+    }
 
 }
