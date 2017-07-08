@@ -1,8 +1,3 @@
-Under construction
-==================
-
-Migrating to MongoDB
-
 PersonalOrganiser
 =================
 
@@ -19,7 +14,10 @@ Guide
 * Download/Install MongoDB server from https://www.mongodb.com/
 * From project_root/resources extract mongodb.zip file to <extracted_path>
 * Modify <extracted_path>/mongodb/conf/mongod.conf file so it references mongodb folders structure
-* From terminal execute next command mongod --config <extracted_path>/mongodb/conf/mongod.conf --smallfiles --fork
+* From terminal execute next command
+    
+        mongod --config <extracted_path>/mongodb/conf/mongod.conf --smallfiles --fork
+    
 * Environment variable JAVA_CMD have to be set to $JAVA_HOME/bin/java;
   JAVA_HOME path should reference JDK
 * From project root in terminal run command "lein run"
@@ -96,9 +94,9 @@ The project includes a working sample application, useful tools, and libraries i
 
 Great number of examples and ideas from this project were implemented in personal-organiser.
 
-Official site - http://clojurescriptone.com/
-Documentation - http://clojurescriptone.com/documentation.html
-Source - https://github.com/brentonashworth/one
+* Official site - http://clojurescriptone.com/
+* Documentation - http://clojurescriptone.com/documentation.html
+* Source - https://github.com/brentonashworth/one
 
 Valip
 =====
@@ -116,10 +114,10 @@ dependency - [clojurewerkz/neocons "1.1.0"]
 
 NEO4J graph database is accessed with neocons library for Clojure developers.
 
-Neocons => http://clojureneo4j.info
-Neocons documentation => http://reference.clojureneo4j.info/
-NEO4J server => http://www.neo4j.org/
-Cypher => http://docs.neo4j.org/chunked/1.9.1/cypher-query-lang.html
+* Neocons => http://clojureneo4j.info
+* Neocons documentation => http://reference.clojureneo4j.info/
+* NEO4J server => http://www.neo4j.org/
+* Cypher => http://docs.neo4j.org/chunked/1.9.1/cypher-query-lang.html
 
 MongoDB
 =======
@@ -128,8 +126,8 @@ dependency - [com.novemberain/monger "3.1.0"]
 
 MongoDB document database is accessed with monger library for Clojure developers.
 
-Monger documentation => http://reference.clojuremongodb.info/
-MongoDB server => https://www.mongodb.com/
+* Monger documentation => http://reference.clojuremongodb.info/
+* MongoDB server => https://www.mongodb.com/
 
 Enlive
 ======
@@ -138,9 +136,9 @@ dependency - [enlive "1.1.1"]
 
 Enlive is a selector-based (à la CSS) templating library for Clojure.
 
-GitHub project => https://github.com/cgrand/enlive
-Example => http://youtu.be/VVd4ow-ZcX0
-Tutorial => https://github.com/cgrand/enlive/wiki/Table-and-Layout-Tutorial,-Part-1:-The-Goal
+* GitHub project => https://github.com/cgrand/enlive
+* Example => http://youtu.be/VVd4ow-ZcX0
+* Tutorial => https://github.com/cgrand/enlive/wiki/Table-and-Layout-Tutorial,-Part-1:-The-Goal
 
 API Documentation
 =================
