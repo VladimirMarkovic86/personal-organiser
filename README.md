@@ -13,14 +13,12 @@ Guide
 * From terminal execute next command:
     
         mongod --config <extracted_path>/mongodb/conf/mongod.conf --smallfiles
-    
-* Environment variable JAVA_CMD have to be set to $JAVA_HOME/bin/java;
-* JAVA_HOME path should reference JDK
+
 * From project_root/resources/public run next command "npm install", follow this link https://www.npmjs.com/get-npm if you don't have node and npm installed
 * From project_root in terminal run command "lein repl" and in repl run command "(start-app [3000])" to start application
 * In another terminal run command "lein cljsbuild auto"
 * And in another terminal run command "lein figwheel"
-* Open browser and visit next url address: localhost:3000/login
+* Open browser and visit next url address: "localhost:3000/login"
 
 Leiningen
 =========
