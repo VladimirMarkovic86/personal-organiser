@@ -4,9 +4,9 @@
             [goog.events :as events]
             [goog.events.KeyCodes :as key-codes]
             [goog.events.KeyHandler :as key-handler]
-            [valip.core :refer [validate]]
-            [valip.predicates :refer [matches]]
-            [personal-organiser.organism.organism-validators :refer [create-organism-errors]]
+            ;[valip.core :refer [validate]]
+            ;[valip.predicates :refer [matches]]
+            ;[personal-organiser.organism.organism-validators :refer [create-organism-errors]]
             [personal-organiser.utils.jsutils :as utils]))
 
 (def val-email false)
@@ -36,14 +36,14 @@
              (.send xmlhttp))
         (def val-email true)))
 
-(defn validate-email
-      "Validate email address"
-      [email]
-      (if-let [errors (:oemail (create-organism-errors {:oemail email}))]
-              (do (dom/prepend! (dom/by-id "tdoemail")
-                                (str "<div class=\"help\">" (first errors) "</div>"))
-                  false)
-              true))
+;(defn validate-email
+;      "Validate email address"
+;      [email]
+;      (if-let [errors (:oemail (create-organism-errors {:oemail email}))]
+;              (do (dom/prepend! (dom/by-id "tdoemail")
+;                                (str "<div class=\"help\">" (first errors) "</div>"))
+;                  false)
+;              true))
 
 (defn psw-confirmation
       "Check equality of password and confirm password in organism form"
@@ -54,14 +54,14 @@
                           "<div class=\"help\">Password and confirm password<br/> must have same value</div>")
             false)))
 
-(defn validate-password
-      "Validate password"
-      [password]
-      (if-let [errors (:password (validate {:password password}
-                                           [:password (matches #"^(?=.*\d).{4,8}$") "Password should contain at least<br/>one number, period and<br/>length should be 4 to 8 chars."]))]
-              (do (dom/prepend! (dom/by-id "tdopassword") (str "<div class=\"help\">" (first errors) "</div>"))
-                  false)
-              true))
+;(defn validate-password
+;      "Validate password"
+;      [password]
+;      (if-let [errors (:password (validate {:password password}
+;                                           [:password (matches #"^(?=.*\d).{4,8}$") "Password should contain at least<br/>one number, period and<br/>length should be 4 to 8 chars."]))]
+;              (do (dom/prepend! (dom/by-id "tdopassword") (str "<div class=\"help\">" (first errors) "</div>"))
+;                  false)
+;              true))
 
 (defn validate-form
       "Validate form"
@@ -95,12 +95,12 @@
                   conj
                   (psw-confirmation (dom/by-id "opassword")
                                     (dom/by-id "oconfirm-password")))
-           (swap! valid
-                  conj
-                  (validate-email (dom/value (dom/by-id "oemail"))))
-           (swap! valid
-                  conj
-                  (validate-password (dom/value (dom/by-id "opassword"))))
+           ;(swap! valid
+           ;       conj
+           ;       (validate-email (dom/value (dom/by-id "oemail"))))
+           ;(swap! valid
+           ;       conj
+           ;       (validate-password (dom/value (dom/by-id "opassword"))))
            (doseq [select select-nodes]
                   (swap! select-valid
                          conj

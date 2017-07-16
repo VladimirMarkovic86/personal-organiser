@@ -3,16 +3,17 @@
         [clojure.set :only [difference intersection]])
   (:require [personal-organiser.meal.meal-validators :refer [create-meal-errors]]
             [personal-organiser.meal.meal-view :refer [read-all-meals]]
-            [personal-organiser.neo4j :as n4j]
             [personal-organiser.utils :as utils]
-            [clojure.test :refer :all]))
+            [clojure.test :refer :all]
+            [personal-organiser.mongo :as mon]
+            [personal-organiser.meal.meal-model :as m-model]))
 
 (defn cal-calc
   "Calculate ingredient calories in meal"
   [acc ingredient]
   (+ acc (* (* (:grams ingredient)
                (:quantity ingredient))
-            (/ (:gcalories (:data (n4j/read-node (:id ingredient))))
+            (/ (:gcalories (mon/find-by-id (mon/grocery-coll) (:id ingredient)))
                100))))
 
 (defn meal-cal-calc
@@ -40,30 +41,15 @@
     [acc ing-index]
     (conj acc {:grams    (read-string (get-value acc ":igrams" ing-index)),
                :quantity (read-string (get-value acc ":iquantity" ing-index)),
-               :id       (read-string (get-value acc ":ingredient" ing-index))}))
+               :id       (get-value acc ":ingredient" ing-index)}))
   (is (= [{":igrams1"     "1",
            ":ingredient1" "1",
            ":iquantity1"  "1"}
           {:grams    1,
            :quantity 1,
-           :id       1}] (add-ingredient-params [{":igrams1"     "1"
-                                                  ":iquantity1"  "1"
-                                                  ":ingredient1" "1"}] "1")))
-  )
-
-(with-test
-  (defn add-ingredient-params-update
-    "Form ingredient params and add them to vector as map"
-    [acc ing-index]
-    (conj acc {:grams    (read-string (get-value acc ":igrams" ing-index)),
-               :quantity (read-string (get-value acc ":iquantity" ing-index)),
-               :id       (read-string ing-index)}))
-  (is (= [{":igrams1"    "1",
-           ":iquantity1" "1"}
-          {:grams    1,
-           :quantity 1,
-           :id       1}] (add-ingredient-params-update [{":igrams1"    "1"
-                                                         ":iquantity1" "1"}] "1")))
+           :id       "1"}] (add-ingredient-params [{":igrams1"     "1"
+                                                    ":iquantity1"  "1"
+                                                    ":ingredient1" "1"}] "1")))
   )
 
 (with-test
@@ -71,35 +57,17 @@
     "Form map of ingredients"
     [req-params ing-indexes]
     (into [] (rest (reduce add-ingredient-params [req-params] ing-indexes))))
-  (is (= [{:grams 1, :quantity 1, :id 1}
-          {:grams 2, :quantity 2, :id 2}
-          {:grams 3, :quantity 3, :id 3}] (form-map-of-ingredients {":igrams1"     "1"
-                                                                    ":iquantity1"  "1"
-                                                                    ":ingredient1" "1"
-                                                                    ":igrams2"     "2"
-                                                                    ":iquantity2"  "2"
-                                                                    ":ingredient2" "2"
-                                                                    ":igrams3"     "3"
-                                                                    ":iquantity3"  "3"
-                                                                    ":ingredient3" "3"} ["1" "2" "3"])))
-  )
-
-(with-test
-  (defn form-map-of-ingredients-update
-    "Form map of ingredients"
-    [req-params ing-indexes]
-    (into [] (rest (reduce add-ingredient-params-update [req-params] ing-indexes))))
-  (is (= [{:grams 1, :quantity 1, :id 1}
-          {:grams 2, :quantity 2, :id 2}
-          {:grams 3, :quantity 3, :id 3}] (form-map-of-ingredients-update {":igrams1"     "1"
-                                                                           ":iquantity1"  "1"
-                                                                           ":ingredient1" "1"
-                                                                           ":igrams2"     "2"
-                                                                           ":iquantity2"  "2"
-                                                                           ":ingredient2" "2"
-                                                                           ":igrams3"     "3"
-                                                                           ":iquantity3"  "3"
-                                                                           ":ingredient3" "3"} ["1" "2" "3"])))
+  (is (= [{:grams 1, :quantity 1, :id "1"}
+          {:grams 2, :quantity 2, :id "2"}
+          {:grams 3, :quantity 3, :id "3"}] (form-map-of-ingredients {":igrams1"     "1"
+                                                                      ":iquantity1"  "1"
+                                                                      ":ingredient1" "1"
+                                                                      ":igrams2"     "2"
+                                                                      ":iquantity2"  "2"
+                                                                      ":ingredient2" "2"
+                                                                      ":igrams3"     "3"
+                                                                      ":iquantity3"  "3"
+                                                                      ":ingredient3" "3"} ["1" "2" "3"])))
   )
 
 (with-test
@@ -137,28 +105,31 @@
                                             :mltype (:mltype req-params)
                                             :mldesc (:mldesc req-params)})]
     (println (str "Meal errors: " meal-errors))
-    (let [n-properties (str "{mlname:'" (:mlname req-params) "'"
-                            ",mlcalories:" (meal-cal-calc (form-map-of-ingredients (utils/map-keys-to-str req-params)
-                                                                                   (split (:ingredient-indexes req-params) #";")))
-                            ",mltype:'" (:mltype req-params) "'"
-                            ",mldesc:'" (:mldesc req-params) "'"
-                            ",mlimg:'" ((split (:filename (:mlimg req-params)) #"\.") 1) "'}")]
-      (def query-params [])
-      (def query-params (utils/create-rels-for-node query-params
-                                                    (form-map-of-ingredients (utils/map-keys-to-str req-params)
-                                                                             (split (:ingredient-indexes req-params) #";"))
-                                                    "meal-has-grocery"))
-      (def query (str (utils/create-query (utils/create-node-tx n-properties) query-params)
-                      " WITH n START nn=node(*) WHERE nn.type = 'meal' SET nn.idx = nn.idx + ID(n)"))
-      (n4j/tx-op-execute [[query nil]])
-      (let [node-id (first (first (:data (n4j/cypher-query (str "START n=node(*)"
-                                                                " WHERE n.mlname='" (:mlname req-params) "'"
-                                                                " AND n.mltype='" (:mltype req-params) "'"
-                                                                " AND n.mldesc='" (:mldesc req-params) "'"
-                                                                " RETURN ID(n)")))))]
+    (let [new-meal {:mlname     (:mlname req-params),
+                    :mlcalories (meal-cal-calc (form-map-of-ingredients (utils/map-keys-to-str req-params)
+                                                                        (split (:ingredient-indexes req-params) #";"))),
+                    :mltype     (:mltype req-params),
+                    :mltype-number (let [mltype (:mltype req-params)]
+                                     (case mltype
+                                       (m-model/meal-breakfast) 0
+                                       (m-model/meal-lunch) 1
+                                       (m-model/meal-dinner) 2
+                                       0)),
+                    :mldesc     (:mldesc req-params),
+                    :mlimg      (if (= (:size (:mlimg req-params)) 0)
+                                  ".jpg"
+                                  (get-file-extension (utils/copy-file (:tempfile (:mlimg req-params))
+                                                                           "resources/public/images/"
+                                                                           (str (:idmeal req-params)
+                                                                                "."
+                                                                                (get-file-extension (:filename (:mlimg req-params))))))),
+                    :groceries  (form-map-of-ingredients (utils/map-keys-to-str req-params)
+                                                         (split (:ingredient-indexes req-params) #";"))
+                    }]
+      (let [inserted-meal (mon/insert-and-return (mon/meal-coll) new-meal)]
         (utils/copy-file (:tempfile (:mlimg req-params))
                          "resources/public/images/"
-                         (str node-id
+                         (str (.toString (:_id inserted-meal))
                               "."
                               (get-file-extension (:filename (:mlimg req-params)))))
         )
@@ -174,56 +145,42 @@
                                             :mlimg  (:mlimg req-params)})]
     (println (str "Meal errors: " meal-errors))
     (let [params-map-str (utils/map-keys-to-str req-params)
-          mlimg (get-img-value req-params)]
-      (def query-params [[(str "START n=node(" (:idmeal req-params) ")"
-                               " SET n.mlname='" (:mlname req-params) "'"
-                               ",n.mlcalories=" (meal-cal-calc (form-map-of-ingredients params-map-str
-                                                                                        (split (:ingredient-indexes req-params) #";")))
-                               ",n.mltype='" (:mltype req-params) "'"
-                               ",n.mldesc='" (:mldesc req-params) "'"
-                               ",n.mlimg='" mlimg "'") nil]])
-      ;When updating meal data:
-      ;	- delete existing relations to groceries that were removed from form
-      ;	- update existing relations with new data
-      ; 	- create new relations
-      (def query-params (conj query-params (utils/delete-rels-for-node (reduce (fn [vec num] (conj vec (read-string num))) [] (into []
-                                                                                                                                    (difference (into #{}
-                                                                                                                                                      (split (get params-map-str ":existing-ing-ind") #";"))
-                                                                                                                                                (into #{}
-                                                                                                                                                      (split (get params-map-str ":ingredient-indexes") #";"))))))
-                              ))
-      (def query-params (utils/update-rels-for-node query-params
-                                                    (form-map-of-ingredients-update params-map-str
-                                                                                    (into []
-                                                                                          (intersection (into #{}
-                                                                                                              (split (get params-map-str ":existing-ing-ind") #";"))
-                                                                                                        (into #{}
-                                                                                                              (split (get params-map-str ":ingredient-indexes") #";"))))))
-        )
-      (def sub-query [])
-      (def sub-query (utils/create-rels-for-node sub-query
-                                                 (form-map-of-ingredients params-map-str
-                                                                          (into []
-                                                                                (difference (into #{}
-                                                                                                  (split (get params-map-str ":ingredient-indexes") #";"))
-                                                                                            (into #{}
-                                                                                                  (split (get params-map-str ":existing-ing-ind") #";")))))
-                                                 "meal-has-grocery"))
-      (if (= sub-query [])
-        (def query "START n=node(0) RETURN n")
-        (def query (utils/create-query (utils/start-node-tx (:idmeal req-params)) sub-query)))
-      (n4j/tx-op-execute (conj query-params [query nil]))
+          update-meal {:mlname (:mlname req-params),
+                       :mlcalories (meal-cal-calc (form-map-of-ingredients params-map-str
+                                                                           (split (:ingredient-indexes req-params) #";"))),
+                       :mltype (:mltype req-params),
+                       :mltype-number (let [mltype (:mltype req-params)]
+                                        (case mltype
+                                          (m-model/meal-breakfast) 0
+                                          (m-model/meal-lunch) 1
+                                          (m-model/meal-dinner) 2
+                                          0)),
+                       :mldesc (:mldesc req-params),
+                       :mlimg (get-img-value req-params),
+                       :groceries (form-map-of-ingredients params-map-str
+                                                           (into []
+                                                                 (conj (intersection (into #{}
+                                                                                     (split (get params-map-str ":existing-ing-ind") #";"))
+                                                                               (into #{}
+                                                                                     (split (get params-map-str ":ingredient-indexes") #";")))
+                                                                       (difference (into #{}
+                                                                                         (split (get params-map-str ":ingredient-indexes") #";"))
+                                                                                   (into #{}
+                                                                                         (split (get params-map-str ":existing-ing-ind") #";")))
+                                                                 )))
+                       }
+          ]
+      (mon/update-by-id (mon/meal-coll) (:idmeal req-params) update-meal)
       ))
   (read-all-meals))
 
 (defn delete-meal
   "Delete meal from neo4j database"
   [id]
-  (doseq [[img-extension] (:data (n4j/cypher-query (str "start n=node(" id ")"
-                                                        "return n.mlimg")))]
+  (let [meal (mon/find-by-id (mon/meal-coll) id)]
     (utils/file-delete (str "resources/public/images/"
                             id
                             "."
-                            img-extension)))
-  (n4j/delete-node "meal" id)
+                            (:mlimg meal))))
+  (mon/remove-by-id (mon/meal-coll) id)
   (str id))

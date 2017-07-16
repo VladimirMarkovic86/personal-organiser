@@ -11,7 +11,7 @@
                (en/html-resource "public/planishrane/planishrane-training.html")
                [:table.planishrane-training]
                [day index]
-               [:option.training-coef-item] (en/clone-for [training (mon/findAll "training")]
+               [:option.training-coef-item] (en/clone-for [training (mon/find-by-filter (mon/training-coll) {})]
                                                           [:option.training-coef-item] (comp (en/content (:trainingName training))
                                                                                              (en/set-attr :value (:coef training))
                                                                                              (en/remove-attr :class)))
@@ -44,9 +44,9 @@
                 []
                 [:title] (en/content "Plan ishrane")
                 [:td.market] (en/content nil)
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/planishrane.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.planishrane.jsplanishrane');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.planishrane.jsplanishrane.init();"})
@@ -93,9 +93,9 @@
                   saturday
                   sunday]]
                 [:title] (en/content "Plan ishrane results")
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/planishrane.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.planishrane.jsplanishrane_result');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.planishrane.jsplanishrane_result.init();"})
@@ -194,9 +194,9 @@
                                       :comp-sel [:div.final-template]}])
                 [meals-by-days market-id]
                 [:title] (en/content "Plan ishrane final")
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/planishrane.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.planishrane.jsplanishrane_final');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.planishrane.jsplanishrane_final.init();"})
@@ -373,9 +373,9 @@
                                       :comp-sel [:div.final-template]}])
                 [meals-by-days market-id]
                 [:title] (en/content "Plan ishrane final")
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/planishrane.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.planishrane.jsplanishrane_final');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.planishrane.jsplanishrane_final.init();"})
@@ -391,10 +391,7 @@
                                                                                                     0
                                                                                                     (.indexOf meals-by-days day)
                                                                                                     market-id)))
-                                                      (catch Exception e (do (en/content (final-template-generator-clock (@day 0)
-                                                                                                                         0
-                                                                                                                         (.indexOf meals-by-days day)
-                                                                                                                         market-id)))))
+                                                      (catch Exception e (do (en/content "Puklo"))))
                                         [:td.123] (try (if (= (:mltype (@day 3))
                                                               "Lunch")
                                                          (en/content (final-template-generator-clock-ii (@day 1)
@@ -406,10 +403,7 @@
                                                                                                      1
                                                                                                      (.indexOf meals-by-days day)
                                                                                                      market-id)))
-                                                       (catch Exception e (do (en/content (final-template-generator-clock (@day 1)
-                                                                                                                          1
-                                                                                                                          (.indexOf meals-by-days day)
-                                                                                                                          market-id)))))
+                                                       (catch Exception e (do (en/content "Puklo"))))
                                         [:td.193] (try (if (= (:mltype (@day 3)) "Dinner")
                                                          (en/content (final-template-generator-clock-ii (@day 2)
                                                                                                         (@day 3)
@@ -420,7 +414,4 @@
                                                                                                      2
                                                                                                      (.indexOf meals-by-days day)
                                                                                                      market-id)))
-                                                       (catch Exception e (do (en/content (final-template-generator-clock (@day 2)
-                                                                                                                          2
-                                                                                                                          (.indexOf meals-by-days day)
-                                                                                                                          market-id)))))))
+                                                       (catch Exception e (do (en/content "Puklo"))))))

@@ -7,7 +7,7 @@ import java.util.List;
 public class Namirnica implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private String id;
 
     private double kalorija;
 
@@ -42,7 +42,7 @@ public class Namirnica implements Serializable {
     public Namirnica() {
     }
 
-    public Namirnica(int id, String naziv, double kalorija, double proteina, double masti, double ugljenihhidrata, double voda, String opis, String poreklo) {
+    public Namirnica(String id, String naziv, double kalorija, double proteina, double masti, double ugljenihhidrata, double voda, String opis, String poreklo) {
         this.id = id;
         this.naziv = naziv;
         this.kalorija = kalorija;
@@ -62,11 +62,11 @@ public class Namirnica implements Serializable {
         }
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

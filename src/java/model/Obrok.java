@@ -8,7 +8,7 @@ import java.util.List;
 public class Obrok implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private String id;
 
     private String ime;
 
@@ -25,7 +25,7 @@ public class Obrok implements Serializable {
     public Obrok() {
     }
 
-    public Obrok(int id, String ime, double kalorije, int vrstaObroka, String opis, String slika) {
+    public Obrok(String id, String ime, double kalorije, int vrstaObroka, String opis, String slika) {
         this.id = id;
         this.ime = ime;
         this.kalorije = kalorije;
@@ -34,8 +34,7 @@ public class Obrok implements Serializable {
         this.slika = slika;
     }
 
-    public Obrok(int id, String ime, double kalorije, int vrstaObroka, String opis, String slika, List<Obrok_has_Namirnica> obrokHasNamirnicas) {
-        this.id = id;
+    public Obrok(String ime, double kalorije, int vrstaObroka, String opis, String slika, List<Obrok_has_Namirnica> obrokHasNamirnicas) {
         this.ime = ime;
         this.kalorije = kalorije;
         this.vrstaObroka = vrstaObroka;
@@ -44,11 +43,11 @@ public class Obrok implements Serializable {
         this.obrokHasNamirnicas = obrokHasNamirnicas;
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

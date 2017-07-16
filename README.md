@@ -7,21 +7,24 @@ Guide
 =====
 
 * Clone project with command "git clone https://github.com/VladimirMarkovic86/personal-organiser.git" from terminal
-* Download/Install Neo4J server from http://www.neo4j.org/
-* Add cypher.default_language_version=3.1 at the end of .neo4j.conf file
-* From project_root/resources extract data.zip file and reference data/graph.db folder with Neo4J application
-* You can start Neo4j server now
+* [removed_from_project] Download/Install Neo4J server from http://www.neo4j.org/
+* [removed_from_project] Add cypher.default_language_version=3.1 at the end of .neo4j.conf file
+* [removed_from_project] From project_root/resources extract data.zip file and reference data/graph.db folder with Neo4J application
+* [removed_from_project] You can start Neo4j server now
 * Download/Install MongoDB server from https://www.mongodb.com/
 * From project_root/resources extract mongodb.zip file to <extracted_path>
-* Modify <extracted_path>/mongodb/conf/mongod.conf file so it references mongodb folders structure
-* From terminal execute next command
+* Modify <extracted_path>/mongodb/conf/mongod.conf file so it references mongodb folders structure on your file system
+* From terminal execute next command:
     
-        mongod --config <extracted_path>/mongodb/conf/mongod.conf --smallfiles --fork
+        mongod --config <extracted_path>/mongodb/conf/mongod.conf --smallfiles
     
 * Environment variable JAVA_CMD have to be set to $JAVA_HOME/bin/java;
-  JAVA_HOME path should reference JDK
-* From project root in terminal run command "lein run"
-  or "lein repl" and in repl run command "(start-server)" to start application
+* JAVA_HOME path should reference JDK
+* From project_root/resources/public run next command "npm install", follow this link https://www.npmjs.com/get-npm if you don't have node and npm installed
+* From project_root in terminal run command "lein repl" and in repl run command "(start-app [3000])" to start application
+* In another terminal run command "lein cljsbuild auto"
+* And in another terminal run command "lein figwheel"
+* Open browser and visit next url address: localhost:3000/login
 
 Leiningen
 =========
@@ -206,10 +209,10 @@ Follows the specification on http://json.org/
 Design solutions
 ================
 
-Input radio - http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-easy-css3-checkboxes-and-radio-buttons/
-Element select - http://stackoverflow.com/questions/1895476/how-to-style-a-select-dropdown-with-css-only-without-javascript
-Vertically and horizontally centering - http://tutorialzine.com/2010/03/centering-div-vertically-and-horizontally/
-Also W3Schools- http://www.w3schools.com/
+* Input radio - http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-easy-css3-checkboxes-and-radio-buttons/
+* Element select - http://stackoverflow.com/questions/1895476/how-to-style-a-select-dropdown-with-css-only-without-javascript
+* Vertically and horizontally centering - http://tutorialzine.com/2010/03/centering-div-vertically-and-horizontally/
+* Also W3Schools- http://www.w3schools.com/
 
 AJAX solution
 =============
@@ -249,3 +252,16 @@ Selenium
 dependency - [org.seleniumhq.selenium/selenium-server "2.35.0"]
 
 Official site - http://docs.seleniumhq.org/
+
+React
+=====
+
+dependency - [reagent "0.7.0"]
+
+* https://reagent-project.github.io/
+* https://github.com/reagent-project/reagent-cookbook
+
+Angular
+=======
+
+* tutorial - http://deliberate-software.com/cljs-angular2/

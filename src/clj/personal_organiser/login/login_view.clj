@@ -1,9 +1,7 @@
 (ns personal-organiser.login.login-view
   (:use (sandbar stateful-session))
-  (:require [personal-organiser.neo4j :as n4j]
-            [personal-organiser.html-generator :as hg]
-            [net.cgrand.enlive-html :as en]
-            [personal-organiser.utils :refer [nodes-data-to-map]]))
+  (:require [personal-organiser.html-generator :as hg]
+            [net.cgrand.enlive-html :as en]))
 
 (en/deftemplate login
                 (hg/build-html-page [{:temp-sel [:div.topcontent],
@@ -17,9 +15,9 @@
                                    (en/content {:tag     :div,
                                                 :attrs   {:class "help"}
                                                 :content "Data not found"}))
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/login.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.login.jslogin');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.login.jslogin.init();"}))
@@ -31,6 +29,13 @@
                 []
                 [:title] (en/content "Welcome"))
 
+(en/deftemplate angular
+                (hg/build-html-page [{:temp-sel [:div.maincontent],
+                                      :comp     "public/login/angular.html",
+                                      :comp-sel [:div.angular]}])
+                []
+                [:title] (en/content "Angular"))
+
 (en/deftemplate forgot-password
                 (hg/build-html-page [{:temp-sel [:div.topcontent],
                                       :comp     "public/login/forgot-password.html",
@@ -38,9 +43,9 @@
                 []
                 [:title] (en/content "Forgot password")
                 [:div.topcontent] (en/set-attr :class "forgot")
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/login.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.login.jsforgot');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.login.jsforgot.init();"}))

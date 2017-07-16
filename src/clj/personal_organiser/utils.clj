@@ -2,7 +2,7 @@
   "Useful functions that are repeatedly called all over the project"
   (:import [java.io File])
   (:require [cljs.reader :refer [read-string]]
-            [personal-organiser.neo4j :as n4j]
+            ;[personal-organiser.neo4j :as n4j]
             [clojure.contrib.duck-streams :as ds]
             [clojure.test :refer :all])
   (:refer-clojure :exclude [read-string]))
@@ -187,7 +187,7 @@
 (defn nodes-data-to-map
   "Format data from nodes to maps"
   [index-type]
-  (let [nodes (n4j/read-all-nodes-type-of index-type)]
+  (let [nodes [{:hello "hello"}]];(n4j/read-all-nodes-type-of index-type)]
     (reduce add-data-to-map {} nodes)))
 
 (defn file-delete

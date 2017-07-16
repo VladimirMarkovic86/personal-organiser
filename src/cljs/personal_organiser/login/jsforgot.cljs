@@ -1,7 +1,6 @@
 (ns personal-organiser.login.jsforgot
   (:require [domina :as dom]
-            [goog.events :as events]
-            [personal-organiser.login.login-validators :refer [login-credential-errors]]))
+            [goog.events :as events]))
 
 (defn prepend-errors
       "Prepend error"
@@ -32,20 +31,20 @@
            (.open xmlhttp "POST" (str "/check-email/" email) true)
            (.send xmlhttp)))
 
-(defn validate-form
-      "Validate form"
-      []
-      (do (dom/destroy! (dom/by-class "help"))
-          (if-let [errors (:email (login-credential-errors {:email (dom/value (dom/by-id "email"))}))]
-                  (do (prepend-errors errors)
-                      false)
-                  val-email)))
+;(defn validate-form
+;      "Validate form"
+;      []
+;      (do (dom/destroy! (dom/by-class "help"))
+;          (if-let [errors (:email (login-credential-errors {:email (dom/value (dom/by-id "email"))}))]
+;                  (do (prepend-errors errors)
+;                      false)
+;                  val-email)))
 
 (defn ^:export init []
       (if (and js/document
                (.-getElementById js/document))
         (let [forgot-form (dom/by-id "forgot-form")]
-             (set! (.-onsubmit forgot-form) validate-form)
+             ;;(set! (.-onsubmit forgot-form) validate-form)
              (events/listen (dom/by-id "email")
                             "change"
                             (fn []

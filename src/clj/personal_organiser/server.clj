@@ -16,8 +16,15 @@
             [personal-organiser.login.login-controller :as lc]
             [personal-organiser.planishrane.planishrane-view :as plv]
             [personal-organiser.planishrane.planishrane-controller :as plc]
-            [personal-organiser.neo4j :as n4j]
-            [ring.adapter.jetty :as jetty]))
+            [clojure.tools.logging :as log]
+            [personal-organiser.mongo :as mon]
+            [ring.adapter.jetty :as jetty]
+            [clojure.data.json :as json]))
+
+(defn my-value-writer [key value]
+  (if (= key :_id)
+    (.toString value)
+    value))
 
 ;; defroutes macro defines a function that chains individual route
 ;; functions together. The request map is passed to each function in
@@ -38,16 +45,16 @@
              (lc/is-logged-in (gc/save-grocery (:params request))))
            (GET "/edit-grocery/:id"
                 [id]
-             (lc/is-logged-in (gv/edit-grocery (n4j/read-node (read-string id)))))
+             (lc/is-logged-in (gv/edit-grocery (mon/find-by-id (mon/grocery-coll) id))))
            (POST "/update-grocery"
                  request
              (lc/is-logged-in (gc/update-grocery (:params request))))
            (DELETE "/delete-grocery/:id"
                    [id]
-             (lc/is-logged-in (gc/delete-grocery (read-string id))))
+             (lc/is-logged-in (gc/delete-grocery id)))
            (GET "/read-organism/:id"
                 [id]
-             (lc/is-logged-in (ov/read-organism (n4j/read-node (read-string id)))))
+             (lc/is-logged-in (ov/read-organism (mon/find-by-id (mon/organism-coll) id))))
            (GET "/organism-nav"
                 []
              (lc/is-logged-in (ov/organism-nav)))
@@ -62,13 +69,13 @@
            (GET "/delete-organism/:id"
                 [id]
              (if (= (str id) (str (session-get :organism-id)))
-               (do (lc/is-logged-in (oc/delete-organism (read-string id)))
+               (do (lc/is-logged-in (oc/delete-organism id))
                    (destroy-session!)
                    (lc/is-logged-in (lv/home)))
                (lc/is-logged-in (lv/home))))
            (GET "/edit-organism/:id"
                 [id]
-             (lc/is-logged-in (ov/edit-organism (n4j/read-node (read-string id)))))
+             (lc/is-logged-in (ov/edit-organism (mon/find-by-id (mon/organism-coll) id))))
            (POST "/update-organism/:idorganism"
                  request
              (lc/is-logged-in (oc/update-organism (:params request))))
@@ -86,10 +93,10 @@
              (lc/is-logged-in (mlv/meal-nav)))
            (DELETE "/delete-meal/:id"
                    [id]
-             (lc/is-logged-in (mlc/delete-meal (read-string id))))
+             (lc/is-logged-in (mlc/delete-meal id)))
            (GET "/edit-meal/:id"
                 [id]
-             (lc/is-logged-in (mlv/edit-meal (n4j/read-node (read-string id)))))
+             (lc/is-logged-in (mlv/edit-meal (mon/find-by-id (mon/meal-coll) id))))
            (POST "/update-meal"
                  request
              (lc/is-logged-in (mlc/update-meal (:params request))))
@@ -99,6 +106,9 @@
            (GET "/login"
                 []
              (lc/is-logged-in (lv/home)))
+           (GET "/angular"
+                []
+             (lc/is-logged-in (lv/angular)))
            (GET "/logout"
                 []
              (do (destroy-session!)
@@ -126,10 +136,17 @@
                  [email]
              (do (lc/is-not-logged-in (oc/send-mail email))
                  (lc/is-logged-in (lv/home))))
+           (GET "/markets"
+                []
+             {:status  200
+              :body    (json/write-str (mon/find-by-filter (mon/market-place-coll) {})
+                                       :value-fn my-value-writer)
+              :headers {"Content-Type" "application/json"}}
+             )
            ; to serve static pages saved in resources/public directory
            (route/resources "/")
            ; if page is not found
-           (route/not-found (lv/page-not-found "Page not found"))
+           (route/not-found (lc/render (lv/page-not-found "Page not found")))
            ;  (GET "/:url/:id"
            ;    request
            ;    (println request))
@@ -145,7 +162,7 @@
                  wrap-params
                  wrap-multipart-params))
 
-(defn run-server
-  "Run jetty server"
-  []
-  (jetty/run-jetty handler {:port 5000 :join? false}))
+;(defn run-server
+;  "Run jetty server"
+;  []
+;  (jetty/run-jetty handler {:port 5000 :join? false}))

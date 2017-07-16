@@ -19,42 +19,24 @@
                               KnowledgeRuntimeLoggerFactory]
            [org.drools.runtime StatefulKnowledgeSession]
            [org.drools.io ResourceFactory])
-  (:require [personal-organiser.neo4j :as n4j]
-            [personal-organiser.utils :as utils]
-            [personal-organiser.mongo :as mon]))
-
-(defn organism-query
-  "Read organism from db"
-  [organism-id]
-  (:data (n4j/cypher-query (str "start n=node(" organism-id ")
-				 return ID(n),
-					n.oheight,
-					n.oweight,
-					n.obirthday,
-					n.ogender,
-					n.odiet,
-					n.oactivity"))))
+  (:require [personal-organiser.utils :as utils]
+            [personal-organiser.mongo :as mon]
+            [personal-organiser.meal.meal-model :as m-model]))
 
 (defn read-organizam
   [training-meal
    training-duration
    training-coef]
   (let [organizam (Organizam.)]
-    (doseq [[id
-             height
-             weight
-             birthday
-             gender
-             diet
-             activity] (organism-query (session-get :organism-id))]
-      (.setId organizam id)
-      (.setVisina organizam height)
-      (.setTezina organizam weight)
+    (let [organism-from-db (mon/find-by-id (mon/organism-coll) (session-get :organism-id))]
+      (.setId organizam (.toString (:_id organism-from-db)))
+      (.setVisina organizam (:oheight organism-from-db))
+      (.setTezina organizam (:oweight organism-from-db))
       (.setDatumRodjenja organizam (.parse (java.text.SimpleDateFormat. "dd.MM.yyyy")
-                                           birthday))
-      (.setPol organizam gender)
-      (.setNacinIshrane organizam diet)
-      (.setFizickaAktivnost organizam activity)
+                                           (:obirthday organism-from-db)))
+      (.setPol organizam (:ogender organism-from-db))
+      (.setNacinIshrane organizam (:odiet organism-from-db))
+      (.setFizickaAktivnost organizam (:oactivity organism-from-db))
       (.setTreningObrok organizam training-meal)
       (def train-dur training-duration)
       (def train-index training-coef)
@@ -80,118 +62,59 @@
                              (.getKnowledgePackages kbuilder))
       kbase)))
 
-(defn meal-query
-  "Read meals of particular type and set numeric value for that type"
-  [meal-type meal-type-num]
-  (:data (n4j/cypher-query (str "start n=node(*)
-				 where n.mltype =\"" meal-type "\"
-				 return ID(n),
-					n.mlname,
-					n.mlcalories,
-					" meal-type-num ",
-					n.mldesc,
-					n.mlimg"))))
-
-(defn meal-has-grocery-query
-  "Read all groceries and their realationships with meal of parameter meal-id"
-  [meal-id]
-  (:data (n4j/cypher-query (str "start n=node(" meal-id ")
-				 match (n)-[r:`meal-has-grocery`]-(n2)
-				 return ID(r),
-					r.grams,
-					r.quantity,
-					ID(n2),
-					n2.gname,
-					n2.gcalories,
-					n2.gproteins,
-					n2.gfats,
-					n2.gcarbohydrates,
-					n2.gwater,
-					n2.gdesc,
-					n2.gorigin"))))
-
 (defn create-meal-has-groceries
   "Create ArrayList of Obrok_has_Namirnica java classes for Obrok java class object"
-  [meal-obj]
+  [meal meal-obj]
   (let [meal-has-groceries (ArrayList.)]
-    (doseq [[mlhgid
-             mlgrams
-             mlquantity
-             gid
-             gname
-             gcalories
-             gproteins
-             gfats
-             gcarbohydrates
-             gwater
-             gdesc
-             gorigin]
-            (meal-has-grocery-query (.getId meal-obj))]
+    (doseq [ingredient (mon/find-all-from-list (mon/grocery-coll) (:groceries meal))]
       (.add meal-has-groceries
-            (Obrok_has_Namirnica. mlhgid
-                                  mlgrams
-                                  mlquantity
-                                  (Namirnica. gid
-                                              gname
-                                              gcalories
-                                              gproteins
-                                              gfats
-                                              gcarbohydrates
-                                              gwater
-                                              gdesc
-                                              gorigin)
+            (Obrok_has_Namirnica. (:grams ingredient)
+                                  (:quantity ingredient)
+                                  (Namirnica. (:id ingredient)
+                                              (:gname ingredient)
+                                              (:gcalories ingredient)
+                                              (:gproteins ingredient)
+                                              (:gfats ingredient)
+                                              (:gcarbohydrates ingredient)
+                                              (:gwater ingredient)
+                                              (:gdesc ingredient)
+                                              (:gorigin ingredient))
                                   meal-obj)))
     meal-has-groceries))
 
 (defn create-meal-obj
   "Create Obrok java class object"
-  [id
-   mlname
-   mlcalories
-   mltype
-   mldesc
-   mlimg]
-  (let [meal-obj (Obrok. id
-                         mlname
-                         mlcalories
-                         mltype
-                         mldesc
-                         mlimg)]
+  [meal]
+  (let [meal-obj (Obrok. (.toString (:_id meal))
+                         (:mlname meal)
+                         (:mlcalories meal)
+                         (:mltype-number meal)
+                         (:mldesc meal)
+                         (:mlimg meal))]
     (.setObrokHasNamirnicas meal-obj
-                            (create-meal-has-groceries meal-obj))
+                            (create-meal-has-groceries meal meal-obj))
     meal-obj))
 
 (defn add-meal-obj
   "Add created meal to seqence"
-  [acc [id
-        mlname
-        mlcalories
-        mltype
-        mldesc
-        mlimg]]
+  [acc meal]
   (conj acc
-        (create-meal-obj id
-                         mlname
-                         mlcalories
-                         mltype
-                         mldesc
-                         mlimg)))
+        (create-meal-obj meal)))
 
 (defn meal-objects-db
   "Create seqence of meals of particular type and its numeric value"
-  [meal-type
-   meal-type-num]
+  [meal-type]
   (reduce add-meal-obj
           []
-          (meal-query meal-type
-                      meal-type-num)))
+          (mon/find-by-filter (mon/meal-coll) {:mltype meal-type})
+          ))
 
 (defn read-meals-from-db
   "Read meals by type in map and define variable"
   []
-  (def meals-from-db {:breakfast (meal-objects-db "Breakfast" 0)
-                      :lunch     (meal-objects-db "Lunch" 1)
-                      :dinner    (meal-objects-db "Dinner" 2)}))
+  (def meals-from-db {:breakfast (meal-objects-db (m-model/meal-breakfast))
+                      :lunch     (meal-objects-db (m-model/meal-lunch))
+                      :dinner    (meal-objects-db (m-model/meal-dinner))}))
 
 (defonce drools-meals-result {:breakfast (ArrayList.)
                               :lunch     (ArrayList.)
@@ -258,8 +181,10 @@
                                         cal-precent-share
                                         organizam)]
     (doseq [meal meals]
-      (let [meal-coef (/ cal-per-meal
-                         (.getKalorije meal))]
+      (let [meal-coef (if (> (.getKalorije meal) 0)
+                        (/ cal-per-meal
+                           (.getKalorije meal))
+                        0)]
         (doseq [meal-grocery (.getObrokHasNamirnicas meal)]
           (.setKolicinaUGramima meal-grocery
                                 (* (.getKolicinaUGramima meal-grocery)

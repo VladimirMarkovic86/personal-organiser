@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Obrok_has_Namirnica implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private String id;
 
     private double kolicinaUGramima;
 
@@ -18,19 +18,18 @@ public class Obrok_has_Namirnica implements Serializable {
     public Obrok_has_Namirnica() {
     }
 
-    public Obrok_has_Namirnica(int id, double kolicinaUGramima, int komad, Namirnica namirnica, Obrok obrok) {
-        this.id = id;
+    public Obrok_has_Namirnica(double kolicinaUGramima, int komad, Namirnica namirnica, Obrok obrok) {
         this.kolicinaUGramima = kolicinaUGramima;
         this.komad = komad;
         this.namirnica = namirnica;
         this.obrok = obrok;
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

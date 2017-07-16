@@ -11,7 +11,7 @@ import java.util.List;
 public class Organizam implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private String id;
 
     private Date datumRodjenja;
 
@@ -34,11 +34,11 @@ public class Organizam implements Serializable {
     public Organizam() {
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

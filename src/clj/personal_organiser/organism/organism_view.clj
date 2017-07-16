@@ -1,7 +1,6 @@
 (ns personal-organiser.organism.organism-view
   (:use (sandbar stateful-session))
-  (:require [personal-organiser.neo4j :as n4j]
-            [personal-organiser.html-generator :as hg]
+  (:require [personal-organiser.html-generator :as hg]
             [net.cgrand.enlive-html :as en]
             [clojure.test :refer :all]))
 
@@ -15,17 +14,9 @@
                 [:td#to-login] (en/content {:tag     :a,
                                             :attrs   {:href "/login"}
                                             :content "back to login"})
-                [:td.info] (en/content {:tag     :div,
-                                        :attrs   nil,
-                                        :content [{:tag     :div,
-                                                   :attrs   nil,
-                                                   :content "Following data represents grown-up daily needs"}
-                                                  {:tag     :div,
-                                                   :attrs   nil,
-                                                   :content "for vitamins and minerals and can be changed"}]})
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/organism.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.organism.jsorganism');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.organism.jsorganism.init();"})
@@ -50,48 +41,6 @@
                                                     (en/set-attr :value month-num)
                                                     (en/remove-attr :id)))
                 [:option#day] (en/content nil)
-                [:tr.vitamin] (en/clone-for [[id vname vdefvalue]
-                                             (:data
-                                               (n4j/cypher-query (str "start n=node(" (clojure.string/join ","
-                                                                                                           (n4j/get-type-indexes "vitamin")) ")
-							  return ID(n),
-								 n.vname,
-								 n.vdefvalue
-								 order by ID(n) asc")))]
-                                            [:td.vname] (en/content {:tag     :label,
-                                                                     :attrs   {:for (str "value" id),
-                                                                               :id  (str "lvalue" id)},
-                                                                     :content vname})
-                                            [:td.vinput] (en/content {:tag     :input,
-                                                                      :attrs   {:type     "number",
-                                                                                :step     "any",
-                                                                                :name     (str "value" id),
-                                                                                :id       (str "value" id),
-                                                                                :value    vdefvalue,
-                                                                                :required "required"},
-                                                                      :content nil})
-                                            [:td.vhelp] (en/set-attr :id (str "tdvalue" id))) ;; vitamin clone-for
-                [:tr.mineral] (en/clone-for [[id mname mdefvalue]
-                                             (:data
-                                               (n4j/cypher-query (str "start n=node(" (clojure.string/join ","
-                                                                                                           (n4j/get-type-indexes "mineral")) ")
-							  return ID(n),
-								 n.mname,
-								 n.mdefvalue
-								 order by ID(n) asc")))]
-                                            [:td.mname] (en/content {:tag     :label,
-                                                                     :attrs   {:for (str "value" id),
-                                                                               :id  (str "lvalue" id)},
-                                                                     :content mname})
-                                            [:td.minput] (en/content {:tag     :input,
-                                                                      :attrs   {:type     "number",
-                                                                                :step     "any",
-                                                                                :name     (str "value" id),
-                                                                                :id       (str "value" id),
-                                                                                :value    mdefvalue,
-                                                                                :required "required"},
-                                                                      :content nil})
-                                            [:td.mhelp] (en/set-attr :id (str "tdvalue" id))) ;; mineral clone-for
                 )
 
 (with-test
@@ -160,29 +109,29 @@
                                      {:temp-sel [:div.left-column],
                                       :comp     "public/organism/organism-nav.html",
                                       :comp-sel [:div.organism-nav]}])
-                [node]
+                [organism]
                 [:title] (en/content "Edit organism")
                 [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism/" (session-get :organism-id)))
                 [:div.read-organism :a] (en/set-attr :href (str "/read-organism/" (session-get :organism-id)))
                 [:h3.form-title] (en/content "Edit organism")
-                [:div.script] (en/content {:tag     :script,
-                                           :attrs   {:src "http://localhost:5000/js/organism.js"},
-                                           :content nil})
+                [:div.script] (en/append {:tag     :script,
+                                          :attrs   nil,
+                                          :content "goog.require('personal_organiser.organism.jsorganism');"})
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "personal_organiser.organism.jsorganism.init();"})
-                [:form#organism-form] (en/set-attr :action (str "/update-organism/" (:id node)))
-                [:input#ofirst-name] (en/set-attr :value (:ofirst-name (:data node)))
-                [:input#olast-name] (en/set-attr :value (:olast-name (:data node)))
-                [:input#oemail] (en/set-attr :value (:oemail (:data node)))
+                [:form#organism-form] (en/set-attr :action (str "/update-organism/" (.toString (:_id organism))))
+                [:input#ofirst-name] (en/set-attr :value (:ofirst-name organism))
+                [:input#olast-name] (en/set-attr :value (:olast-name organism))
+                [:input#oemail] (en/set-attr :value (:oemail organism))
                 [:td.tdpswd] (en/content nil)
-                [:input#oheight] (en/set-attr :value (:oheight (:data node)))
-                [:input#oweight] (en/set-attr :value (:oweight (:data node)))
+                [:input#oheight] (en/set-attr :value (:oheight organism))
+                [:input#oweight] (en/set-attr :value (:oweight organism))
                 [:option#year] (en/clone-for [year (into [] (map str (range 1970 2021 1)))]
                                              (comp (en/content year)
                                                    (en/set-attr :value year)
                                                    (en/remove-attr :id)
-                                                   (if (= (get-date-part (:obirthday (:data node)) 2) year)
+                                                   (if (= (get-date-part (:obirthday organism) 2) year)
                                                      (en/set-attr :selected "selected")
                                                      (en/set-attr :value year))))
                 [:option#month] (en/clone-for [[month-num month-name] [["01" "January"]
@@ -200,75 +149,37 @@
                                               (comp (en/content month-name)
                                                     (en/set-attr :value month-num)
                                                     (en/remove-attr :id)
-                                                    (if (= (get-date-part (:obirthday (:data node)) 1) month-num)
+                                                    (if (= (get-date-part (:obirthday organism) 1) month-num)
                                                       (en/set-attr :selected "selected")
                                                       (en/set-attr :value month-num))))
-                [:option#day] (en/clone-for [day (day-numbers (:obirthday (:data node)))]
+                [:option#day] (en/clone-for [day (day-numbers (:obirthday organism))]
                                             (comp (en/content day)
                                                   (en/set-attr :value day)
                                                   (en/remove-attr :id)
-                                                  (if (= (get-date-part (:obirthday (:data node)) 0) day)
+                                                  (if (= (get-date-part (:obirthday organism) 0) day)
                                                     (en/set-attr :selected "selected")
                                                     (en/set-attr :value day))))
-                [:input#ogender-male] (if (= (:ogender (:data node)) "Male")
+                [:input#ogender-male] (if (= (:ogender organism) "Male")
                                         (en/set-attr :checked "checked")
                                         (en/set-attr :name "ogender"))
-                [:input#ogender-female] (if (= (:ogender (:data node)) "Female")
+                [:input#ogender-female] (if (= (:ogender organism) "Female")
                                           (en/set-attr :checked "checked")
                                           (en/set-attr :name "ogender"))
-                [:input#odiet-all] (if (= (:odiet (:data node)) "All")
+                [:input#odiet-all] (if (= (:odiet organism) "All")
                                      (en/set-attr :checked "checked")
                                      (en/set-attr :name "odiet"))
-                [:input#odiet-vegetarian] (if (= (:odiet (:data node)) "Vegetarian")
+                [:input#odiet-vegetarian] (if (= (:odiet organism) "Vegetarian")
                                             (en/set-attr :checked "checked")
                                             (en/set-attr :name "odiet"))
-                [:input#oactivity-easy] (if (= (:oactivity (:data node)) "Easy")
+                [:input#oactivity-easy] (if (= (:oactivity organism) "Easy")
                                           (en/set-attr :checked "checked")
                                           (en/set-attr :name "oactivity"))
-                [:input#oactivity-medium] (if (= (:oactivity (:data node)) "Medium")
+                [:input#oactivity-medium] (if (= (:oactivity organism) "Medium")
                                             (en/set-attr :checked "checked")
                                             (en/set-attr :name "oactivity"))
-                [:input#oactivity-hard] (if (= (:oactivity (:data node)) "Hard")
+                [:input#oactivity-hard] (if (= (:oactivity organism) "Hard")
                                           (en/set-attr :checked "checked")
                                           (en/set-attr :name "oactivity"))
-                [:tr.vitamin] (en/clone-for [[rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node(" (:id node) ")
-										  match (n)-[r:`organism-needs-vitamin`]-(n2)
-										  return ID(r),
-											 r.mg,
-											 n2.vname
-											 order by ID(n2) asc")))]
-                                            [:td.vname] (en/content {:tag     :label,
-                                                                     :attrs   {:for (str "value" rid),
-                                                                               :id  (str "lvalue" rid)},
-                                                                     :content vlabel})
-                                            [:td.vinput] (en/content {:tag     :input,
-                                                                      :attrs   {:type     "number",
-                                                                                :step     "any",
-                                                                                :name     (str "value" rid),
-                                                                                :id       (str "value" rid),
-                                                                                :value    vvalue,
-                                                                                :required "required"},
-                                                                      :content nil})
-                                            [:td.vhelp] (en/set-attr :id (str "tdvalue" rid))) ;; vitamin clone-for
-                [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node(" (:id node) ")
-										  match (n)-[r:`organism-needs-mineral`]-(n2)
-										  return ID(r),
-											 r.mg,
-											 n2.mname
-											 order by ID(n2) asc")))]
-                                            [:td.mname] (en/content {:tag     :label,
-                                                                     :attrs   {:for (str "value" rid),
-                                                                               :id  (str "lvalue" rid)},
-                                                                     :content mlabel})
-                                            [:td.minput] (en/content {:tag     :input,
-                                                                      :attrs   {:type     "number",
-                                                                                :step     "any",
-                                                                                :name     (str "value" rid),
-                                                                                :id       (str "value" rid),
-                                                                                :value    mvalue,
-                                                                                :required "required"},
-                                                                      :content nil})
-                                            [:td.mhelp] (en/set-attr :id (str "tdvalue" rid))) ;; mineral clone-for
                 [:input#submit] (en/set-attr :value "Save changes"))
 
 (en/deftemplate read-organism
@@ -278,30 +189,30 @@
                                      {:temp-sel [:div.left-column],
                                       :comp     "public/organism/organism-nav.html",
                                       :comp-sel [:div.organism-nav]}])
-                [node]
+                [organism]
                 [:title] (en/content "Organism")
                 [:div.edit-organism :a] (en/set-attr :href (str "/edit-organism/" (session-get :organism-id)))
                 [:div.read-organism :a] (en/set-attr :href (str "/read-organism/" (session-get :organism-id)))
                 [:h3.form-title] (en/content "Organism")
                 [:td#to-login] (en/content {:tag     :a,
-                                            :attrs   {:href (str "/delete-organism/" (:id node))}
+                                            :attrs   {:href (str "/delete-organism/" (.toString (:_id organism)))}
                                             :content "Delete organism"})
-                [:input#ofirst-name] (comp (en/set-attr :value (:ofirst-name (:data node)))
+                [:input#ofirst-name] (comp (en/set-attr :value (:ofirst-name organism))
                                            (en/set-attr :readonly "readonly"))
-                [:input#olast-name] (comp (en/set-attr :value (:olast-name (:data node)))
+                [:input#olast-name] (comp (en/set-attr :value (:olast-name organism))
                                           (en/set-attr :readonly "readonly"))
-                [:input#oemail] (comp (en/set-attr :value (:oemail (:data node)))
+                [:input#oemail] (comp (en/set-attr :value (:oemail organism))
                                       (en/set-attr :readonly "readonly"))
                 [:td.tdpswd] (en/content nil)
-                [:input#oheight] (comp (en/set-attr :value (:oheight (:data node)))
+                [:input#oheight] (comp (en/set-attr :value (:oheight organism))
                                        (en/set-attr :readonly "readonly"))
-                [:input#oweight] (comp (en/set-attr :value (:oweight (:data node)))
+                [:input#oweight] (comp (en/set-attr :value (:oweight organism))
                                        (en/set-attr :readonly "readonly"))
                 [:option#year] (en/clone-for [year (into [] (map str (range 1970 2021 1)))]
                                              (comp (en/content year)
                                                    (en/set-attr :value year)
                                                    (en/remove-attr :id)
-                                                   (if (= (get-date-part (:obirthday (:data node)) 2) year)
+                                                   (if (= (get-date-part (:obirthday organism) 2) year)
                                                      (en/set-attr :selected "selected")
                                                      (en/set-attr :value year))))
                 [:select#obirthday-year] (en/set-attr :disabled "disabled")
@@ -320,84 +231,46 @@
                                               (comp (en/content month-name)
                                                     (en/set-attr :value month-num :disabled "disabled")
                                                     (en/remove-attr :id)
-                                                    (if (= (get-date-part (:obirthday (:data node)) 1) month-num)
+                                                    (if (= (get-date-part (:obirthday organism) 1) month-num)
                                                       (en/set-attr :selected "selected")
                                                       (en/set-attr :value month-num))))
                 [:select#obirthday-month] (en/set-attr :disabled "disabled")
-                [:option#day] (en/clone-for [day (day-numbers (:obirthday (:data node)))]
+                [:option#day] (en/clone-for [day (day-numbers (:obirthday organism))]
                                             (comp (en/content day)
                                                   (en/set-attr :value day :disabled "disabled")
                                                   (en/remove-attr :id)
-                                                  (if (= (get-date-part (:obirthday (:data node)) 0) day)
+                                                  (if (= (get-date-part (:obirthday organism) 0) day)
                                                     (en/set-attr :selected "selected")
                                                     (en/set-attr :value day))))
                 [:select#obirthday-day] (en/set-attr :disabled "disabled")
-                [:input#ogender-male] (comp (if (= (:ogender (:data node)) "Male")
+                [:input#ogender-male] (comp (if (= (:ogender organism) "Male")
                                               (en/set-attr :checked "checked")
                                               (en/set-attr :name "ogender"))
                                             (en/set-attr :disabled "disabled"))
-                [:input#ogender-female] (comp (if (= (:ogender (:data node)) "Female")
+                [:input#ogender-female] (comp (if (= (:ogender organism) "Female")
                                                 (en/set-attr :checked "checked")
                                                 (en/set-attr :name "ogender"))
                                               (en/set-attr :disabled "disabled"))
-                [:input#odiet-all] (comp (if (= (:odiet (:data node)) "All")
+                [:input#odiet-all] (comp (if (= (:odiet organism) "All")
                                            (en/set-attr :checked "checked")
                                            (en/set-attr :name "odiet"))
                                          (en/set-attr :disabled "disabled"))
-                [:input#odiet-vegetarian] (comp (if (= (:odiet (:data node)) "Vegetarian")
+                [:input#odiet-vegetarian] (comp (if (= (:odiet organism) "Vegetarian")
                                                   (en/set-attr :checked "checked")
                                                   (en/set-attr :name "odiet"))
                                                 (en/set-attr :disabled "disabled"))
-                [:input#oactivity-easy] (comp (if (= (:oactivity (:data node)) "Easy")
+                [:input#oactivity-easy] (comp (if (= (:oactivity organism) "Easy")
                                                 (en/set-attr :checked "checked")
                                                 (en/set-attr :name "oactivity"))
                                               (en/set-attr :disabled "disabled"))
-                [:input#oactivity-medium] (comp (if (= (:oactivity (:data node)) "Medium")
+                [:input#oactivity-medium] (comp (if (= (:oactivity organism) "Medium")
                                                   (en/set-attr :checked "checked")
                                                   (en/set-attr :name "oactivity"))
                                                 (en/set-attr :disabled "disabled"))
-                [:input#oactivity-hard] (comp (if (= (:oactivity (:data node)) "Hard")
+                [:input#oactivity-hard] (comp (if (= (:oactivity organism) "Hard")
                                                 (en/set-attr :checked "checked")
                                                 (en/set-attr :name "oactivity"))
                                               (en/set-attr :disabled "disabled"))
-                [:tr.vitamin] (en/clone-for [[rid vvalue vlabel] (:data (n4j/cypher-query (str "start n=node(" (:id node) ")
-										  match (n)-[r:`organism-needs-vitamin`]-(n2)
-										  return ID(r),
-											 r.mg,
-											 n2.vname
-											 order by ID(n2) asc")))]
-                                            [:td.vname] (en/content {:tag     :label,
-                                                                     :attrs   {:for (str "value" rid),
-                                                                               :id  (str "lvalue" rid)},
-                                                                     :content vlabel})
-                                            [:td.vinput] (en/content {:tag     :input,
-                                                                      :attrs   {:type     "number",
-                                                                                :step     "any",
-                                                                                :name     (str "value" rid),
-                                                                                :id       (str "value" rid),
-                                                                                :value    vvalue,
-                                                                                :readonly "readonly"},
-                                                                      :content nil})
-                                            [:td.vhelp] (en/set-attr :id (str "tdvalue" rid))) ;; vitamin clone-for
-                [:tr.mineral] (en/clone-for [[rid mvalue mlabel] (:data (n4j/cypher-query (str "start n=node(" (:id node) ")
-										  match (n)-[r:`organism-needs-mineral`]-(n2)
-										  return ID(r),
-											 r.mg,
-											 n2.mname
-											 order by ID(n2) asc")))]
-                                            [:td.mname] (en/content {:tag     :label,
-                                                                     :attrs   {:for (str "value" rid),
-                                                                               :id  (str "lvalue" rid)},
-                                                                     :content mlabel})
-                                            [:td.minput] (en/content {:tag     :input,
-                                                                      :attrs   {:type     "number",
-                                                                                :step     "any",
-                                                                                :name     (str "value" rid),
-                                                                                :id       (str "value" rid),
-                                                                                :value    mvalue,
-                                                                                :readonly "readonly"},
-                                                                      :content nil})
-                                            [:td.mhelp] (en/set-attr :id (str "tdvalue" rid))) ;; mineral clone-for
                 [:input#submit] (en/set-attr :type "hidden"))
 
 (en/deftemplate organism-nav

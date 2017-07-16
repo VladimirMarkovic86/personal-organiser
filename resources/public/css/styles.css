@@ -310,3 +310,8 @@ div.shell {
   height: 50px;
   position: relative;
 }
+div.angular {
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px;
+}
