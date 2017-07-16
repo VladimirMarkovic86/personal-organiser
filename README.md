@@ -7,10 +7,6 @@ Guide
 =====
 
 * Clone project with command "git clone https://github.com/VladimirMarkovic86/personal-organiser.git" from terminal
-* [removed_from_project] Download/Install Neo4J server from http://www.neo4j.org/
-* [removed_from_project] Add cypher.default_language_version=3.1 at the end of .neo4j.conf file
-* [removed_from_project] From project_root/resources extract data.zip file and reference data/graph.db folder with Neo4J application
-* [removed_from_project] You can start Neo4j server now
 * Download/Install MongoDB server from https://www.mongodb.com/
 * From project_root/resources extract mongodb.zip file to <extracted_path>
 * Modify <extracted_path>/mongodb/conf/mongod.conf file so it references mongodb folders structure on your file system
