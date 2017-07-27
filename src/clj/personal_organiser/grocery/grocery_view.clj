@@ -52,7 +52,7 @@
                 [:input#gorigin-vegetarian] (if (= (:gorigin grocery) "Vegetarian")
                                               (en/set-attr :checked "checked")
                                               (en/set-attr :name "gorigin"))
-                [:textarea#gdescription] (en/content (:gdesc grocery))
+                [:textarea#gdesc] (en/content (:gdesc grocery))
                 [:input#submit] (en/set-attr :value "Save changes")
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,

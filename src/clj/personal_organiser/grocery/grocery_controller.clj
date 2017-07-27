@@ -10,47 +10,58 @@
 (defn save-grocery
   "Save grocery in neo4j database"
   [req-params]
-  (if-let [grocery-errors (create-grocery-errors {:gname          (:gname req-params)
-                                                  :gcalories      (:gcalories req-params)
-                                                  :gfats          (:gfats req-params)
-                                                  :gproteins      (:gproteins req-params)
-                                                  :gcarbohydrates (:gcarbohydrates req-params)
-                                                  :gwater         (:gwater req-params)
-                                                  :gorigin        (:gorigin req-params)
-                                                  :gdesc          (:gdesc req-params)})]
-    (str "Grocery errors: " grocery-errors)
-    (let [new-grocery {:gname (:gname req-params),
-                       :gcalories (read-string (:gcalories req-params)),
-                       :gfats (read-string (:gfats req-params)),
-                       :gproteins (read-string (:gproteins req-params)),
+  (if-let [grocery-errors (first (create-grocery-errors (try
+                                                          {:gname          (:gname req-params),
+                                                           :gcalories      (read-string (:gcalories req-params)),
+                                                           :gfats          (read-string (:gfats req-params)),
+                                                           :gproteins      (read-string (:gproteins req-params)),
+                                                           :gcarbohydrates (read-string (:gcarbohydrates req-params)),
+                                                           :gwater         (read-string (:gwater req-params)),
+                                                           :gorigin        (:gorigin req-params),
+                                                           :gdesc          (:gdesc req-params)
+                                                           }
+                                                          (catch Exception e
+                                                            (println "Caught exception: " (.getMessage e))
+                                                            {}))))]
+    (println "Grocery errors: " grocery-errors)
+    (let [new-grocery {:gname          (:gname req-params),
+                       :gcalories      (read-string (:gcalories req-params)),
+                       :gfats          (read-string (:gfats req-params)),
+                       :gproteins      (read-string (:gproteins req-params)),
                        :gcarbohydrates (read-string (:gcarbohydrates req-params)),
-                       :gwater (read-string (:gwater req-params)),
-                       :gorigin (:gorigin req-params),
-                       :gdesc (:gdesc req-params)
+                       :gwater         (read-string (:gwater req-params)),
+                       :gorigin        (:gorigin req-params),
+                       :gdesc          (:gdesc req-params)
                        }]
-      (mon/insert-and-return (mon/grocery-coll) new-grocery)))
+      (mon/insert-and-return (mon/grocery-coll) new-grocery))
+    )
   (read-all-groceries))
 
 (defn update-grocery
   "Update grocery in neo4j database"
   [req-params]
-  (if-let [grocery-errors (create-grocery-errors {:gname          (:gname req-params)
-                                                  :gcalories      (:gcalories req-params)
-                                                  :gfats          (:gfats req-params)
-                                                  :gproteins      (:gproteins req-params)
-                                                  :gcarbohydrates (:gcarbohydrates req-params)
-                                                  :gwater         (:gwater req-params)
-                                                  :gorigin        (:gorigin req-params)
-                                                  :gdesc          (:gdesc req-params)})]
-    (str "Grocery errors: " grocery-errors)
-    (let [update-grocery {:gname (:gname req-params),
-                          :gcalories (read-string (:gcalories req-params)),
-                          :gfats (read-string (:gfats req-params)),
-                          :gproteins (read-string (:gproteins req-params)),
+  (if-let [grocery-errors (first (create-grocery-errors (try
+                                                          {:gname          (:gname req-params),
+                                                           :gcalories      (read-string (:gcalories req-params)),
+                                                           :gfats          (read-string (:gfats req-params)),
+                                                           :gproteins      (read-string (:gproteins req-params)),
+                                                           :gcarbohydrates (read-string (:gcarbohydrates req-params)),
+                                                           :gwater         (read-string (:gwater req-params)),
+                                                           :gorigin        (:gorigin req-params),
+                                                           :gdesc          (:gdesc req-params)
+                                                           }
+                                                          (catch Exception e
+                                                            (println "Caught exception: " (.getMessage e))
+                                                            {}))))]
+    (println "Grocery errors: " grocery-errors)
+    (let [update-grocery {:gname          (:gname req-params),
+                          :gcalories      (read-string (:gcalories req-params)),
+                          :gfats          (read-string (:gfats req-params)),
+                          :gproteins      (read-string (:gproteins req-params)),
                           :gcarbohydrates (read-string (:gcarbohydrates req-params)),
-                          :gwater (read-string (:gwater req-params)),
-                          :gorigin (:gorigin req-params),
-                          :gdesc (:gdesc req-params)
+                          :gwater         (read-string (:gwater req-params)),
+                          :gorigin        (:gorigin req-params),
+                          :gdesc          (:gdesc req-params)
                           }]
       (mon/update-by-id (mon/grocery-coll) (:idgrocery req-params) update-grocery))
     )

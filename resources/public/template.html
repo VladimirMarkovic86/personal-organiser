@@ -26,7 +26,7 @@
         <div class="maincontent">
             <div class="left-column"></div>
             <div class="middle-column"></div>
-            <div class="right-column"></div>
+            <div class="right-column"><div class="angularHide" style="display: none;"></div></div>
         </div>
         <div class="footer">
             <div class="clj img"></div>
@@ -39,7 +39,6 @@
 
         </div>
     </div>
-
     <script type="text/javascript">
         var context = "{{servlet-context}}";
     </script>
@@ -49,6 +48,9 @@
     {% script "/node_modules/rxjs/bundles/Rx.umd.js" %}
     {% script "/node_modules/angular2/bundles/angular2-all.umd.js" %}
     {% script "/js/app.js" %}
-    <div class="script"></div>
+    <div class="script">
+        <script>goog.require('personal_organiser.core');</script>
+        <script>personal_organiser.core.init();</script>
+    </div>
 </body>
 </html>

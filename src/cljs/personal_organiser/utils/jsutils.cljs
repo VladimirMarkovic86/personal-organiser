@@ -72,3 +72,10 @@
                           (str "<div class=\"help\">Select one option for " msg "</div>"))
             false)
         true))
+
+(defn parse-number-nan
+  "Return float or if NaN return field value as string"
+  [field-value]
+  (if (js/isNaN (js/parseFloat field-value))
+    field-value
+    (js/parseFloat field-value)))

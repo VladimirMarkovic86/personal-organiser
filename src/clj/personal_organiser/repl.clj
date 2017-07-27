@@ -226,7 +226,6 @@
 
 (println)
 (println "Type (start-app [3000]) to launch application.")
-(println "Type (restart-server) to restart server.")
 (println "Type (stop-app) to stop application.")
 (println)
 (println "Type (selenium-test) to test functionalities.")

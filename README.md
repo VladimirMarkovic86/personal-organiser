@@ -15,7 +15,7 @@ Guide
         mongod --config <extracted_path>/mongodb/conf/mongod.conf --smallfiles
 
 * From project_root/resources/public run next command "npm install", follow this link https://www.npmjs.com/get-npm if you don't have node and npm installed
-* From project_root in terminal run command "lein repl" and in repl run command "(start-app [3000])" to start application
+* From project_root in terminal run command "lein run 3000" to start application
 * In another terminal run command "lein cljsbuild auto"
 * And in another terminal run command "lein figwheel"
 * Open browser and visit next url address: "localhost:3000/login"
@@ -23,7 +23,7 @@ Guide
 Leiningen
 =========
 
-Version - 2.0
+Version - 2.7.1
 
 Leiningen is the easiest way to use Clojure. With a focus on project automation and declarative configuration, it gets out of your way and lets you focus on your code.
 
@@ -59,24 +59,9 @@ Compojure is a small routing library for Ring that allows web applications to be
 https://github.com/weavejester/compojure
 
 ClojureScript
-=========
+=============
 
 plugin - [lein-cljsbuild "0.3.2"]
-
-Command to build js files:
-
-generates js development files that connects to brepl (browser repl) ->
-lein cljsbuild once dev-grocery dev-meal dev-organism dev-login dev-planishrane
-
-run brepl ->
-lein trampolina cljsbuild repl-listen
-
-generates js production file ->
-lein cljsbuild once prod-grocery prod-meal prod-organism prod-login prod-planishrane
-
-* Attention
-When compiling javascript files, drools dependencies in project.clj file should be commented.
-Afterwords uncomment drools dependencies and run project.
 
 https://github.com/clojure/clojurescript
 
@@ -104,7 +89,7 @@ Valip is a validation library for Clojure. It is primarily designed to validate 
 
 https://github.com/cemerick/valip
 
-NEO4J
+Neo4J
 =====
 
 dependency - [clojurewerkz/neocons "1.1.0"]

@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   ;; CLJ source code path
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "src/cljc"]
   :test-paths ["src/clj"]
   :resource-paths ["resources" "target/cljsbuild" "node_modules"]
   :java-source-paths ["src/java"]
@@ -100,7 +100,7 @@
   :cljsbuild {:builds
               {:app
                {;; CLJS source code path
-                :source-paths ["src/cljs"]
+                :source-paths ["src/cljs" "src/cljc"]
 
                 ;; Google Closure (CLS) options configuration
                 :compiler     {;; CLS generated JS script filename
