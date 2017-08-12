@@ -6,7 +6,10 @@
             [personal-organiser.utils :as utils]
             [clojure.test :refer :all]
             [personal-organiser.mongo :as mon]
-            [personal-organiser.meal.meal-model :as m-model]))
+            [personal-organiser.meal.meal-model :as m-model]
+            [pantomime.mime :refer [mime-type-of]])
+  (:import (java.util Base64)
+           (org.apache.commons.io FileUtils)))
 
 (defn cal-calc
   "Calculate ingredient calories in meal"
@@ -70,104 +73,61 @@
                                                                       ":ingredient3" "3"} ["1" "2" "3"])))
   )
 
-(with-test
-  (defn get-file-extension
-    "Get file extension"
-    [filename]
-    (if (= (re-find #"\." filename) ".")
-      (let [filename-seq (split filename #"\.")
-            filename-seq-length (- (count filename-seq) 1)]
-        (filename-seq filename-seq-length))
-      ""
-      )
-    )
-  (is (= "extension" (get-file-extension "filename.extension")))
-  (is (= "extension" (get-file-extension "file.name.extension")))
-  (is (= "" (get-file-extension "filename")))
-  )
-
-(defn get-img-value
-  "Get value for image in database"
-  [req-params]
-  (if (= (:size (:mlimg req-params)) 0)
-    (:mlhimg req-params)
-    (do (utils/file-delete (str "resources/public/images/" (:idmeal req-params) "." (:mlhimg req-params)))
-        (get-file-extension (utils/copy-file (:tempfile (:mlimg req-params))
-                                             "resources/public/images/"
-                                             (str (:idmeal req-params)
-                                                  "."
-                                                  (get-file-extension (:filename (:mlimg req-params)))))))))
-
 (defn save-meal
-  "Save meal in neo4j database"
+  "Save meal in database"
   [req-params]
-  (if-let [meal-errors (create-meal-errors {:mlname (:mlname req-params)
-                                            :mltype (:mltype req-params)
-                                            :mldesc (:mldesc req-params)})]
-    (println (str "Meal errors: " meal-errors))
-    (let [new-meal {:mlname     (:mlname req-params),
-                    :mlcalories (meal-cal-calc (form-map-of-ingredients (utils/map-keys-to-str req-params)
-                                                                        (split (:ingredient-indexes req-params) #";"))),
-                    :mltype     (:mltype req-params),
+  (if-let [meal-errors (first (create-meal-errors req-params))]
+    (println "Meal errors: " meal-errors)
+    (let [new-meal {:mlname        (:mlname req-params),
+                    :mlcalories    (meal-cal-calc (form-map-of-ingredients (utils/map-keys-to-str req-params)
+                                                                           (split (:ingredient-indexes req-params) #";"))),
+                    :mltype        (:mltype req-params),
                     :mltype-number (let [mltype (:mltype req-params)]
                                      (case mltype
                                        (m-model/meal-breakfast) 0
                                        (m-model/meal-lunch) 1
                                        (m-model/meal-dinner) 2
                                        0)),
-                    :mldesc     (:mldesc req-params),
-                    :mlimg      (if (= (:size (:mlimg req-params)) 0)
-                                  ".jpg"
-                                  (get-file-extension (utils/copy-file (:tempfile (:mlimg req-params))
-                                                                           "resources/public/images/"
-                                                                           (str (:idmeal req-params)
-                                                                                "."
-                                                                                (get-file-extension (:filename (:mlimg req-params))))))),
-                    :groceries  (form-map-of-ingredients (utils/map-keys-to-str req-params)
-                                                         (split (:ingredient-indexes req-params) #";"))
+                    :mldesc        (:mldesc req-params),
+                    :mlimg         (.encode Base64 (.readFileToByteArray FileUtils (:tempfile (:mlimg req-params)))),
+                    :mlimg-ext     (mime-type-of (:filename (:mlimg req-params))),
+                    :groceries     (form-map-of-ingredients (utils/map-keys-to-str req-params)
+                                                            (split (:ingredient-indexes req-params) #";"))
                     }]
-      (let [inserted-meal (mon/insert-and-return (mon/meal-coll) new-meal)]
-        (utils/copy-file (:tempfile (:mlimg req-params))
-                         "resources/public/images/"
-                         (str (.toString (:_id inserted-meal))
-                              "."
-                              (get-file-extension (:filename (:mlimg req-params)))))
-        )
+      (mon/insert-and-return (mon/meal-coll) new-meal)
       ))
   (read-all-meals))
 
 (defn update-meal
-  "Update meal in neo4j database"
+  "Update meal in database"
   [req-params]
-  (if-let [meal-errors (create-meal-errors {:mlname (:mlname req-params)
-                                            :mltype (:mltype req-params)
-                                            :mldesc (:mldesc req-params)
-                                            :mlimg  (:mlimg req-params)})]
-    (println (str "Meal errors: " meal-errors))
+  (if-let [meal-errors (first (create-meal-errors req-params))]
+    (println "Meal errors: " meal-errors)
     (let [params-map-str (utils/map-keys-to-str req-params)
-          update-meal {:mlname (:mlname req-params),
-                       :mlcalories (meal-cal-calc (form-map-of-ingredients params-map-str
-                                                                           (split (:ingredient-indexes req-params) #";"))),
-                       :mltype (:mltype req-params),
+          update-meal {:mlname        (:mlname req-params),
+                       :mlcalories    (meal-cal-calc (form-map-of-ingredients params-map-str
+                                                                              (split (:ingredient-indexes req-params) #";"))),
+                       :mltype        (:mltype req-params),
                        :mltype-number (let [mltype (:mltype req-params)]
                                         (case mltype
                                           (m-model/meal-breakfast) 0
                                           (m-model/meal-lunch) 1
                                           (m-model/meal-dinner) 2
                                           0)),
-                       :mldesc (:mldesc req-params),
-                       :mlimg (get-img-value req-params),
-                       :groceries (form-map-of-ingredients params-map-str
-                                                           (into []
-                                                                 (conj (intersection (into #{}
-                                                                                     (split (get params-map-str ":existing-ing-ind") #";"))
-                                                                               (into #{}
-                                                                                     (split (get params-map-str ":ingredient-indexes") #";")))
-                                                                       (difference (into #{}
-                                                                                         (split (get params-map-str ":ingredient-indexes") #";"))
-                                                                                   (into #{}
-                                                                                         (split (get params-map-str ":existing-ing-ind") #";")))
-                                                                 )))
+                       :mldesc        (:mldesc req-params),
+                       :mlimg         (.encode Base64 (.readFileToByteArray FileUtils (:tempfile (:mlimg req-params)))),
+                       :mlimg-ext     (mime-type-of (:filename (:mlimg req-params))),
+                       :groceries     (form-map-of-ingredients params-map-str
+                                                               (into []
+                                                                     (conj (intersection (into #{}
+                                                                                               (split (get params-map-str ":existing-ing-ind") #";"))
+                                                                                         (into #{}
+                                                                                               (split (get params-map-str ":ingredient-indexes") #";")))
+                                                                           (difference (into #{}
+                                                                                             (split (get params-map-str ":ingredient-indexes") #";"))
+                                                                                       (into #{}
+                                                                                             (split (get params-map-str ":existing-ing-ind") #";")))
+                                                                           )))
                        }
           ]
       (mon/update-by-id (mon/meal-coll) (:idmeal req-params) update-meal)
@@ -175,12 +135,7 @@
   (read-all-meals))
 
 (defn delete-meal
-  "Delete meal from neo4j database"
+  "Delete meal from database"
   [id]
-  (let [meal (mon/find-by-id (mon/meal-coll) id)]
-    (utils/file-delete (str "resources/public/images/"
-                            id
-                            "."
-                            (:mlimg meal))))
   (mon/remove-by-id (mon/meal-coll) id)
-  (str id))
+  id)

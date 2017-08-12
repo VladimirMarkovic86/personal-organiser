@@ -1,12 +1,6 @@
 (ns personal-organiser.core
   (:require-macros [hiccups.core :as hiccups :refer [html]])
-  (:require
-    [goog.events :as events]
-    [goog.history.EventType :as HistoryEventType]
-    [markdown.core :refer [md->html]]
-    [ajax.core :refer [GET POST]]
-    [domina :as dom])
-  (:import goog.History))
+  )
 
 (defn get-app []
   (or (.-app js/window)

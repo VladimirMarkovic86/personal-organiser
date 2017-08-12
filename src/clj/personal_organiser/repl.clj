@@ -7,17 +7,17 @@
   ;(:import [java.io InputStreamReader
   ;                  BufferedReader]
   ;         [java.lang Runtime])
-  (:require ;[clojure.java.browse :as browse]
-            [personal-organiser.server :as server]
-            ;[personal-organiser.neo4j :as n4j]
-            [personal-organiser.mongo :as mon]
-            [personal-organiser.selenium.selenium-test :as sl]
-            [immutant.web :as immutant]
-            [clojure.tools.nrepl.server :as nrepl]
-            [clojure.tools.logging :as log]
-            [environ.core :refer [env]]
-            [personal-organiser.config :refer [defaults]]
-            [mount.core :as mount])
+  (:require                                                 ;[clojure.java.browse :as browse]
+    [personal-organiser.server :as server]
+    ;[personal-organiser.neo4j :as n4j]
+    [personal-organiser.mongo :as mon]
+    [personal-organiser.selenium.selenium-test :as sl]
+    [immutant.web :as immutant]
+    [clojure.tools.nrepl.server :as nrepl]
+    [clojure.tools.logging :as log]
+    [environ.core :refer [env]]
+    [personal-organiser.config :refer [defaults]]
+    [mount.core :as mount])
   (:gen-class))
 
 (defn selenium-test
@@ -172,7 +172,7 @@
     (cond
       (string? port) (Integer/parseInt port)
       (number? port) port
-      :else          (throw (Exception. (str "invalid port value: " port))))))
+      :else (throw (Exception. (str "invalid port value: " port))))))
 
 (defn stop-nrepl []
   (when-let [server @nrepl-server]

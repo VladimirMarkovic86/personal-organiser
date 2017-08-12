@@ -5,7 +5,7 @@
 
 (def defaults
   {:init
-   (fn []
-     (parser/cache-off!)
-     (log/info "\n-=[personal-organiser started successfully using the development profile]=-"))
+               (fn []
+                 (parser/cache-off!)
+                 (log/info "\n-=[personal-organiser started successfully using the development profile]=-"))
    :middleware wrap-dev})

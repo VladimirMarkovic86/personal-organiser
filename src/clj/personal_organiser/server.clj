@@ -143,6 +143,13 @@
                                        :value-fn my-value-writer)
               :headers {"Content-Type" "application/json"}}
              )
+           (GET "/groceries"
+                []
+             {:status  200
+              :body    (json/write-str (mon/find-by-filter (mon/grocery-coll) {})
+                                       :value-fn my-value-writer)
+              :headers {"Content-Type" "application/json"}}
+             )
            ; to serve static pages saved in resources/public directory
            (route/resources "/")
            ; if page is not found

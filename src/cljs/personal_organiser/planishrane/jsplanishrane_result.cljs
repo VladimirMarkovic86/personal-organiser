@@ -18,11 +18,6 @@
             :error-handler   (fn [details] (.warn js/console (str "Failed to refresh markets from server: " details)))
             :response-format :json, :keywords? true}))
 
-(def hardcoded-markets-data [{:crawlIndex      3
-                              :marketPlaceName "Fast just got faster with Nexus S"}
-                             {:crawlIndex      4
-                              :marketPlaceName "The Next, Next Generation tablet."}])
-
 (declare                                                    ;; here we declare our components to define they're in an order that feels natural.
   <markets-list>
   <market-item>)
@@ -46,26 +41,26 @@
     (.getElementById js/document "markets")))
 
 (defn validate-form
-      "Validate form"
-      []
-      (let [select-nodes (map dom/attrs (dom/nodes (domcss/sel "select")))
-            valid (atom [])]
-           (dom/destroy! (dom/by-class "help"))
-           (doseq [select select-nodes]
-                  (swap! valid
-                         conj
-                         (not (= (dom/value (dom/by-id (:id select)))
-                                 "- Select -"))))
-           (if (not (every? true? @valid))
-             (dom/prepend! (dom/by-class "error-msgs")
-                           "<div class=\"help\">Choose meal for every day, meal instead of \"- Select -\"</div>"))
-           (every? true? @valid)))
+  "Validate form"
+  []
+  (let [select-nodes (map dom/attrs (dom/nodes (domcss/sel "select")))
+        valid (atom [])]
+    (dom/destroy! (dom/by-class "help"))
+    (doseq [select select-nodes]
+      (swap! valid
+             conj
+             (not (= (dom/value (dom/by-id (:id select)))
+                     "- Select -"))))
+    (if (not (every? true? @valid))
+      (dom/prepend! (dom/by-class "error-msgs")
+                    "<div class=\"help\">Choose meal for every day, meal instead of \"- Select -\"</div>"))
+    (every? true? @valid)))
 
 (defn ^:export init []
-      (if (and js/document
-               (.-getElementById js/document))
-        (let [planishrane-form (dom/by-id "planishrane-form")]
-             (set! (.-onsubmit planishrane-form) validate-form)
-             (load-markets! state)
-             (mount-root)
-             )))
+  (if (and js/document
+           (.-getElementById js/document))
+    (let [planishrane-form (dom/by-id "planishrane-form")]
+      (set! (.-onsubmit planishrane-form) validate-form)
+      (load-markets! state)
+      (mount-root)
+      )))

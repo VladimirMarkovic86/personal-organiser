@@ -9,48 +9,50 @@
     {% style "/css/styles.css" %}
 </head>
 <body>
-    <div class="topcontent">
-        <div class="navigation">
-            <table>
-                <tr>
-                    <td><a href="/home">Home</a></td>
-                    <td><a href="/grocery-nav">Grocery</a></td>
-                    <td><a href="/meal-nav">Meals</a></td>
-                    <td><a href="/planishrane">Plan ishrane</a></td>
-                    <td><a href="/organism-nav">Organism</a></td>
-                    <td><a href="/angular">Angular</a></td>
-                    <td><a href="/logout">Log out</a></td>
-                </tr>
-            </table>
+<div class="topcontent">
+    <div class="navigation">
+        <table>
+            <tr>
+                <td><a href="/home">Home</a></td>
+                <td><a href="/grocery-nav">Grocery</a></td>
+                <td><a href="/meal-nav">Meals</a></td>
+                <td><a href="/planishrane">Plan ishrane</a></td>
+                <td><a href="/organism-nav">Organism</a></td>
+                <td><a href="/angular">Angular</a></td>
+                <td><a href="/logout">Log out</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="maincontent">
+        <div class="left-column"></div>
+        <div class="middle-column"></div>
+        <div class="right-column"></div>
+    </div>
+    <div class="footer">
+        <div class="clj img"></div>
+        <div class="lein img"></div>
+        <div class="drools img"></div>
+        <div class="made-by">
+            <div>Made by Vladimir Marković</div>
+            <div>email: markovic.vladimir86@gmail.com</div>
         </div>
-        <div class="maincontent">
-            <div class="left-column"></div>
-            <div class="middle-column"></div>
-            <div class="right-column"><div class="angularHide" style="display: none;"></div></div>
-        </div>
-        <div class="footer">
-            <div class="clj img"></div>
-            <div class="lein img"></div>
-            <div class="drools img"></div>
-            <div class="made-by">
-                <div>Made by Vladimir Marković</div>
-                <div>email: markovic.vladimir86@gmail.com</div>
-            </div>
 
-        </div>
     </div>
-    <script type="text/javascript">
+</div>
+<div class="angularHide" style="display: none;"></div>
+<script type="text/javascript">
         var context = "{{servlet-context}}";
-    </script>
-    {% script "/node_modules/es6-shim/es6-shim.min.js" %}
-    {% script "/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js" %}
-    {% script "/node_modules/angular2/bundles/angular2-polyfills.js" %}
-    {% script "/node_modules/rxjs/bundles/Rx.umd.js" %}
-    {% script "/node_modules/angular2/bundles/angular2-all.umd.js" %}
-    {% script "/js/app.js" %}
-    <div class="script">
-        <script>goog.require('personal_organiser.core');</script>
-        <script>personal_organiser.core.init();</script>
-    </div>
+
+</script>
+{% script "/node_modules/es6-shim/es6-shim.min.js" %}
+{% script "/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js" %}
+{% script "/node_modules/angular2/bundles/angular2-polyfills.js" %}
+{% script "/node_modules/rxjs/bundles/Rx.umd.js" %}
+{% script "/node_modules/angular2/bundles/angular2-all.umd.js" %}
+{% script "/js/app.js" %}
+<div class="script">
+    <script>goog.require('personal_organiser.core');</script>
+    <script>personal_organiser.core.init();</script>
+</div>
 </body>
 </html>

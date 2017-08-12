@@ -73,6 +73,7 @@
                  [xstream/xstream "1.2.2"]
                  [org.jvnet.jaxb2_commons/jaxb-xjc "2.1.10.1"]
                  [org.clojure/tools.reader "0.9.2"]
+                 [com.novemberain/pantomime "2.9.0"]
                  ]
 
   :min-lein-version "2.0.0"
@@ -104,72 +105,72 @@
 
                 ;; Google Closure (CLS) options configuration
                 :compiler     {;; CLS generated JS script filename
-                               :output-to     "target/cljsbuild/public/js/app.js"
+                               :output-to    "target/cljsbuild/public/js/app.js"
 
-                               :output-dir "target/cljsbuild/public/js/out"
+                               :output-dir   "target/cljsbuild/public/js/out"
 
-                               :externs ["react/externs/react.js"]
+                               :externs      ["react/externs/react.js"]
 
                                ;; generated JS code prettyfication
-                               :pretty-print  true}
+                               :pretty-print true}
                 }
                }
               }
 
   :profiles
-  {:uberjar {:omit-source true
-             :env {:production true}
-             :prep-tasks ["compile" ["cljsbuild" "once"]]
-             :cljsbuild
-                          {:builds
-                           {:app
-                            {:source-paths ["env/prod/cljs"]
-                             :compiler
-                                           {:optimizations :advanced
-                                            :pretty-print false
-                                            :closure-warnings
-                                                           {:externs-validation :off :non-standard-jsdoc :off}}}}}
+  {:uberjar       {:omit-source  true
+                   :env          {:production true}
+                   :prep-tasks   ["compile" ["cljsbuild" "once"]]
+                   :cljsbuild
+                                 {:builds
+                                  {:app
+                                   {:source-paths ["env/prod/cljs"]
+                                    :compiler
+                                                  {:optimizations :advanced
+                                                   :pretty-print  false
+                                                   :closure-warnings
+                                                                  {:externs-validation :off :non-standard-jsdoc :off}}}}}
 
-             :aot :all
-             :source-paths ["env/prod/clj"]}
+                   :aot          :all
+                   :source-paths ["env/prod/clj"]}
    :dev           [:project/dev :profiles/dev]
    :test          [:project/test :profiles/test]
-   :project/dev  {:dependencies [[prone "0.8.3"]
-                                 [ring/ring-mock "0.3.0"]
-                                 [ring/ring-devel "1.4.0" :exclusions [commons-fileupload commons-io]]
-                                 [pjstadig/humane-test-output "0.7.1"]
-                                 [lein-figwheel "0.5.0-2" :exclusions [org.ow2.asm/asm-all org.clojure/tools.analyzer]]
-                                 [com.cemerick/piggieback "0.2.2-SNAPSHOT" :exclusions [com.google.guava/guava]]]
-                  :plugins [[lein-figwheel "0.5.0-2" :exclusions [org.clojure/core.memoize org.ow2.asm/asm-all commons-fileupload org.clojure/tools.analyzer org.clojure/tools.analyzer.jvm]]]
-                  :cljsbuild
-                                {:builds
-                                 {:app
-                                  {:source-paths ["env/dev/cljs"]
-                                   :compiler
-                                                 {:main "personal-organiser.app"
-                                                  :asset-path "/js/out"
-                                                  :optimizations :none
-                                                  :source-map true}}}}
+   :project/dev   {:dependencies [[prone "0.8.3"]
+                                  [ring/ring-mock "0.3.0"]
+                                  [ring/ring-devel "1.4.0" :exclusions [commons-fileupload commons-io]]
+                                  [pjstadig/humane-test-output "0.7.1"]
+                                  [lein-figwheel "0.5.0-2" :exclusions [org.ow2.asm/asm-all org.clojure/tools.analyzer]]
+                                  [com.cemerick/piggieback "0.2.2-SNAPSHOT" :exclusions [com.google.guava/guava]]]
+                   :plugins      [[lein-figwheel "0.5.0-2" :exclusions [org.clojure/core.memoize org.ow2.asm/asm-all commons-fileupload org.clojure/tools.analyzer org.clojure/tools.analyzer.jvm]]]
+                   :cljsbuild
+                                 {:builds
+                                  {:app
+                                   {:source-paths ["env/dev/cljs"]
+                                    :compiler
+                                                  {:main          "personal-organiser.app"
+                                                   :asset-path    "/js/out"
+                                                   :optimizations :none
+                                                   :source-map    true}}}}
 
-                  :figwheel
-                                {:http-server-root "public"
-                                 :server-port 3449
-                                 :nrepl-port 7002
-                                 :nrepl-middleware ["cemerick.piggieback/wrap-cljs-repl"]
-                                 :css-dirs ["resources/public/css"]
-                                 :ring-handler personal-organiser.server/handler}
+                   :figwheel
+                                 {:http-server-root "public"
+                                  :server-port      3449
+                                  :nrepl-port       7002
+                                  :nrepl-middleware ["cemerick.piggieback/wrap-cljs-repl"]
+                                  :css-dirs         ["resources/public/css"]
+                                  :ring-handler     personal-organiser.server/handler}
 
-                  :source-paths ["env/dev/clj"]
-                  :repl-options {:init-ns personal-organiser.repl}
-                  :injections [(require 'pjstadig.humane-test-output)
-                               (pjstadig.humane-test-output/activate!)]
-                  ;;when :nrepl-port is set the application starts the nREPL server on load
-                  :env {:dev        true
-                        :port       5000
-                        :nrepl-port 7000}}
-   :project/test {:env {:test       true
-                        :port       3001
-                        :nrepl-port 7001}}
-   :profiles/dev {}
+                   :source-paths ["env/dev/clj"]
+                   :repl-options {:init-ns personal-organiser.repl}
+                   :injections   [(require 'pjstadig.humane-test-output)
+                                  (pjstadig.humane-test-output/activate!)]
+                   ;;when :nrepl-port is set the application starts the nREPL server on load
+                   :env          {:dev        true
+                                  :port       5000
+                                  :nrepl-port 7000}}
+   :project/test  {:env {:test       true
+                         :port       3001
+                         :nrepl-port 7001}}
+   :profiles/dev  {}
    :profiles/test {}}
   )

@@ -7,18 +7,12 @@
 (en/deftemplate create-meal
                 (hg/build-html-page [{:temp-sel [:div.middle-column],
                                       :comp     "public/meal/meal-form.html",
-                                      :comp-sel [:form#meal-form]}
+                                      :comp-sel [:div#meal-form]}
                                      {:temp-sel [:div.left-column],
                                       :comp     "public/meal/meal-nav.html",
                                       :comp-sel [:div.meal-nav]}])
                 []
                 [:title] (en/content "Create meal")
-                [:form#meal-form] (en/set-attr :action "/save-meal")
-                [:tr.ingredient-row] nil
-                [:option#ingredient-option1] (en/clone-for [ingredient (mon/find-by-filter (mon/grocery-coll) {})]
-                                                           (comp (en/content (:gname ingredient))
-                                                                 (en/set-attr :value (.toString (:_id ingredient)))
-                                                                 (en/remove-attr :id)))
                 [:div.script] (en/append {:tag     :script,
                                           :attrs   nil,
                                           :content "goog.require('personal_organiser.meal.jsmeal');"})
@@ -65,11 +59,23 @@
                                          (en/set-attr :checked "checked")
                                          (en/set-attr :name "mltype"))
                 [:textarea#mldesc] (en/content (:mldesc meal))
-                [:input#mlimg] (en/after {:tag     :input,
-                                          :attrs   {:type  "hidden"
-                                                    :value (:mlimg meal)
-                                                    :name  "mlhimg"}
-                                          :content nil})
+                [:input#mlimg-file] (en/before {:tag     :img,
+                                                :attrs   {:src   (str "data:" (:mlimg-ext meal) ";base64," (:mlimg meal))
+                                                          :style "width: 150px; height: 150px;"
+                                                          :id    "meal-image"}
+                                                :content nil})
+                [:input#mlimg-file] (en/before {:tag     :input,
+                                                :attrs   {:type  "hidden"
+                                                          :name  "mlimg-ext"
+                                                          :value (:mlimg-ext meal)
+                                                          :id    "mlimg-ext"}
+                                                :content nil})
+                [:input#mlimg-file] (en/before {:tag     :input,
+                                                :attrs   {:type  "hidden"
+                                                          :name  "mlimg"
+                                                          :value (:mlimg meal)
+                                                          :id    "mlimg"}
+                                                :content nil})
                 [:input#ingredient-indexes] (comp (en/before {:tag     :input,
                                                               :attrs   {:type  "hidden",
                                                                         :name  "existing-ing-ind",
